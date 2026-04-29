@@ -1,0 +1,109 @@
+:root {
+  --poke-red: #3B4CCA;
+  --poke-red-dk: #2a379f;
+  --poke-yellow: #FFCB05;
+  --poke-yellow-lt: #FFE566;
+  --poke-blue: #3B4CCA;
+  --poke-blue-lt: #6478E0;
+  --poke-white: #F8F8F8;
+  --poke-dark: #1a1a2e;
+  --poke-gray: #333355;
+  --nav-h: 64px;
+  --banner-h: 38px;
+
+  --card-bg: #fff;
+  --accent: #4a90e2;
+  --muted: #f2f2f2;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body (cleaned — no flex issues) */
+body {
+  font-family: 'Nunito', Arial, sans-serif;
+  background: #f6f8fb;
+  margin: 20px;
+  color: var(--poke-white);
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--poke-red);
+  border-bottom: 4px solid var(--poke-yellow);
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  gap: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  width: 100%; /* important */
+}
+
+.nav-links {
+  display: flex;
+  margin-left: auto;
+  list-style: none;
+}
+
+/* Container */
+.container {
+  width: 900px;
+  max-width: 96%;
+  margin: 0 auto; /* centers properly */
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* Calculator */
+.calc {
+  background: var(--card-bg);
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(20,30,60,0.04);
+  margin-bottom: 18px;
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+thead th {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* Buttons */
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
