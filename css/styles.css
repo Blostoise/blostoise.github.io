@@ -23,13 +23,17 @@
   padding: 0;
 }
 
-/* Body (cleaned — no flex issues) */
+body {
+  background: lime !important;
+}
+
+/* Body (cleaned — no flex issues) 
 body {
   font-family: 'Nunito', Arial, sans-serif;
   background: #f6f8fb;
   margin: 20px;
   color: var(--poke-white);
-}
+} */
 
 /* NAV */
 nav {
