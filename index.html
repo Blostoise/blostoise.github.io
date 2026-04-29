@@ -14,37 +14,8 @@
     ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
   </div>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="/" class="nav-brand">
-      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
-      <span class="nav-site-name">PMD Campaign</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-
-      <li>
-        <span>Character <span class="dropdown-arrow">▼</span></span>
-        <div class="dropdown-menu">
-          <a href="/calc">Calculator</a>
-          <a href="/pokemon">Pokémon</a>
-          <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
-        </div>
-      </li>
-
-      <li>
-        <span>Game <span class="dropdown-arrow">▼</span></span>
-        <div class="dropdown-menu">
-          <a href="/rules">Rules</a>
-          <a href="/jobs">Jobs</a>
-          <a href="/map">Map</a>
-          <a href="/shop">Shop</a>
-          <a href="/lore">Lore</a>
-        </div>
-      </li>
-    </ul>
-  </nav>
-
+  <div id="nav-placeholder"></div>
+  
   <!-- Hero -->
   <section class="hero">
     <img src="/css/images/logo.jpg" alt="PMD Campaign" class="hero-logo" />
@@ -122,6 +93,12 @@
         btn.setAttribute('aria-expanded', 'true');
       }
     }
+
+    fetch('/nav.html')
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById('nav-placeholder').innerHTML = data;
+  });
   </script>
 
 </body>
