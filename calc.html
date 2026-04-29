@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMD Stat Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --poke-red:     #3B4CCA;
+      --poke-red-dk:  #2a379f;
+      --poke-yellow:  #FFCB05;
+      --poke-yellow-lt: #FFE566;
+      --poke-blue:    #3B4CCA;
+      --poke-blue-lt: #6478E0;
+      --poke-white:   #F8F8F8;
+      --poke-dark:    #1a1a2e;
+      --poke-gray:    #333355;
+      --nav-h:        64px;
+      --banner-h:     38px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--poke-dark);
+      color: var(--poke-white);
+      min-height: 100vh;
+    }
+
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto; /* push links to the right */
+    }
+
+    .nav-links > li { position: relative; }
+
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    /* Dropdown */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      min-width: 170px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+
+    .nav-links > li:hover .dropdown-menu { display: block; }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu a:last-child { border-bottom: none; }
+
+    .dropdown-menu a:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 3rem 1rem 4rem;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(59,76,202,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse at 20% 80%, rgba(59,76,202,0.3) 0%, transparent 60%),
+        var(--poke-dark);
+    }
+
+    /* Pokéball decorative circle */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,203,5,0.07);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,203,5,0.05);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      width: min(300px, 70vw);
+      filter: drop-shadow(0 0 32px rgba(255,203,5,0.4)) drop-shadow(0 4px 16px rgba(0,0,0,0.6));
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      margin-top: 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 900;
+      color: var(--poke-yellow);
+      text-shadow:
+        2px 2px 0 var(--poke-red-dk),
+        0 0 40px rgba(255,203,5,0.3);
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      margin-top: 0.8rem;
+      font-size: 1rem;
+      color: rgba(248,248,248,0.65);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── STORY SECTION ── */
+    .story-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: var(--poke-yellow);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-red), var(--poke-yellow));
+      border-radius: 2px;
+      margin: 0.8rem auto 0;
+    }
+
+    /* Accordion */
+    .accordion { display: flex; flex-direction: column; gap: 1rem; }
+
+    .accordion-item {
+      border: 2px solid rgba(255,203,5,0.25);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .accordion-item:hover { border-color: rgba(255,203,5,0.5); }
+
+    .accordion-btn {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(59,76,202,0.25) 0%, rgba(100,120,224,0.25) 100%);
+      border: none;
+      color: var(--poke-white);
+      padding: 1.1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+    }
+
+    .accordion-btn:hover {
+      background: linear-gradient(135deg, rgba(59,76,202,0.4) 0%, rgba(100,120,224,0.4) 100%);
+    }
+
+    .accordion-btn.active {
+      background: linear-gradient(135deg, var(--poke-red-dk) 0%, var(--poke-blue) 100%);
+      color: var(--poke-yellow);
+    }
+
+    .accordion-icon {
+      font-size: 1rem;
+      transition: transform 0.35s ease;
+      color: var(--poke-yellow);
+    }
+
+    .accordion-btn.active .accordion-icon { transform: rotate(180deg); }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, padding 0.3s ease;
+    }
+
+    .accordion-body.open {
+      max-height: 1000px;
+    }
+
+    .accordion-body-inner {
+      padding: 1.4rem 1.5rem 1.6rem;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(248,248,248,0.85);
+      border-top: 1px solid rgba(255,203,5,0.15);
+    }
+
+    .accordion-body-inner p + p { margin-top: 0.9rem; }
+
+    .chapter-badge {
+      display: inline-block;
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-right: 0.75rem;
+      vertical-align: middle;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-pokeball {
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+      opacity: 0.7;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: var(--poke-yellow); }
+
+    /* ── PIXEL DIVIDER ── */
+    .pixel-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0.5rem 0;
+    }
+
+    .pixel-divider span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--poke-yellow);
+      opacity: 0.4;
+    }
+
+    .pixel-divider span:nth-child(2) { background: var(--poke-blue-lt); opacity: 0.6; }
+    .pixel-divider span:nth-child(3) { background: var(--poke-blue); opacity: 0.6; }
+    .pixel-divider span:nth-child(4) { background: var(--poke-yellow); opacity: 0.4; }
+
+    :root{
+      --card-bg:#fff;
+      --accent:#4a90e2;
+      --muted:#f2f2f2;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        background: #f6f8fb;
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+      width: 900px;
+      max-width: 96%;
+    }
+
+    h1 { margin-bottom: 6px; font-size: 20px; }
+    label { font-weight: bold; }
+
+    /* Card for name + sprite */
+    .card {
+        background: var(--card-bg);
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 18px;
+    }
+
+    .left {
+      flex: 1 1 auto;
+      position: relative;
+    }
+
+    .left label { display:block; margin-bottom:6px; }
+    .left input[type="text"]{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cfd8e6;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 76px;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #e1e6f0;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+      max-height: 180px;
+      overflow-y: auto;
+      display: none;
+      z-index: 60;
+    }
+    .suggestions div { padding: 8px 10px; cursor: pointer; }
+    .suggestions div:hover { background: #eef4ff; }
+
+    .sprite {
+      width: 110px;
+      flex: 0 0 110px;
+      text-align: center;
+    }
+    .sprite img {
+      width: 96px;
+      height: 96px;
+      image-rendering: pixelated;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .sprite .label { font-weight: bold; margin-top:8px; font-size:13px; }
+
+    /* Calculator section */
+    .calc {
+      background: var(--card-bg);
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.04);
+      margin-bottom: 18px;
+    }
+
+    .calc .row {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom: 12px;
+    }
+    .calc label { margin-right: 6px; }
+
+    input[type="number"] {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #d0d8e6;
+      width: 120px;
+      box-sizing: border-box;
+    }
+
+    /* IV/EV Table */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        text-align: center;
+        margin-top: 6px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        width: 100px;
+    }
+    thead th { background-color: var(--accent); color: white; }
+    tbody td:first-child { background-color: #e9f3ff; font-weight: bold; text-align: left; padding-left: 12px; }
+    tbody tr:nth-child(even) { background: var(--muted); }
+
+    /* Buttons and results */
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #results {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #eef2fb;
+    }
+
+    /* Base stats table at page bottom */
+    .basetable { margin-top: 14px; background: #fff; border-radius: 10px; padding: 10px; }
+    .basetable table { font-size:13px; }
+    @media (max-width: 760px){
+      .card { flex-direction: column; align-items: stretch; gap:12px;}
+      .sprite { order: -1; display:flex; justify-content:center;}
+      .left .suggestions { top: 104px; }
+      input[type="number"]{ width: 100%; }
+    }
+    
+  </style>
+</head>
+<body>
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <a href="/calc">Calculator</a>
+          <a href="/pokemon">Pokémon</a>
+          <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+        </div>
+      </li>
+
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <a href="/rules">Rules</a>
+          <a href="/jobs">Jobs</a>
+          <a href="/map">Map</a>
+          <a href="/shop">Shop</a>
+          <a href="/lore">Lore</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+<body>
+  <div class="container">
+    <h1>PMD Stat Calculator</h1>
+
+    <!-- Card: Name input + sprite (side-by-side inside card) -->
+    <div class="card" aria-label="Pokémon selector">
+      <div class="left">
+        <label for="pokeName">Pokémon Name</label>
+        <input id="pokeName" type="text" placeholder="Start typing (e.g. Pikachu)" autocomplete="off" />
+        <div id="suggestions" class="suggestions" role="listbox"></div>
+      </div>
+
+      <div class="sprite" aria-hidden="false">
+        <img id="sprite" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8Z3XjB9sdU3nLa94exUGxcr6vlFhaTnNKag&s" alt="Pokémon sprite (96x96)" />
+        <div class="label" id="spriteLabel">—</div>
+      </div>
+    </div>
+
+    <!-- Calculator UI -->
+    <div class="calc">
+      <form id="pokemonForm">
+        <div class="row">
+          <label for="level">Level</label>
+          <input type="number" id="level" value="50" min="1" max="100" />
+        </div>
+
+        <h3>Enter IVs & EVs Per Stat</h3>
+        <table>
+          <thead>
+            <tr><th>Stat</th><th>IV</th><th>EV</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>HP</td><td><input type="number" id="ivHP" value="0" min="0" max="32"></td><td><input type="number" id="evHP" value="0" min="0" max="999"></td></tr>
+            <tr><td>Attack</td><td><input type="number" id="ivAtk" value="0" min="0" max="32"></td><td><input type="number" id="evAtk" value="0" min="0" max="999"></td></tr>
+            <tr><td>Defense</td><td><input type="number" id="ivDef" value="0" min="0" max="32"></td><td><input type="number" id="evDef" value="0" min="0" max="999"></td></tr>
+            <tr><td>Sp. Attack</td><td><input type="number" id="ivSpA" value="0" min="0" max="32"></td><td><input type="number" id="evSpA" value="0" min="0" max="999"></td></tr>
+            <tr><td>Sp. Defense</td><td><input type="number" id="ivSpD" value="0" min="0" max="32"></td><td><input type="number" id="evSpD" value="0" min="0" max="999"></td></tr>
+            <tr><td>Speed</td><td><input type="number" id="ivSpe" value="0" min="0" max="32"></td><td><input type="number" id="evSpe" value="0" min="0" max="999"></td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:12px;">
+          <button type="submit">Calculate</button>
+        </div>
+      </form>
+
+      <div id="results" aria-live="polite"></div>
+    </div>
+
+<script>
+/* ---- Data & Dex mapping ---- */
+const pokemonStats = [
+  { name: "Bulbasaur", hp: 45, attack: 49, defense: 49, spAttack: 65, spDefense: 65, speed: 45 },
+  { name: "Charmander", hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
+  { name: "Squirtle", hp: 44, attack: 48, defense: 65, spAttack: 50, spDefense: 64, speed: 43 },
+  { name: "Pikachu", hp: 35, attack: 55, defense: 40, spAttack: 50, spDefense: 50, speed: 90 },
+  { name: "Vulpix", hp: 38, attack: 41, defense: 40, spAttack: 50, spDefense: 65, speed: 65 },
+  { name: "Eevee", hp: 55, attack: 55, defense: 50, spAttack: 45, spDefense: 65, speed: 55 },
+  { name: "Chikorita", hp: 45, attack: 49, defense: 65, spAttack: 49, spDefense: 65, speed: 45 },
+  { name: "Cyndaquil", hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
+  { name: "Quilava", hp: 58, attack: 64, defense: 58, spAttack: 80, spDefense: 65, speed: 80 },
+  { name: "Totodile", hp: 50, attack: 65, defense: 64, spAttack: 44, spDefense: 48, speed: 43 },
+  { name: "Croconaw", hp: 65, attack: 80, defense: 80, spAttack: 59, spDefense: 63, speed: 58 },
+  { name: "Phanpy", hp: 90, attack: 60, defense: 60, spAttack: 40, spDefense: 40, speed: 40 },
+  { name: "Treecko", hp: 40, attack: 45, defense: 35, spAttack: 65, spDefense: 55, speed: 70 },
+  { name: "Torchic", hp: 45, attack: 60, defense: 40, spAttack: 70, spDefense: 50, speed: 45 },
+  { name: "Mudkip", hp: 50, attack: 70, defense: 50, spAttack: 50, spDefense: 50, speed: 40 },
+  { name: "Skitty", hp: 50, attack: 45, defense: 45, spAttack: 35, spDefense: 35, speed: 50 },
+  { name: "Turtwig", hp: 55, attack: 68, defense: 64, spAttack: 45, spDefense: 55, speed: 31 },
+  { name: "Chimchar", hp: 44, attack: 58, defense: 44, spAttack: 58, spDefense: 44, speed: 61 },
+  { name: "Piplup", hp: 53, attack: 51, defense: 53, spAttack: 61, spDefense: 56, speed: 40 },
+  { name: "Shinx", hp: 45, attack: 65, defense: 34, spAttack: 40, spDefense: 34, speed: 45 },
+  { name: "Riolu", hp: 40, attack: 70, defense: 40, spAttack: 35, spDefense: 40, speed: 60 }
+];
+
+// mapping name -> national dex number (for sprite URL)
+const nameToDex = {
+  "bulbasaur": 1,
+  "charmander": 4,
+  "squirtle": 7,
+  "pikachu": 25,
+  "vulpix": 37,
+  "eevee": 133,
+  "chikorita": 152,
+  "cyndaquil": 155,
+  "quilava": 156,
+  "totodile": 158,
+  "croconaw": 159,
+  "phanpy": 231,
+  "treecko": 252,
+  "torchic": 255,
+  "mudkip": 258,
+  "skitty": 300,
+  "turtwig": 387,
+  "chimchar": 390,
+  "piplup": 393,
+  "shinx": 403,
+  "riolu": 447
+};
+
+/* DOM references */
+const pokeInput = document.getElementById("pokeName");
+const suggestions = document.getElementById("suggestions");
+const spriteImg = document.getElementById("sprite");
+const spriteLabel = document.getElementById("spriteLabel");
+const resultsDiv = document.getElementById("results");
+
+/* Build simple local names array for autocomplete */
+const pokemonNames = pokemonStats.map(p => p.name);
+
+/* AUTOCOMPLETE handling */
+pokeInput.addEventListener("input", function(){
+  const q = pokeInput.value.trim().toLowerCase();
+  suggestions.innerHTML = "";
+  if (!q) {
+    suggestions.style.display = "none";
+    return;
+  }
+  const matches = pokemonNames.filter(n => n.toLowerCase().startsWith(q)).slice(0, 12);
+  matches.forEach(name => {
+    const d = document.createElement("div");
+    d.textContent = name;
+    d.onclick = () => {
+      pokeInput.value = name;
+      suggestions.style.display = "none";
+      showSpriteFor(name);
+    };
+    suggestions.appendChild(d);
+  });
+  suggestions.style.display = matches.length ? "block" : "none";
+});
+
+/* hide suggestions on click outside */
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".left")) suggestions.style.display = "none";
+});
+
+/* Show sprite using National Dex number mapping (generation-iv diamond-pearl) */
+function showSpriteFor(name){
+  if (!name) {
+    spriteImg.src = "";
+    spriteLabel.textContent = "—";
+    return;
+  }
+  const key = name.toLowerCase();
+  const dex = nameToDex[key];
+  if (!dex) {
+    // fallback: try using lowercase name in a different sprite repo (best effort)
+    spriteImg.src = "";
+    spriteImg.alt = "";
+    spriteLabel.textContent = name + " (sprite not mapped)";
+    return;
+  }
+  // diamond/pearl gen4 sprite path (96x96-ish)
+  const url = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/${dex}.png`;
+  spriteImg.src = url;
+  spriteImg.alt = name;
+  spriteLabel.textContent = name;
+}
+
+/* Load sprite when input loses focus (if name recognized) */
+pokeInput.addEventListener("change", () => {
+  showSpriteFor(pokeInput.value.trim());
+});
+
+/* Calculation logic (unchanged formulas) */
+document.getElementById("pokemonForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const name = pokeInput.value.trim();
+  const lvl = parseInt(document.getElementById("level").value) || 50;
+
+  const pokemon = pokemonStats.find(p => p.name.toLowerCase() === name.toLowerCase());
+  if (!pokemon) {
+    resultsDiv.innerHTML = `<strong>Pokémon not found. Make sure spelling matches (e.g. Pikachu).</strong>`;
+    return;
+  }
+
+  // Collect IVs and EVs (per-stat)
+  const iv = {
+    hp: parseInt(document.getElementById("ivHP").value) || 0,
+    atk: parseInt(document.getElementById("ivAtk").value) || 0,
+    def: parseInt(document.getElementById("ivDef").value) || 0,
+    spa: parseInt(document.getElementById("ivSpA").value) || 0,
+    spd: parseInt(document.getElementById("ivSpD").value) || 0,
+    spe: parseInt(document.getElementById("ivSpe").value) || 0
+  };
+  const ev = {
+    hp: parseInt(document.getElementById("evHP").value) || 0,
+    atk: parseInt(document.getElementById("evAtk").value) || 0,
+    def: parseInt(document.getElementById("evDef").value) || 0,
+    spa: parseInt(document.getElementById("evSpA").value) || 0,
+    spd: parseInt(document.getElementById("evSpD").value) || 0,
+    spe: parseInt(document.getElementById("evSpe").value) || 0
+  };
+
+  // HP formula: FLOOR((((Base*2)+IV+(EV/4))*(Level/100))+Level+30,1)
+  const calcHP = (base, ivv, evv) => Math.floor(((base * 2 + ivv + (evv/4)) * (lvl / 100)) + lvl + 30);
+
+  // Others: FLOOR((((Base*2)+IV+(EV/4))*(Level/100))+5,1)
+  const calcOther = (base, ivv, evv) => Math.floor(((base * 2 + ivv + (evv/4)) * (lvl / 100)) + 5);
+
+  const out = {
+    HP: calcHP(pokemon.hp, iv.hp, ev.hp),
+    Attack: calcOther(pokemon.attack, iv.atk, ev.atk),
+    Defense: calcOther(pokemon.defense, iv.def, ev.def),
+    "Sp. Attack": calcOther(pokemon.spAttack, iv.spa, ev.spa),
+    "Sp. Defense": calcOther(pokemon.spDefense, iv.spd, ev.spd),
+    Speed: calcOther(pokemon.speed, iv.spe, ev.spe)
+  };
+
+  // Show sprite for the selected Pokémon (ensures sprite is present)
+  showSpriteFor(name);
+
+  // Render results
+resultsDiv.innerHTML = `
+  <h3>${pokemon.name} — Calculated Stats (Level ${lvl})</h3>
+  <table>
+    <tr>
+      <th>Stat</th>
+      <th>Value</th>
+      <th>Modifier</th>
+    </tr>
+    <tr>
+      <td>HP</td>
+      <td>${out.HP}</td>
+      <td>${Math.floor((out.HP - (lvl + 25)) / 5)}</td>
+    </tr>
+    <tr>
+      <td>Attack</td>
+      <td>${out.Attack}</td>
+      <td>${Math.floor(out.Attack / 5)}</td>
+    </tr>
+    <tr>
+      <td>Defense</td>
+      <td>${out.Defense}</td>
+      <td>${Math.floor(out.Defense / 5)}</td>
+    </tr>
+    <tr>
+      <td>Sp. Attack</td>
+      <td>${out['Sp. Attack']}</td>
+      <td>${Math.floor(out['Sp. Attack'] / 5)}</td>
+    </tr>
+    <tr>
+      <td>Sp. Defense</td>
+      <td>${out['Sp. Defense']}</td>
+      <td>${Math.floor(out['Sp. Defense'] / 5)}</td>
+    </tr>
+    <tr>
+      <td>Speed</td>
+      <td>${out.Speed}</td>
+      <td>${Math.floor(out.Speed / 5)}</td>
+    </tr>
+  </table>
+`;
+});
+</script><br>
+</body>
+</html>
