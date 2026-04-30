@@ -457,21 +457,21 @@
     }
 
     .rules-list li {
-      display: flex;
-      gap: 0.65rem;
-      align-items: flex-start;
+      padding-left: 1.3rem;
+      position: relative;
     }
 
     .rules-list li::before {
       content: '▸';
       color: var(--poke-yellow);
       font-size: 0.8rem;
-      flex-shrink: 0;
-      margin-top: 0.15rem;
+      position: absolute;
+      left: 0;
+      top: 0.15rem;
     }
 
     .rules-list.numbered { list-style: none; counter-reset: rule-counter; }
-    .rules-list.numbered li { counter-increment: rule-counter; }
+    .rules-list.numbered li { counter-increment: rule-counter; padding-left: 1.8rem; }
     .rules-list.numbered li::before {
       content: counter(rule-counter);
       background: var(--poke-blue);
@@ -485,8 +485,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      margin-top: 0.15rem;
+      position: absolute;
+      left: 0;
+      top: 0.1rem;
     }
 
     .inline-link {
