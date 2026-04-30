@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jobs – PMD Campaign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --poke-red:     #3B4CCA;
+      --poke-red-dk:  #2a379f;
+      --poke-yellow:  #FFCB05;
+      --poke-blue:    #3B4CCA;
+      --poke-blue-lt: #6478E0;
+      --poke-white:   #F8F8F8;
+      --poke-dark:    #1a1a2e;
+      --poke-gray:    #333355;
+      --nav-h:        64px;
+
+      --rank-b: #6390F0;   /* blue */
+      --rank-c: #7AC74C;   /* green */
+      --rank-d: #F7D02C;   /* yellow */
+      --rank-e: #A8A77A;   /* grey */
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f6f8fb;
+      color: var(--poke-dark);
+      min-height: 100vh;
+    }
+
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links > li { position: relative; }
+
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px;
+      min-width: 170px;
+      z-index: 999;
+    }
+
+    .nav-links > li.open .dropdown-menu { display: block; }
+
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover { background: var(--poke-yellow); color: var(--poke-red-dk); }
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 34px);
+      flex-direction: column;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+
+    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
+    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .mob-sub.open { max-height: 400px; }
+
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-site-name { display: none; }
+      nav { padding: 0 1rem; }
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    .board-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 900;
+      color: var(--poke-dark);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+
+    .board-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow));
+      border-radius: 2px;
+      margin-top: 0.5rem;
+    }
+
+    /* ── RANK ACCORDION ── */
+    .rank-accordion { display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1.5rem; }
+
+    .rank-item {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid rgba(59,76,202,0.13);
+      box-shadow: 0 3px 12px rgba(20,30,60,0.06);
+      overflow: hidden;
+    }
+
+    .rank-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.4rem;
+      background: linear-gradient(135deg, rgba(59,76,202,0.06) 0%, rgba(100,120,224,0.1) 100%);
+      border: none;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--poke-dark);
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+      text-align: left;
+    }
+
+    .rank-btn:hover {
+      background: linear-gradient(135deg, rgba(59,76,202,0.12) 0%, rgba(100,120,224,0.18) 100%);
+    }
+
+    .rank-btn.active {
+      background: linear-gradient(135deg, var(--poke-blue) 0%, var(--poke-blue-lt) 100%);
+      color: var(--poke-yellow);
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .rank-badge.b { background: var(--rank-b); }
+    .rank-badge.c { background: var(--rank-c); color: #1a1a2e; }
+    .rank-badge.d { background: var(--rank-d); color: #1a1a2e; }
+    .rank-badge.e { background: var(--rank-e); }
+
+    .rank-icon {
+      font-size: 0.85rem;
+      transition: transform 0.35s ease;
+      flex-shrink: 0;
+    }
+
+    .rank-btn.active .rank-icon { transform: rotate(180deg); }
+
+    .rank-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+
+    .rank-body.open { max-height: 9999px; }
+
+    .rank-body-inner {
+      padding: 1rem 1.4rem 1.4rem;
+      border-top: 1px solid rgba(59,76,202,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    /* ── LOCATION SUB-ACCORDION ── */
+    .loc-item {
+      border: 1px solid rgba(59,76,202,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8f9ff;
+    }
+
+    .loc-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1.1rem;
+      background: rgba(59,76,202,0.05);
+      border: none;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--poke-blue);
+      letter-spacing: 0.08em;
+      transition: background 0.2s;
+      text-align: left;
+    }
+
+    .loc-btn:hover { background: rgba(59,76,202,0.1); }
+    .loc-btn.active { background: rgba(59,76,202,0.14); }
+
+    .loc-icon {
+      font-size: 0.75rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      color: var(--poke-blue);
+    }
+
+    .loc-btn.active .loc-icon { transform: rotate(180deg); }
+
+    .loc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease;
+    }
+
+    .loc-body.open { max-height: 9999px; }
+
+    .loc-body-inner {
+      padding: 0.5rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      border-top: 1px solid rgba(59,76,202,0.1);
+    }
+
+    /* ── JOB CARD ── */
+    .job-card {
+      background: #fff;
+      border: 1px solid rgba(59,76,202,0.1);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.3rem 1rem;
+    }
+
+    .job-request {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--poke-dark);
+      grid-column: 1 / -1;
+      letter-spacing: 0.04em;
+    }
+
+    .job-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      grid-column: 1;
+    }
+
+    .job-meta span {
+      font-size: 0.82rem;
+      color: var(--poke-gray);
+    }
+
+    .job-meta span b {
+      color: var(--poke-dark);
+      font-weight: 700;
+    }
+
+    .job-reward {
+      grid-column: 1 / -1;
+      margin-top: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--poke-blue);
+      background: rgba(59,76,202,0.07);
+      border-radius: 20px;
+      padding: 3px 10px;
+      width: fit-content;
+    }
+
+    /* ── UNGROUPED JOBS (D/E rank with no location sub-dropdown) ── */
+    .ungrouped-jobs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    /* ── BOARD DIVIDER ── */
+    .board-divider {
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow), var(--poke-blue));
+      border-radius: 2px;
+      margin: 2.5rem 0;
+      opacity: 0.3;
+    }
+
+    /* ── OUTLAW BOARD ── */
+    .outlaw-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+
+    .outlaw-card {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1 1 200px;
+      max-width: 240px;
+      background: #fff;
+      border: 2px solid rgba(200,30,30,0.15);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(20,30,60,0.08);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .outlaw-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(180,20,20,0.18);
+      border-color: rgba(200,30,30,0.45);
+    }
+
+    .outlaw-img-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .outlaw-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .outlaw-info {
+      padding: 0.85rem 1rem 1rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .wanted-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      color: #c0392b;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .outlaw-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--poke-dark);
+      letter-spacing: 0.06em;
+    }
+
+    .outlaw-location {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--poke-gray);
+      margin-top: 0.2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: var(--poke-yellow); }
+
+    @media (max-width: 560px) {
+      .outlaw-card { max-width: 100%; }
+      .job-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-wrap">
+
+    <!-- ══ BULLETIN BOARD ══ -->
+    <h1 class="board-title">Bulletin Board</h1>
+
+    <div class="rank-accordion">
+
+      <!-- B RANK -->
+      <div class="rank-item">
+        <button class="rank-btn" onclick="toggleRank(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.7rem;">
+            <span class="rank-badge b">B</span>
+            B Rank Jobs
+          </span>
+          <span class="rank-icon">▼</span>
+        </button>
+        <div class="rank-body">
+          <div class="rank-body-inner">
+
+            <!-- Cinder Volcano -->
+            <div class="loc-item">
+              <button class="loc-btn" onclick="toggleLoc(this)" aria-expanded="false">
+                Cinder Volcano
+                <span class="loc-icon">▼</span>
+              </button>
+              <div class="loc-body">
+                <div class="loc-body-inner">
+
+                  <div class="job-card">
+                    <div class="job-request">It's so hot in here...</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Snorunt</span>
+                      <span><b>Info:</b> Rescue Snorunt on Cinder Volcano 4F</span>
+                    </div>
+                    <div class="job-reward">400P per participant &nbsp;·&nbsp; 40 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I'm burned, please help!</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Hoothoot</span>
+                      <span><b>Info:</b> Bring a Rawst Berry to Sentret on 5F</span>
+                    </div>
+                    <div class="job-reward">400P per participant &nbsp;·&nbsp; 40 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I really want an Igneous Rock from the Volcano.</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Graveller</span>
+                      <span><b>Info:</b> Retrieve Igneous Rock from 6F</span>
+                    </div>
+                    <div class="job-reward">400P per participant &nbsp;·&nbsp; 40 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I want to see Koffing again!</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Grimer</span>
+                      <span><b>Info:</b> Escort Grimer to Koffing on 8F</span>
+                    </div>
+                    <div class="job-reward">450P per participant &nbsp;·&nbsp; 45 RP</div>
+                  </div>
+
+                </div>
+              </div>
+            </div><!-- /Cinder Volcano -->
+
+          </div>
+        </div>
+      </div><!-- /B Rank -->
+
+      <!-- C RANK -->
+      <div class="rank-item">
+        <button class="rank-btn" onclick="toggleRank(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.7rem;">
+            <span class="rank-badge c">C</span>
+            C Rank Jobs
+          </span>
+          <span class="rank-icon">▼</span>
+        </button>
+        <div class="rank-body">
+          <div class="rank-body-inner">
+
+            <!-- Bolt Mountain -->
+            <div class="loc-item">
+              <button class="loc-btn" onclick="toggleLoc(this)" aria-expanded="false">
+                Bolt Mountain
+                <span class="loc-icon">▼</span>
+              </button>
+              <div class="loc-body">
+                <div class="loc-body-inner">
+
+                  <div class="job-card">
+                    <div class="job-request">I can't find my way out!</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Gible</span>
+                      <span><b>Info:</b> Rescue Gible on Bolt Mountain 3F</span>
+                    </div>
+                    <div class="job-reward">350P per participant &nbsp;·&nbsp; 35 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I am getting sleepy...</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Sentret</span>
+                      <span><b>Info:</b> Bring a Chesto Berry to Sentret 5F</span>
+                    </div>
+                    <div class="job-reward">350P per participant &nbsp;·&nbsp; 35 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I dropped my Mother's memento, please help!</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Cubone</span>
+                      <span><b>Info:</b> Retrieve Cherished Bone on 6F</span>
+                    </div>
+                    <div class="job-reward">350P per participant &nbsp;·&nbsp; 35 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">Bellsprout ran away and I can't find him!</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Oddish</span>
+                      <span><b>Info:</b> Escort Oddish to Bellsprout on 8F</span>
+                    </div>
+                    <div class="job-reward">400P per participant &nbsp;·&nbsp; 40 RP</div>
+                  </div>
+
+                </div>
+              </div>
+            </div><!-- /Bolt Mountain -->
+
+            <!-- Sharpgrass Savannah -->
+            <div class="loc-item">
+              <button class="loc-btn" onclick="toggleLoc(this)" aria-expanded="false">
+                Sharpgrass Savannah
+                <span class="loc-icon">▼</span>
+              </button>
+              <div class="loc-body">
+                <div class="loc-body-inner">
+
+                  <div class="job-card">
+                    <div class="job-request">I am SO lost</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Spinda</span>
+                      <span><b>Info:</b> Rescue Spinda on Sharpgrass Savannah 3F</span>
+                    </div>
+                    <div class="job-reward">300P per participant &nbsp;·&nbsp; 30 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I feel so weak...</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Dunsparce</span>
+                      <span><b>Info:</b> Bring an Oran Berry to Dunsparce on 5F</span>
+                    </div>
+                    <div class="job-reward">300P per participant &nbsp;·&nbsp; 30 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I am looking for a special rock</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Geodude</span>
+                      <span><b>Info:</b> Retrieve Special Rock on 6F</span>
+                    </div>
+                    <div class="job-reward">300P per participant &nbsp;·&nbsp; 30 RP</div>
+                  </div>
+
+                  <div class="job-card">
+                    <div class="job-request">I am lost without Minun</div>
+                    <div class="job-meta">
+                      <span><b>Issuer:</b> Plusle</span>
+                      <span><b>Info:</b> Escort Plusle to 8F</span>
+                    </div>
+                    <div class="job-reward">350P per participant &nbsp;·&nbsp; 35 RP</div>
+                  </div>
+
+                </div>
+              </div>
+            </div><!-- /Sharpgrass Savannah -->
+
+          </div>
+        </div>
+      </div><!-- /C Rank -->
+
+      <!-- D RANK -->
+      <div class="rank-item">
+        <button class="rank-btn" onclick="toggleRank(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.7rem;">
+            <span class="rank-badge d">D</span>
+            D Rank Jobs
+          </span>
+          <span class="rank-icon">▼</span>
+        </button>
+        <div class="rank-body">
+          <div class="rank-body-inner">
+            <div class="ungrouped-jobs">
+
+              <div class="job-card">
+                <div class="job-request">Help Me!</div>
+                <div class="job-meta">
+                  <span><b>Issuer:</b> Pidgey</span>
+                  <span><b>Location:</b> Moonlight Grove</span>
+                  <span><b>Info:</b> Rescue Pidgey on B3F</span>
+                </div>
+                <div class="job-reward">200P per participant &nbsp;·&nbsp; 20 RP</div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-request">I'm getting sleepy</div>
+                <div class="job-meta">
+                  <span><b>Issuer:</b> Poochyena</span>
+                  <span><b>Location:</b> Moonlight Grove</span>
+                  <span><b>Info:</b> Bring a Chesto Berry to B4F</span>
+                </div>
+                <div class="job-reward">200P per participant &nbsp;·&nbsp; 20 RP</div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-request">Where is Minun?</div>
+                <div class="job-meta">
+                  <span><b>Issuer:</b> Plusle</span>
+                  <span><b>Location:</b> Moonlight Grove</span>
+                  <span><b>Info:</b> Escort Plusle to B5F</span>
+                </div>
+                <div class="job-reward">250P per participant &nbsp;·&nbsp; 25 RP</div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-request">Help</div>
+                <div class="job-meta">
+                  <span><b>Issuer:</b> Ralts</span>
+                  <span><b>Location:</b> Moonlight Grove</span>
+                  <span><b>Info:</b> Rescue Ralts on B6F</span>
+                </div>
+                <div class="job-reward">200P per participant &nbsp;·&nbsp; 20 RP</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div><!-- /D Rank -->
+
+      <!-- E RANK -->
+      <div class="rank-item">
+        <button class="rank-btn" onclick="toggleRank(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.7rem;">
+            <span class="rank-badge e">E</span>
+            E Rank Jobs
+          </span>
+          <span class="rank-icon">▼</span>
+        </button>
+        <div class="rank-body">
+          <div class="rank-body-inner">
+            <div class="ungrouped-jobs">
+
+              <div class="job-card">
+                <div class="job-request">I don't feel so good</div>
+                <div class="job-meta">
+                  <span><b>Issuer:</b> Bidoof</span>
+                  <span><b>Location:</b> Verdant Plains</span>
+                  <span><b>Info:</b> Bring a Pecha Berry to Verdant Plains 2F</span>
+                </div>
+                <div class="job-reward">100P per participant &nbsp;·&nbsp; 10 RP</div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-request">Where Am I?</div>
+                <div class="job-meta">
+                  <span><b>Issuer:</b> Beautifly</span>
+                  <span><b>Location:</b> Verdant Plains</span>
+                  <span><b>Info:</b> Rescue Beautifly on Verdant Plains 3F</span>
+                </div>
+                <div class="job-reward">100P per participant &nbsp;·&nbsp; 10 RP</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div><!-- /E Rank -->
+
+    </div><!-- /.rank-accordion -->
+
+    <div class="board-divider"></div>
+
+    <!-- ══ OUTLAW BOARD ══ -->
+    <h2 class="board-title">Outlaw Board</h2>
+
+    <div class="outlaw-grid">
+
+      <a href="/outlaw1.html" class="outlaw-card">
+        <div class="outlaw-img-wrap">
+          <img src="/css/images/outlaw1.png" alt="Magcargo wanted poster" />
+        </div>
+        <div class="outlaw-info">
+          <div class="wanted-label">Wanted</div>
+          <div class="outlaw-name">Magcargo</div>
+          <div class="outlaw-location">Sharpgrass Savannah</div>
+        </div>
+      </a>
+
+      <a href="/outlaw2.html" class="outlaw-card">
+        <div class="outlaw-img-wrap">
+          <img src="/css/images/outlaw2.png" alt="Wobuffet wanted poster" />
+        </div>
+        <div class="outlaw-info">
+          <div class="wanted-label">Wanted</div>
+          <div class="outlaw-name">Wobuffet</div>
+          <div class="outlaw-location">Bolt Mountain</div>
+        </div>
+      </a>
+
+      <a href="/outlaw3.html" class="outlaw-card">
+        <div class="outlaw-img-wrap">
+          <img src="/css/images/outlaw3.png" alt="Piloswine wanted poster" />
+        </div>
+        <div class="outlaw-info">
+          <div class="wanted-label">Wanted</div>
+          <div class="outlaw-name">Piloswine</div>
+          <div class="outlaw-location">Cinder Volcano</div>
+        </div>
+      </a>
+
+    </div>
+
+  </div><!-- /.page-wrap -->
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
+
+  <script>
+    /* ── Rank accordion (only one open at a time) ── */
+    function toggleRank(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      document.querySelectorAll('.rank-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.rank-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-expanded','false'); });
+      if (!isOpen) {
+        body.classList.add('open');
+        btn.classList.add('active');
+        btn.setAttribute('aria-expanded','true');
+      }
+    }
+
+    /* ── Location sub-accordion (independent, multiple can be open) ── */
+    function toggleLoc(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      btn.classList.toggle('active', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    /* ── Dropdown nav ── */
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+
+    /* ── Hamburger ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
+  </script>
+</body>
+</html>
