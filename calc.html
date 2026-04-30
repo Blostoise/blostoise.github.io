@@ -1,49 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PMD Stat Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/styles.css">
+<meta charset="utf-8" />
+<title>PMD Stat Calculator</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+    :root{
+      --card-bg:#fff;
+      --accent:#4a90e2;
+      --muted:#f2f2f2;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        background: #f6f8fb;
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+      width: 900px;
+      max-width: 96%;
+    }
+
+    h1 { margin-bottom: 6px; font-size: 20px; }
+    label { font-weight: bold; }
+
+    /* Card for name + sprite */
+    .card {
+        background: var(--card-bg);
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 18px;
+    }
+
+    .left {
+      flex: 1 1 auto;
+      position: relative;
+    }
+
+    .left label { display:block; margin-bottom:6px; }
+    .left input[type="text"]{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cfd8e6;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 76px;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #e1e6f0;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+      max-height: 180px;
+      overflow-y: auto;
+      display: none;
+      z-index: 60;
+    }
+    .suggestions div { padding: 8px 10px; cursor: pointer; }
+    .suggestions div:hover { background: #eef4ff; }
+
+    .sprite {
+      width: 110px;
+      flex: 0 0 110px;
+      text-align: center;
+    }
+    .sprite img {
+      width: 96px;
+      height: 96px;
+      image-rendering: pixelated;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .sprite .label { font-weight: bold; margin-top:8px; font-size:13px; }
+
+    /* Calculator section */
+    .calc {
+      background: var(--card-bg);
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.04);
+      margin-bottom: 18px;
+    }
+
+    .calc .row {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom: 12px;
+    }
+    .calc label { margin-right: 6px; }
+
+    input[type="number"] {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #d0d8e6;
+      width: 120px;
+      box-sizing: border-box;
+    }
+
+    /* IV/EV Table */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        text-align: center;
+        margin-top: 6px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        width: 100px;
+    }
+    thead th { background-color: var(--accent); color: white; }
+    tbody td:first-child { background-color: #e9f3ff; font-weight: bold; text-align: left; padding-left: 12px; }
+    tbody tr:nth-child(even) { background: var(--muted); }
+
+    /* Buttons and results */
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #results {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #eef2fb;
+    }
+
+    /* Base stats table at page bottom */
+    .basetable { margin-top: 14px; background: #fff; border-radius: 10px; padding: 10px; }
+    .basetable table { font-size:13px; }
+    @media (max-width: 760px){
+      .card { flex-direction: column; align-items: stretch; gap:12px;}
+      .sprite { order: -1; display:flex; justify-content:center;}
+      .left .suggestions { top: 104px; }
+      input[type="number"]{ width: 100%; }
+    }
+</style>
 </head>
 <body>
-
-  <!-- Disclaimer Banner -->
-  <div class="disclaimer-banner">
-    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
-  </div>
-
-  <!-- Navigation -->
-  <nav>
-    <a href="/" class="nav-brand">
-      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
-      <span class="nav-site-name">PMD Campaign</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-
-      <li>
-        <span>Character <span class="dropdown-arrow">▼</span></span>
-        <div class="dropdown-menu">
-          <a href="/calc">Calculator</a>
-          <a href="/pokemon">Pokémon</a>
-          <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
-        </div>
-      </li>
-
-      <li>
-        <span>Game <span class="dropdown-arrow">▼</span></span>
-        <div class="dropdown-menu">
-          <a href="/rules">Rules</a>
-          <a href="/jobs">Jobs</a>
-          <a href="/map">Map</a>
-          <a href="/shop">Shop</a>
-          <a href="/lore">Lore</a>
-        </div>
-      </li>
-    </ul>
-  </nav>
   <div class="container">
     <h1>PMD Stat Calculator</h1>
 
@@ -91,6 +206,40 @@
 
       <div id="results" aria-live="polite"></div>
     </div>
+
+    <!-- Base Stats Table 
+    <div class="basetable">
+      <h3>Base Stats</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Pokemon</th><th>HP</th><th>Attack</th><th>Defense</th><th>Special Attack</th><th>Special Defense</th><th>Speed</th><th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Bulbasaur</td><td>45</td><td>49</td><td>49</td><td>65</td><td>65</td><td>45</td><td>318</td></tr>
+          <tr><td>Charmander</td><td>39</td><td>52</td><td>43</td><td>60</td><td>50</td><td>65</td><td>309</td></tr>
+          <tr><td>Squirtle</td><td>44</td><td>48</td><td>65</td><td>50</td><td>64</td><td>43</td><td>314</td></tr>
+          <tr><td>Pikachu</td><td>35</td><td>55</td><td>40</td><td>50</td><td>50</td><td>90</td><td>320</td></tr>
+          <tr><td>Vulpix</td><td>38</td><td>41</td><td>40</td><td>50</td><td>65</td><td>65</td><td>299</td></tr>
+          <tr><td>Eevee</td><td>55</td><td>55</td><td>50</td><td>45</td><td>65</td><td>55</td><td>325</td></tr>
+          <tr><td>Chikorita</td><td>45</td><td>49</td><td>65</td><td>49</td><td>65</td><td>45</td><td>318</td></tr>
+          <tr><td>Cyndaquil</td><td>39</td><td>52</td><td>43</td><td>60</td><td>50</td><td>65</td><td>309</td></tr>
+          <tr><td>Totodile</td><td>50</td><td>65</td><td>64</td><td>44</td><td>48</td><td>43</td><td>314</td></tr>
+          <tr><td>Phanpy</td><td>90</td><td>60</td><td>60</td><td>40</td><td>40</td><td>40</td><td>330</td></tr>
+          <tr><td>Treecko</td><td>40</td><td>45</td><td>35</td><td>65</td><td>55</td><td>70</td><td>310</td></tr>
+          <tr><td>Torchic</td><td>45</td><td>60</td><td>40</td><td>70</td><td>50</td><td>45</td><td>310</td></tr>
+          <tr><td>Mudkip</td><td>50</td><td>70</td><td>50</td><td>50</td><td>50</td><td>40</td><td>310</td></tr>
+          <tr><td>Skitty</td><td>50</td><td>45</td><td>45</td><td>35</td><td>35</td><td>50</td><td>260</td></tr>
+          <tr><td>Turtwig</td><td>55</td><td>68</td><td>64</td><td>45</td><td>55</td><td>31</td><td>318</td></tr>
+          <tr><td>Chimchar</td><td>44</td><td>58</td><td>44</td><td>58</td><td>44</td><td>61</td><td>309</td></tr>
+          <tr><td>Piplup</td><td>53</td><td>51</td><td>53</td><td>61</td><td>56</td><td>40</td><td>314</td></tr>
+          <tr><td>Shinx</td><td>45</td><td>65</td><td>34</td><td>40</td><td>34</td><td>45</td><td>263</td></tr>
+          <tr><td>Riolu</td><td>40</td><td>70</td><td>40</td><td>35</td><td>40</td><td>60</td><td>285</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div> -->
 
 <script>
 /* ---- Data & Dex mapping ---- */
