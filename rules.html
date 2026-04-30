@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rules – PMD Campaign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --poke-red:     #3B4CCA;
+      --poke-red-dk:  #2a379f;
+      --poke-yellow:  #FFCB05;
+      --poke-blue:    #3B4CCA;
+      --poke-blue-lt: #6478E0;
+      --poke-white:   #F8F8F8;
+      --poke-dark:    #1a1a2e;
+      --poke-gray:    #333355;
+      --nav-h:        64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f6f8fb;
+      color: var(--poke-dark);
+      min-height: 100vh;
+    }
+
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links > li { position: relative; }
+
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px;
+      min-width: 170px;
+      z-index: 999;
+    }
+
+    .nav-links > li.open .dropdown-menu { display: block; }
+
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover { background: var(--poke-yellow); color: var(--poke-red-dk); }
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 34px);
+      flex-direction: column;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+
+    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
+    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .mob-sub.open { max-height: 400px; }
+
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-site-name { display: none; }
+      nav { padding: 0 1rem; }
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    .page-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 900;
+      color: var(--poke-dark);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title::after {
+      content: '';
+      display: block;
+      width: 70px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow));
+      border-radius: 2px;
+      margin-top: 0.6rem;
+    }
+
+    .intro-text {
+      margin-top: 1.2rem;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--poke-gray);
+    }
+
+    .disclaimer-note {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: rgba(51,51,85,0.7);
+    }
+
+    /* ── TABLE OF CONTENTS ── */
+    .toc-card {
+      background: #fff;
+      border: 1px solid rgba(59,76,202,0.15);
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(20,30,60,0.07);
+      padding: 1.4rem 1.75rem;
+      margin: 1.75rem 0 2rem;
+    }
+
+    .toc-heading {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--poke-blue);
+      border-bottom: 2px solid rgba(59,76,202,0.12);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .toc-list li a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--poke-blue);
+      transition: color 0.15s;
+    }
+
+    .toc-list li a:hover { color: var(--poke-red-dk); }
+
+    .toc-list li a::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--poke-yellow);
+      flex-shrink: 0;
+    }
+
+    /* ── ACCORDION ── */
+    .accordion { display: flex; flex-direction: column; gap: 1rem; }
+
+    .accordion-item {
+      background: #fff;
+      border: 1px solid rgba(59,76,202,0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(20,30,60,0.06);
+      scroll-margin-top: calc(var(--nav-h) + 1rem);
+    }
+
+    .accordion-btn {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(59,76,202,0.06) 0%, rgba(100,120,224,0.1) 100%);
+      border: none;
+      color: var(--poke-dark);
+      padding: 1.1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+      text-align: left;
+      gap: 1rem;
+    }
+
+    .accordion-btn:hover {
+      background: linear-gradient(135deg, rgba(59,76,202,0.12) 0%, rgba(100,120,224,0.18) 100%);
+    }
+
+    .accordion-btn.active {
+      background: linear-gradient(135deg, var(--poke-blue) 0%, var(--poke-blue-lt) 100%);
+      color: var(--poke-yellow);
+    }
+
+    .accordion-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(59,76,202,0.12);
+      font-size: 0.75rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .accordion-btn.active .accordion-num {
+      background: rgba(255,203,5,0.25);
+      color: var(--poke-yellow);
+    }
+
+    .accordion-icon {
+      font-size: 0.9rem;
+      transition: transform 0.35s ease;
+      flex-shrink: 0;
+    }
+
+    .accordion-btn.active .accordion-icon { transform: rotate(180deg); }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+
+    .accordion-body.open { max-height: 9999px; }
+
+    .accordion-body-inner {
+      padding: 1.5rem 1.75rem 1.75rem;
+      border-top: 1px solid rgba(59,76,202,0.1);
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--poke-gray);
+    }
+
+    /* ── CONTENT STYLES ── */
+    .rules-section + .rules-section { margin-top: 1.4rem; }
+
+    .subsection-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--poke-blue);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(59,76,202,0.15);
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rules-list li {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+    }
+
+    .rules-list li::before {
+      content: '▸';
+      color: var(--poke-yellow);
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .rules-list.numbered { list-style: none; counter-reset: rule-counter; }
+    .rules-list.numbered li { counter-increment: rule-counter; }
+    .rules-list.numbered li::before {
+      content: counter(rule-counter);
+      background: var(--poke-blue);
+      color: #fff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .inline-link {
+      color: var(--poke-blue);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(59,76,202,0.3);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .inline-link:hover { color: var(--poke-red-dk); border-color: var(--poke-red-dk); }
+
+    .highlight-box {
+      background: rgba(59,76,202,0.05);
+      border-left: 3px solid var(--poke-blue);
+      border-radius: 0 8px 8px 0;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.88rem;
+    }
+
+    .example-box {
+      background: rgba(255,203,5,0.08);
+      border-left: 3px solid var(--poke-yellow);
+      border-radius: 0 8px 8px 0;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.88rem;
+    }
+
+    .example-box strong { color: var(--poke-dark); }
+
+    p + p { margin-top: 0.7rem; }
+
+    /* ── CONDITIONS GRID ── */
+    .conditions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .condition-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: #f8f9ff;
+      border: 1px solid rgba(59,76,202,0.1);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+    }
+
+    .condition-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--poke-blue);
+      width: 90px;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+      padding-top: 0.1rem;
+    }
+
+    .condition-desc {
+      font-size: 0.87rem;
+      color: var(--poke-gray);
+      line-height: 1.6;
+    }
+
+    /* ── WEATHER GRID ── */
+    .weather-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .weather-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: #f8f9ff;
+      border: 1px solid rgba(59,76,202,0.1);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+    }
+
+    .weather-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--poke-blue);
+      width: 100px;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+      padding-top: 0.1rem;
+    }
+
+    .weather-desc {
+      font-size: 0.87rem;
+      color: var(--poke-gray);
+      line-height: 1.6;
+    }
+
+    /* ── RANK TABLE ── */
+    .table-wrap { overflow-x: auto; margin-top: 0.75rem; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.88rem;
+    }
+
+    thead th {
+      background: var(--poke-blue);
+      color: #fff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      padding: 10px 14px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tbody tr { border-bottom: 1px solid #e8ecf6; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: #f5f7ff; }
+
+    tbody td {
+      padding: 10px 14px;
+      color: var(--poke-gray);
+      vertical-align: middle;
+    }
+
+    tbody td:first-child {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--poke-dark);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: var(--poke-yellow); }
+
+    @media (max-width: 560px) {
+      .accordion-body-inner { padding: 1.1rem 1.1rem 1.3rem; }
+      .condition-name, .weather-name { width: 75px; font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-wrap">
+
+    <h1 class="page-title">Rules</h1>
+    <p class="intro-text">Below you will find how we are going to run this campaign. Feel free to return here to reference if you have any questions.</p>
+    <p class="disclaimer-note">⚠️ These rules are subject to change if we need to balance something. Keep in mind, this was homebrewed from scratch — some things may need balancing over time.</p>
+
+    <!-- Table of Contents -->
+    <div class="toc-card">
+      <div class="toc-heading">Table of Contents</div>
+      <ul class="toc-list">
+        <li><a href="#section-1">1 &nbsp;— Building Your Character</a></li>
+        <li><a href="#section-2">2 &nbsp;— Dungeons</a></li>
+        <li><a href="#section-3">3 &nbsp;— Combat</a></li>
+        <li><a href="#section-4">4 &nbsp;— General Rules</a></li>
+        <li><a href="#section-5">5 &nbsp;— Exploration Teams</a></li>
+      </ul>
+    </div>
+
+    <!-- Accordion -->
+    <div class="accordion">
+
+      <!-- 1: Building Your Character -->
+      <div class="accordion-item" id="section-1">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="accordion-num">1</span>
+            Building Your Character
+          </span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+
+            <div class="rules-section">
+              <div class="subsection-title">Step 1 — Choose Your Pokémon</div>
+              <p>You can choose your Pokémon by taking the quiz, or by picking for yourself from the starter list. Players who stick with their quiz result will receive a bonus.</p>
+              <ul class="rules-list" style="margin-top:0.75rem;">
+                <li>Quiz: <a href="https://nrosa01.github.io/pmd-quiz-online/" class="inline-link" target="_blank" rel="noopener">nrosa01.github.io/pmd-quiz-online ↗</a></li>
+                <li>Starter List: <a href="https://www.serebii.net/dungeonsky/starter.shtml" class="inline-link" target="_blank" rel="noopener">serebii.net/dungeonsky/starter.shtml ↗</a></li>
+              </ul>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">Step 2 — Roll Your IVs</div>
+              <p>IVs give you a bonus to your stats. An IV value can be up to 31. To roll your IVs, <strong>roll 5d8 and drop the lowest</strong> (if you roll a 32, treat it as 31). Do this 7 times, then drop the lowest total. You may assign these values to any stats you please.</p>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">Step 3 — Determine Your Stats</div>
+              <p>There is a <a href="/calc" class="inline-link">calculator built into this site</a> — enter your Pokémon, level, and IVs to get your stats. Newly created Pokémon start at <strong>Level 5</strong>.</p>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">Step 4 — Figure Out Your Moves</div>
+              <p>See each Pokémon's page for their level-up moves and what they do.</p>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">Step 5 — Choose Your Ability</div>
+              <p>Each Pokémon has more than one ability (including hidden abilities). Choose whichever you like — depending on the ability, it may function differently than it does in the mainline games.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 2: Dungeons -->
+      <div class="accordion-item" id="section-2">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="accordion-num">2</span>
+            Dungeons
+          </span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+
+            <div class="rules-section">
+              <div class="subsection-title">2.1 — General</div>
+              <ul class="rules-list">
+                <li>At the start of a dungeon, everyone rolls <strong>initiative</strong>. This determines the order in which everyone moves throughout the dungeon.</li>
+                <li>Dungeons are <strong>random</strong> — the structure changes every time you enter.</li>
+                <li>Once you enter a dungeon, there are only 3 ways to leave:
+                  <ul class="rules-list" style="margin-top:0.4rem; margin-left:1rem;">
+                    <li>Fainting (see Section 3.2)</li>
+                    <li>Clearing the dungeon (reaching the stairs on the final floor)</li>
+                    <li>Completing a Job</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">2.2 — Exploring</div>
+              <ul class="rules-list">
+                <li>Out of combat, initiative is not as strict. Characters can move up to <strong>30ft</strong> on their turn as long as no enemies are after them.</li>
+                <li>Parties can only advance to the next floor <strong>as a group</strong>. If a member is not present, the party cannot move on.</li>
+              </ul>
+              <p style="margin-top:0.75rem;">When you advance to the next floor, the following happens:</p>
+              <ul class="rules-list" style="margin-top:0.5rem;">
+                <li>You <strong>cannot</strong> go back to the previous floor.</li>
+                <li>Your <strong>Hunger</strong> decreases by 10.</li>
+                <li>You <strong>regain HP</strong> equal to your HP modifier.</li>
+                <li>You are <strong>healed of any special conditions</strong>.</li>
+                <li>All <strong>stat changes end</strong>.</li>
+              </ul>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">2.3 — Weather</div>
+              <p>Some dungeons will be in harsh environments, and bad weather may have negative effects on certain floors. Some moves can also cause weather for 5 turns.</p>
+              <div class="weather-grid" style="margin-top:0.9rem;">
+                <div class="weather-row">
+                  <span class="weather-name">Rain</span>
+                  <span class="weather-desc">Water moves do 50% more damage; Fire moves do 50% less damage.</span>
+                </div>
+                <div class="weather-row">
+                  <span class="weather-name">Downpour</span>
+                  <span class="weather-desc">Water moves do 75% more damage; Fire moves do no damage.</span>
+                </div>
+                <div class="weather-row">
+                  <span class="weather-name">Harsh Sun</span>
+                  <span class="weather-desc">Fire moves do 50% more damage; Water moves do 50% less damage.</span>
+                </div>
+                <div class="weather-row">
+                  <span class="weather-name">Drought</span>
+                  <span class="weather-desc">Fire moves do 75% more damage; Water moves do no damage.</span>
+                </div>
+                <div class="weather-row">
+                  <span class="weather-name">Sandstorm</span>
+                  <span class="weather-desc">All types except Rock, Steel, and Ground take 2 damage every turn. Rock, Steel, and Ground types have their Special Defense modifier increased by 50%.</span>
+                </div>
+                <div class="weather-row">
+                  <span class="weather-name">Hail</span>
+                  <span class="weather-desc">All types except Ice take 2 damage every turn. Ice type moves do 50% more damage.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: Combat -->
+      <div class="accordion-item" id="section-3">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="accordion-num">3</span>
+            Combat
+          </span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+
+            <div class="rules-section">
+              <div class="subsection-title">3.1 — Attacking</div>
+              <p>On your turn, you get <strong>1 move action</strong> and <strong>1 standard action</strong>.</p>
+              <ul class="rules-list" style="margin-top:0.6rem;">
+                <li><strong>Move action:</strong> Move 5ft in any direction (including diagonals).</li>
+                <li><strong>Standard actions:</strong> Perform any attack, use an item, move an ally (5ft with consent), or move an extra 5ft.</li>
+              </ul>
+
+              <div class="highlight-box" style="margin-top:1rem;">
+                <strong>To Hit:</strong> Roll 1d20 + the category modifier (Attack or Sp. Attack), DC 12. For every 5 points of Accuracy below 100, add 1 to the DC (e.g. a 95 Accuracy move is DC 13).
+              </div>
+
+              <div class="highlight-box">
+                <strong>Damage:</strong> You get one die per half of your modifier (rounded up) based on the move's power. A 40-power move uses a d4, with one die per half of your Attack or Sp. Attack modifier.
+              </div>
+
+              <div class="example-box">
+                <strong>Example:</strong> A Rattata using Tackle (40 power) with a +4 Attack modifier would roll 3d4 instead of 2d4.
+              </div>
+
+              <ul class="rules-list" style="margin-top:0.75rem;">
+                <li><strong>STAB:</strong> For any move that matches your type, roll 50% more dice.</li>
+                <li><strong>Super Effective:</strong> 2× the damage rolled.</li>
+                <li><strong>Not Very Effective:</strong> ½ the damage rolled (rounded down).</li>
+                <li><strong>Double Weakness / Resistance:</strong> 4× damage or ¼ damage respectively.</li>
+                <li>If you run out of PP, you cannot use that move until you leave the dungeon or use a PP restoring item.</li>
+                <li><strong>Basic Attack:</strong> Deals damage equal to your Attack Modifier.</li>
+                <li><strong>Struggle:</strong> Roll 1d4 per Attack or Sp. Attack modifier, then take 75% of that as recoil.</li>
+                <li>Stat changes (positive or negative) last for <strong>10 turns</strong>, or until you step on a Reset Tile.</li>
+                <li><strong>Critical Hits</strong> occur on a Natural 20 (no confirm). Critical damage is always double the number of dice rolled.</li>
+              </ul>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">3.2 — Fainting</div>
+              <ul class="rules-list">
+                <li>If you faint, you lose <strong>15% of the money</strong> on you, <strong>1d6 items</strong> (chosen randomly) from your bag, and <strong>ALL treasure chests</strong> on you. These are not dropped — they are lost to the dungeon and cannot be recovered.</li>
+                <li>If you have a <strong>Reviver Seed</strong> in your bag, it can be consumed automatically. You will not lose any items besides the seed itself.</li>
+                <li>If you faint without a Reviver Seed, your teammates have <strong>3 turns</strong> to revive you with a Reviver Seed or Revive Orb.</li>
+              </ul>
+            </div>
+
+            <div class="rules-section">
+              <div class="subsection-title">3.3 — Conditions</div>
+              <p>Certain moves apply special conditions. Some persist until healed by an item or by advancing to the next floor.</p>
+              <div class="conditions-grid" style="margin-top:0.9rem;">
+                <div class="condition-row">
+                  <span class="condition-name">Paralysis</span>
+                  <span class="condition-desc">For up to 4 turns, you cannot move. You can still attack and use items. DC 15 Speed check to end it early.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Sleep</span>
+                  <span class="condition-desc">For up to 3 turns, you cannot move or attack. Ends when you take damage or an ally within 5ft uses an item to wake you. DC 15 Defense check to wake early.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Poison</span>
+                  <span class="condition-desc">Every 3 turns, take 5% of max HP in damage. When you take damage, make a DC 15 HP check to end the condition.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Bad Poison</span>
+                  <span class="condition-desc">Every 3 turns, take 10% of max HP in damage. When you take damage, make a DC 15 HP check to end the condition.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Burn</span>
+                  <span class="condition-desc">Every 2 turns, take 1d4 damage and your Attack modifier is halved. When you take damage, make a DC 15 Attack check to end the condition.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Frostbite</span>
+                  <span class="condition-desc">Every 2 turns, take 1d4 damage and your Sp. Attack modifier is halved. When you take damage, make a DC 15 Sp. Attack check to end the condition.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Confused</span>
+                  <span class="condition-desc">Any movement or attack is performed in a random direction (roll a d8). At the end of your turn, roll a Sp. Defense check to end your confusion.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Flinch</span>
+                  <span class="condition-desc">You cannot perform any attacks next turn.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Disabled</span>
+                  <span class="condition-desc">Your last move cannot be used until you advance to the next floor or remove this condition with an item.</span>
+                </div>
+                <div class="condition-row">
+                  <span class="condition-name">Infatuated</span>
+                  <span class="condition-desc">50% chance to be too in love to act on your turn. No turn limit, but make a Sp. Def check DC 13 each turn to end it early.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: General -->
+      <div class="accordion-item" id="section-4">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="accordion-num">4</span>
+            General Rules
+          </span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <ul class="rules-list">
+              <li>You may only hold <strong>12 jobs</strong> at one time.</li>
+              <li>The number of items you may hold in your bag is determined by your <strong>Exploration Team Rank</strong> (see Section 5).</li>
+              <li>You will gain <strong>12 EVs every level</strong>. You may put these in any stat, but no single stat may exceed <strong>252 EVs</strong>.</li>
+              <li>Once EVs have been allocated, <strong>you cannot respec them</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5: Exploration Teams -->
+      <div class="accordion-item" id="section-5">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="accordion-num">5</span>
+            Exploration Teams
+          </span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Points Needed</th>
+                    <th>Max Job Rank</th>
+                    <th>Bag Slots</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Normal Rank</td><td>0</td><td>E</td><td>15</td></tr>
+                  <tr><td>Bronze Rank</td><td>100</td><td>D</td><td>20</td></tr>
+                  <tr><td>Silver Rank</td><td>200</td><td>C</td><td>25</td></tr>
+                  <tr><td>Gold Rank</td><td>400</td><td>B</td><td>30</td></tr>
+                  <tr><td>Diamond Rank</td><td>800</td><td>A</td><td>35</td></tr>
+                  <tr><td>Super Rank</td><td>1,600</td><td>S</td><td>40</td></tr>
+                  <tr><td>Hyper Rank</td><td>3,200</td><td>S+</td><td>45</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.accordion -->
+  </div><!-- /.page-wrap -->
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
+
+  <script>
+    /* ── Accordion ── */
+    function toggleAccordion(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+
+      document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.accordion-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!isOpen) {
+        body.classList.add('open');
+        btn.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    /* ── TOC anchor links — open accordion then scroll ── */
+    document.querySelectorAll('.toc-list a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (!target) return;
+        const btn = target.querySelector('.accordion-btn');
+        const body = target.querySelector('.accordion-body');
+        if (btn && body && !body.classList.contains('open')) {
+          toggleAccordion(btn);
+        }
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      });
+    });
+
+    /* ── Dropdown nav ── */
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+
+    /* ── Hamburger ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
+  </script>
+</body>
+</html>
