@@ -1,43 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>PMD Stat Calculator</title>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<style>
-    :root{
-      --card-bg:#fff;
-      --accent:#4a90e2;
-      --muted:#f2f2f2;
+  <meta charset="utf-8" />
+  <title>PMD Stat Calculator – PMD Campaign</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── SITE TOKENS (matches index.html) ── */
+    :root {
+      --poke-red:        #3B4CCA;
+      --poke-red-dk:     #2a379f;
+      --poke-yellow:     #FFCB05;
+      --poke-yellow-lt:  #FFE566;
+      --poke-blue:       #3B4CCA;
+      --poke-blue-lt:    #6478E0;
+      --poke-white:      #F8F8F8;
+      --poke-dark:       #1a1a2e;
+      --poke-gray:       #333355;
+      --nav-h:           64px;
+
+      /* calc-specific */
+      --card-bg:  #fff;
+      --accent:   #3B4CCA;   /* was #4a90e2 – now matches site blue */
+      --muted:    #f2f2f2;
     }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        font-family: Arial, sans-serif;
-        background: #f6f8fb;
-        margin: 20px;
-        display: flex;
-        justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      background: #f6f8fb;
+      color: var(--poke-dark);
+      min-height: 100vh;
     }
 
-    .container {
-      width: 900px;
-      max-width: 96%;
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
     }
 
-    h1 { margin-bottom: 6px; font-size: 20px; }
-    label { font-weight: bold; }
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
 
-    /* Card for name + sprite */
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links > li { position: relative; }
+
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px;
+      min-width: 170px;
+      z-index: 999;
+    }
+
+    .nav-links > li.open .dropdown-menu { display: block; }
+
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu a:last-child { border-bottom: none; }
+
+    .dropdown-menu a:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+
+    /* ── PAGE CONTENT ── */
+    .page-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .page-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 700;
+      color: var(--poke-blue);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.08em;
+      position: relative;
+    }
+
+    .page-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow));
+      border-radius: 2px;
+      margin-top: 0.5rem;
+    }
+
+    /* ── CARD (name input + sprite) ── */
     .card {
-        background: var(--card-bg);
-        padding: 12px;
-        border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(20,30,60,0.06);
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        width: 100%;
-        box-sizing: border-box;
-        margin-bottom: 18px;
+      background: var(--card-bg);
+      padding: 14px 16px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.08);
+      border: 1px solid rgba(59,76,202,0.12);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 18px;
     }
 
     .left {
@@ -45,14 +207,28 @@
       position: relative;
     }
 
-    .left label { display:block; margin-bottom:6px; }
-    .left input[type="text"]{
+    .left label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--poke-gray);
+      letter-spacing: 0.04em;
+    }
+
+    .left input[type="text"] {
       width: 100%;
       padding: 10px 12px;
       border-radius: 8px;
       border: 1px solid #cfd8e6;
       font-size: 14px;
-      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .left input[type="text"]:focus {
+      outline: none;
+      border-color: var(--poke-blue);
+      box-shadow: 0 0 0 3px rgba(59,76,202,0.12);
     }
 
     .suggestions {
@@ -63,106 +239,235 @@
       background: white;
       border: 1px solid #e1e6f0;
       border-radius: 8px;
-      box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+      box-shadow: 0 6px 18px rgba(20,30,60,0.1);
       max-height: 180px;
       overflow-y: auto;
       display: none;
       z-index: 60;
     }
-    .suggestions div { padding: 8px 10px; cursor: pointer; }
-    .suggestions div:hover { background: #eef4ff; }
+
+    .suggestions div {
+      padding: 8px 12px;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .suggestions div:hover { background: #eef4ff; color: var(--poke-blue); }
 
     .sprite {
       width: 110px;
       flex: 0 0 110px;
       text-align: center;
     }
+
     .sprite img {
       width: 96px;
       height: 96px;
       image-rendering: pixelated;
       border-radius: 8px;
-      background: #fff;
+      background: #f0f4ff;
+      border: 1px solid rgba(59,76,202,0.1);
     }
-    .sprite .label { font-weight: bold; margin-top:8px; font-size:13px; }
 
-    /* Calculator section */
+    .sprite .label {
+      font-weight: 700;
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--poke-gray);
+    }
+
+    /* ── CALCULATOR SECTION ── */
     .calc {
       background: var(--card-bg);
-      padding: 14px;
+      padding: 18px 20px;
       border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(20,30,60,0.04);
+      box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+      border: 1px solid rgba(59,76,202,0.1);
       margin-bottom: 18px;
     }
 
     .calc .row {
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
     }
-    .calc label { margin-right: 6px; }
+
+    .calc label {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--poke-gray);
+    }
+
+    .calc h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--poke-blue);
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
 
     input[type="number"] {
-      padding: 8px;
+      padding: 8px 10px;
       border-radius: 6px;
       border: 1px solid #d0d8e6;
       width: 120px;
-      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
     }
 
-    /* IV/EV Table */
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--poke-blue);
+      box-shadow: 0 0 0 3px rgba(59,76,202,0.12);
+    }
+
+    /* ── IV/EV TABLE ── */
     table {
-        border-collapse: collapse;
-        width: 100%;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        text-align: center;
-        margin-top: 6px;
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 6px;
     }
+
     th, td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        width: 100px;
+      border: 1px solid #dde3f0;
+      padding: 10px;
     }
-    thead th { background-color: var(--accent); color: white; }
-    tbody td:first-child { background-color: #e9f3ff; font-weight: bold; text-align: left; padding-left: 12px; }
+
+    thead th {
+      background: var(--poke-blue);
+      color: white;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+
+    tbody td:first-child {
+      background: #eef1ff;
+      font-weight: 700;
+      text-align: left;
+      padding-left: 14px;
+      color: var(--poke-dark);
+    }
+
     tbody tr:nth-child(even) { background: var(--muted); }
 
-    /* Buttons and results */
+    /* ── BUTTON ── */
     button {
-      background: var(--accent);
+      background: var(--poke-blue);
       color: white;
       border: none;
-      padding: 10px 16px;
+      padding: 10px 22px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 600;
-    }
-    #results {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #fff;
-      border: 1px solid #eef2fb;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s, transform 0.1s;
     }
 
-    /* Base stats table at page bottom */
-    .basetable { margin-top: 14px; background: #fff; border-radius: 10px; padding: 10px; }
-    .basetable table { font-size:13px; }
-    @media (max-width: 760px){
-      .card { flex-direction: column; align-items: stretch; gap:12px;}
-      .sprite { order: -1; display:flex; justify-content:center;}
-      .left .suggestions { top: 104px; }
-      input[type="number"]{ width: 100%; }
+    button:hover { background: var(--poke-red-dk); }
+    button:active { transform: scale(0.97); }
+
+    /* ── RESULTS ── */
+    #results {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #f5f6ff;
+      border: 1px solid rgba(59,76,202,0.15);
     }
-</style>
+
+    #results h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--poke-blue);
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: var(--poke-yellow); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 760px) {
+      .card { flex-direction: column; align-items: stretch; gap: 12px; }
+      .sprite { order: -1; display: flex; justify-content: center; }
+      .left .suggestions { top: 104px; }
+      input[type="number"] { width: 100%; }
+      .page-wrap { padding: 1.5rem 1rem 3rem; }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>PMD Stat Calculator</h1>
 
-    <!-- Card: Name input + sprite (side-by-side inside card) -->
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="page-wrap">
+    <h1 class="page-title">Stat Calculator</h1>
+
+    <!-- Card: Name input + sprite -->
     <div class="card" aria-label="Pokémon selector">
       <div class="left">
         <label for="pokeName">Pokémon Name</label>
@@ -184,270 +489,195 @@
           <input type="number" id="level" value="50" min="1" max="100" />
         </div>
 
-        <h3>Enter IVs & EVs Per Stat</h3>
+        <h3>IVs &amp; EVs Per Stat</h3>
         <table>
           <thead>
             <tr><th>Stat</th><th>IV</th><th>EV</th></tr>
           </thead>
           <tbody>
-            <tr><td>HP</td><td><input type="number" id="ivHP" value="0" min="0" max="32"></td><td><input type="number" id="evHP" value="0" min="0" max="999"></td></tr>
-            <tr><td>Attack</td><td><input type="number" id="ivAtk" value="0" min="0" max="32"></td><td><input type="number" id="evAtk" value="0" min="0" max="999"></td></tr>
-            <tr><td>Defense</td><td><input type="number" id="ivDef" value="0" min="0" max="32"></td><td><input type="number" id="evDef" value="0" min="0" max="999"></td></tr>
-            <tr><td>Sp. Attack</td><td><input type="number" id="ivSpA" value="0" min="0" max="32"></td><td><input type="number" id="evSpA" value="0" min="0" max="999"></td></tr>
-            <tr><td>Sp. Defense</td><td><input type="number" id="ivSpD" value="0" min="0" max="32"></td><td><input type="number" id="evSpD" value="0" min="0" max="999"></td></tr>
-            <tr><td>Speed</td><td><input type="number" id="ivSpe" value="0" min="0" max="32"></td><td><input type="number" id="evSpe" value="0" min="0" max="999"></td></tr>
+            <tr><td>HP</td>        <td><input type="number" id="ivHP"  value="0" min="0" max="32"></td>  <td><input type="number" id="evHP"  value="0" min="0" max="999"></td></tr>
+            <tr><td>Attack</td>    <td><input type="number" id="ivAtk" value="0" min="0" max="32"></td>  <td><input type="number" id="evAtk" value="0" min="0" max="999"></td></tr>
+            <tr><td>Defense</td>   <td><input type="number" id="ivDef" value="0" min="0" max="32"></td>  <td><input type="number" id="evDef" value="0" min="0" max="999"></td></tr>
+            <tr><td>Sp. Attack</td><td><input type="number" id="ivSpA" value="0" min="0" max="32"></td>  <td><input type="number" id="evSpA" value="0" min="0" max="999"></td></tr>
+            <tr><td>Sp. Defense</td><td><input type="number" id="ivSpD" value="0" min="0" max="32"></td> <td><input type="number" id="evSpD" value="0" min="0" max="999"></td></tr>
+            <tr><td>Speed</td>     <td><input type="number" id="ivSpe" value="0" min="0" max="32"></td>  <td><input type="number" id="evSpe" value="0" min="0" max="999"></td></tr>
           </tbody>
         </table>
 
-        <div style="margin-top:12px;">
-          <button type="submit">Calculate</button>
+        <div style="margin-top:16px;">
+          <button type="submit">Calculate Stats</button>
         </div>
       </form>
 
       <div id="results" aria-live="polite"></div>
     </div>
+  </div><!-- /.page-wrap -->
 
-    <!-- Base Stats Table 
-    <div class="basetable">
-      <h3>Base Stats</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Pokemon</th><th>HP</th><th>Attack</th><th>Defense</th><th>Special Attack</th><th>Special Defense</th><th>Speed</th><th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Bulbasaur</td><td>45</td><td>49</td><td>49</td><td>65</td><td>65</td><td>45</td><td>318</td></tr>
-          <tr><td>Charmander</td><td>39</td><td>52</td><td>43</td><td>60</td><td>50</td><td>65</td><td>309</td></tr>
-          <tr><td>Squirtle</td><td>44</td><td>48</td><td>65</td><td>50</td><td>64</td><td>43</td><td>314</td></tr>
-          <tr><td>Pikachu</td><td>35</td><td>55</td><td>40</td><td>50</td><td>50</td><td>90</td><td>320</td></tr>
-          <tr><td>Vulpix</td><td>38</td><td>41</td><td>40</td><td>50</td><td>65</td><td>65</td><td>299</td></tr>
-          <tr><td>Eevee</td><td>55</td><td>55</td><td>50</td><td>45</td><td>65</td><td>55</td><td>325</td></tr>
-          <tr><td>Chikorita</td><td>45</td><td>49</td><td>65</td><td>49</td><td>65</td><td>45</td><td>318</td></tr>
-          <tr><td>Cyndaquil</td><td>39</td><td>52</td><td>43</td><td>60</td><td>50</td><td>65</td><td>309</td></tr>
-          <tr><td>Totodile</td><td>50</td><td>65</td><td>64</td><td>44</td><td>48</td><td>43</td><td>314</td></tr>
-          <tr><td>Phanpy</td><td>90</td><td>60</td><td>60</td><td>40</td><td>40</td><td>40</td><td>330</td></tr>
-          <tr><td>Treecko</td><td>40</td><td>45</td><td>35</td><td>65</td><td>55</td><td>70</td><td>310</td></tr>
-          <tr><td>Torchic</td><td>45</td><td>60</td><td>40</td><td>70</td><td>50</td><td>45</td><td>310</td></tr>
-          <tr><td>Mudkip</td><td>50</td><td>70</td><td>50</td><td>50</td><td>50</td><td>40</td><td>310</td></tr>
-          <tr><td>Skitty</td><td>50</td><td>45</td><td>45</td><td>35</td><td>35</td><td>50</td><td>260</td></tr>
-          <tr><td>Turtwig</td><td>55</td><td>68</td><td>64</td><td>45</td><td>55</td><td>31</td><td>318</td></tr>
-          <tr><td>Chimchar</td><td>44</td><td>58</td><td>44</td><td>58</td><td>44</td><td>61</td><td>309</td></tr>
-          <tr><td>Piplup</td><td>53</td><td>51</td><td>53</td><td>61</td><td>56</td><td>40</td><td>314</td></tr>
-          <tr><td>Shinx</td><td>45</td><td>65</td><td>34</td><td>40</td><td>34</td><td>45</td><td>263</td></tr>
-          <tr><td>Riolu</td><td>40</td><td>70</td><td>40</td><td>35</td><td>40</td><td>60</td><td>285</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div> -->
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
 
-<script>
-/* ---- Data & Dex mapping ---- */
-const pokemonStats = [
-  { name: "Bulbasaur", hp: 45, attack: 49, defense: 49, spAttack: 65, spDefense: 65, speed: 45 },
-  { name: "Charmander", hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
-  { name: "Squirtle", hp: 44, attack: 48, defense: 65, spAttack: 50, spDefense: 64, speed: 43 },
-  { name: "Pikachu", hp: 35, attack: 55, defense: 40, spAttack: 50, spDefense: 50, speed: 90 },
-  { name: "Vulpix", hp: 38, attack: 41, defense: 40, spAttack: 50, spDefense: 65, speed: 65 },
-  { name: "Eevee", hp: 55, attack: 55, defense: 50, spAttack: 45, spDefense: 65, speed: 55 },
-  { name: "Chikorita", hp: 45, attack: 49, defense: 65, spAttack: 49, spDefense: 65, speed: 45 },
-  { name: "Cyndaquil", hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
-  { name: "Quilava", hp: 58, attack: 64, defense: 58, spAttack: 80, spDefense: 65, speed: 80 },
-  { name: "Totodile", hp: 50, attack: 65, defense: 64, spAttack: 44, spDefense: 48, speed: 43 },
-  { name: "Croconaw", hp: 65, attack: 80, defense: 80, spAttack: 59, spDefense: 63, speed: 58 },
-  { name: "Phanpy", hp: 90, attack: 60, defense: 60, spAttack: 40, spDefense: 40, speed: 40 },
-  { name: "Treecko", hp: 40, attack: 45, defense: 35, spAttack: 65, spDefense: 55, speed: 70 },
-  { name: "Torchic", hp: 45, attack: 60, defense: 40, spAttack: 70, spDefense: 50, speed: 45 },
-  { name: "Mudkip", hp: 50, attack: 70, defense: 50, spAttack: 50, spDefense: 50, speed: 40 },
-  { name: "Skitty", hp: 50, attack: 45, defense: 45, spAttack: 35, spDefense: 35, speed: 50 },
-  { name: "Turtwig", hp: 55, attack: 68, defense: 64, spAttack: 45, spDefense: 55, speed: 31 },
-  { name: "Chimchar", hp: 44, attack: 58, defense: 44, spAttack: 58, spDefense: 44, speed: 61 },
-  { name: "Piplup", hp: 53, attack: 51, defense: 53, spAttack: 61, spDefense: 56, speed: 40 },
-  { name: "Shinx", hp: 45, attack: 65, defense: 34, spAttack: 40, spDefense: 34, speed: 45 },
-  { name: "Riolu", hp: 40, attack: 70, defense: 40, spAttack: 35, spDefense: 40, speed: 60 }
-];
+  <script>
+    /* ---- Data & Dex mapping ---- */
+    const pokemonStats = [
+      { name: "Bulbasaur",  hp: 45, attack: 49, defense: 49, spAttack: 65, spDefense: 65, speed: 45 },
+      { name: "Charmander", hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
+      { name: "Squirtle",   hp: 44, attack: 48, defense: 65, spAttack: 50, spDefense: 64, speed: 43 },
+      { name: "Pikachu",    hp: 35, attack: 55, defense: 40, spAttack: 50, spDefense: 50, speed: 90 },
+      { name: "Vulpix",     hp: 38, attack: 41, defense: 40, spAttack: 50, spDefense: 65, speed: 65 },
+      { name: "Eevee",      hp: 55, attack: 55, defense: 50, spAttack: 45, spDefense: 65, speed: 55 },
+      { name: "Chikorita",  hp: 45, attack: 49, defense: 65, spAttack: 49, spDefense: 65, speed: 45 },
+      { name: "Cyndaquil",  hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
+      { name: "Quilava",    hp: 58, attack: 64, defense: 58, spAttack: 80, spDefense: 65, speed: 80 },
+      { name: "Totodile",   hp: 50, attack: 65, defense: 64, spAttack: 44, spDefense: 48, speed: 43 },
+      { name: "Croconaw",   hp: 65, attack: 80, defense: 80, spAttack: 59, spDefense: 63, speed: 58 },
+      { name: "Phanpy",     hp: 90, attack: 60, defense: 60, spAttack: 40, spDefense: 40, speed: 40 },
+      { name: "Treecko",    hp: 40, attack: 45, defense: 35, spAttack: 65, spDefense: 55, speed: 70 },
+      { name: "Torchic",    hp: 45, attack: 60, defense: 40, spAttack: 70, spDefense: 50, speed: 45 },
+      { name: "Mudkip",     hp: 50, attack: 70, defense: 50, spAttack: 50, spDefense: 50, speed: 40 },
+      { name: "Skitty",     hp: 50, attack: 45, defense: 45, spAttack: 35, spDefense: 35, speed: 50 },
+      { name: "Turtwig",    hp: 55, attack: 68, defense: 64, spAttack: 45, spDefense: 55, speed: 31 },
+      { name: "Chimchar",   hp: 44, attack: 58, defense: 44, spAttack: 58, spDefense: 44, speed: 61 },
+      { name: "Piplup",     hp: 53, attack: 51, defense: 53, spAttack: 61, spDefense: 56, speed: 40 },
+      { name: "Shinx",      hp: 45, attack: 65, defense: 34, spAttack: 40, spDefense: 34, speed: 45 },
+      { name: "Riolu",      hp: 40, attack: 70, defense: 40, spAttack: 35, spDefense: 40, speed: 60 }
+    ];
 
-// mapping name -> national dex number (for sprite URL)
-const nameToDex = {
-  "bulbasaur": 1,
-  "charmander": 4,
-  "squirtle": 7,
-  "pikachu": 25,
-  "vulpix": 37,
-  "eevee": 133,
-  "chikorita": 152,
-  "cyndaquil": 155,
-  "quilava": 156,
-  "totodile": 158,
-  "croconaw": 159,
-  "phanpy": 231,
-  "treecko": 252,
-  "torchic": 255,
-  "mudkip": 258,
-  "skitty": 300,
-  "turtwig": 387,
-  "chimchar": 390,
-  "piplup": 393,
-  "shinx": 403,
-  "riolu": 447
-};
-
-/* DOM references */
-const pokeInput = document.getElementById("pokeName");
-const suggestions = document.getElementById("suggestions");
-const spriteImg = document.getElementById("sprite");
-const spriteLabel = document.getElementById("spriteLabel");
-const resultsDiv = document.getElementById("results");
-
-/* Build simple local names array for autocomplete */
-const pokemonNames = pokemonStats.map(p => p.name);
-
-/* AUTOCOMPLETE handling */
-pokeInput.addEventListener("input", function(){
-  const q = pokeInput.value.trim().toLowerCase();
-  suggestions.innerHTML = "";
-  if (!q) {
-    suggestions.style.display = "none";
-    return;
-  }
-  const matches = pokemonNames.filter(n => n.toLowerCase().startsWith(q)).slice(0, 12);
-  matches.forEach(name => {
-    const d = document.createElement("div");
-    d.textContent = name;
-    d.onclick = () => {
-      pokeInput.value = name;
-      suggestions.style.display = "none";
-      showSpriteFor(name);
+    const nameToDex = {
+      "bulbasaur": 1,  "charmander": 4,  "squirtle": 7,   "pikachu": 25,
+      "vulpix": 37,    "eevee": 133,     "chikorita": 152, "cyndaquil": 155,
+      "quilava": 156,  "totodile": 158,  "croconaw": 159,  "phanpy": 231,
+      "treecko": 252,  "torchic": 255,   "mudkip": 258,    "skitty": 300,
+      "turtwig": 387,  "chimchar": 390,  "piplup": 393,    "shinx": 403,
+      "riolu": 447
     };
-    suggestions.appendChild(d);
-  });
-  suggestions.style.display = matches.length ? "block" : "none";
-});
 
-/* hide suggestions on click outside */
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".left")) suggestions.style.display = "none";
-});
+    const pokeInput   = document.getElementById("pokeName");
+    const suggestions = document.getElementById("suggestions");
+    const spriteImg   = document.getElementById("sprite");
+    const spriteLabel = document.getElementById("spriteLabel");
+    const resultsDiv  = document.getElementById("results");
+    const pokemonNames = pokemonStats.map(p => p.name);
 
-/* Show sprite using National Dex number mapping (generation-iv diamond-pearl) */
-function showSpriteFor(name){
-  if (!name) {
-    spriteImg.src = "";
-    spriteLabel.textContent = "—";
-    return;
-  }
-  const key = name.toLowerCase();
-  const dex = nameToDex[key];
-  if (!dex) {
-    // fallback: try using lowercase name in a different sprite repo (best effort)
-    spriteImg.src = "";
-    spriteImg.alt = "";
-    spriteLabel.textContent = name + " (sprite not mapped)";
-    return;
-  }
-  // diamond/pearl gen4 sprite path (96x96-ish)
-  const url = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/${dex}.png`;
-  spriteImg.src = url;
-  spriteImg.alt = name;
-  spriteLabel.textContent = name;
-}
+    /* Autocomplete */
+    pokeInput.addEventListener("input", function () {
+      const q = pokeInput.value.trim().toLowerCase();
+      suggestions.innerHTML = "";
+      if (!q) { suggestions.style.display = "none"; return; }
+      const matches = pokemonNames.filter(n => n.toLowerCase().startsWith(q)).slice(0, 12);
+      matches.forEach(name => {
+        const d = document.createElement("div");
+        d.textContent = name;
+        d.onclick = () => {
+          pokeInput.value = name;
+          suggestions.style.display = "none";
+          showSpriteFor(name);
+        };
+        suggestions.appendChild(d);
+      });
+      suggestions.style.display = matches.length ? "block" : "none";
+    });
 
-/* Load sprite when input loses focus (if name recognized) */
-pokeInput.addEventListener("change", () => {
-  showSpriteFor(pokeInput.value.trim());
-});
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".left")) suggestions.style.display = "none";
+    });
 
-/* Calculation logic (unchanged formulas) */
-document.getElementById("pokemonForm").addEventListener("submit", function(e){
-  e.preventDefault();
+    /* Sprite */
+    function showSpriteFor(name) {
+      if (!name) { spriteImg.src = ""; spriteLabel.textContent = "—"; return; }
+      const key = name.toLowerCase();
+      const dex = nameToDex[key];
+      if (!dex) {
+        spriteImg.src = "";
+        spriteImg.alt = "";
+        spriteLabel.textContent = name + " (sprite not mapped)";
+        return;
+      }
+      const url = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/${dex}.png`;
+      spriteImg.src = url;
+      spriteImg.alt = name;
+      spriteLabel.textContent = name;
+    }
 
-  const name = pokeInput.value.trim();
-  const lvl = parseInt(document.getElementById("level").value) || 50;
+    pokeInput.addEventListener("change", () => showSpriteFor(pokeInput.value.trim()));
 
-  const pokemon = pokemonStats.find(p => p.name.toLowerCase() === name.toLowerCase());
-  if (!pokemon) {
-    resultsDiv.innerHTML = `<strong>Pokémon not found. Make sure spelling matches (e.g. Pikachu).</strong>`;
-    return;
-  }
+    /* Calculation */
+    document.getElementById("pokemonForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = pokeInput.value.trim();
+      const lvl  = parseInt(document.getElementById("level").value) || 50;
+      const pokemon = pokemonStats.find(p => p.name.toLowerCase() === name.toLowerCase());
 
-  // Collect IVs and EVs (per-stat)
-  const iv = {
-    hp: parseInt(document.getElementById("ivHP").value) || 0,
-    atk: parseInt(document.getElementById("ivAtk").value) || 0,
-    def: parseInt(document.getElementById("ivDef").value) || 0,
-    spa: parseInt(document.getElementById("ivSpA").value) || 0,
-    spd: parseInt(document.getElementById("ivSpD").value) || 0,
-    spe: parseInt(document.getElementById("ivSpe").value) || 0
-  };
-  const ev = {
-    hp: parseInt(document.getElementById("evHP").value) || 0,
-    atk: parseInt(document.getElementById("evAtk").value) || 0,
-    def: parseInt(document.getElementById("evDef").value) || 0,
-    spa: parseInt(document.getElementById("evSpA").value) || 0,
-    spd: parseInt(document.getElementById("evSpD").value) || 0,
-    spe: parseInt(document.getElementById("evSpe").value) || 0
-  };
+      if (!pokemon) {
+        resultsDiv.innerHTML = `<strong>Pokémon not found. Make sure the spelling matches (e.g. Pikachu).</strong>`;
+        return;
+      }
 
-  // HP formula: FLOOR((((Base*2)+IV+(EV/4))*(Level/100))+Level+30,1)
-  const calcHP = (base, ivv, evv) => Math.floor(((base * 2 + ivv + (evv/4)) * (lvl / 100)) + lvl + 30);
+      const iv = {
+        hp:  parseInt(document.getElementById("ivHP").value)  || 0,
+        atk: parseInt(document.getElementById("ivAtk").value) || 0,
+        def: parseInt(document.getElementById("ivDef").value) || 0,
+        spa: parseInt(document.getElementById("ivSpA").value) || 0,
+        spd: parseInt(document.getElementById("ivSpD").value) || 0,
+        spe: parseInt(document.getElementById("ivSpe").value) || 0
+      };
+      const ev = {
+        hp:  parseInt(document.getElementById("evHP").value)  || 0,
+        atk: parseInt(document.getElementById("evAtk").value) || 0,
+        def: parseInt(document.getElementById("evDef").value) || 0,
+        spa: parseInt(document.getElementById("evSpA").value) || 0,
+        spd: parseInt(document.getElementById("evSpD").value) || 0,
+        spe: parseInt(document.getElementById("evSpe").value) || 0
+      };
 
-  // Others: FLOOR((((Base*2)+IV+(EV/4))*(Level/100))+5,1)
-  const calcOther = (base, ivv, evv) => Math.floor(((base * 2 + ivv + (evv/4)) * (lvl / 100)) + 5);
+      const calcHP    = (base, ivv, evv) => Math.floor(((base * 2 + ivv + (evv / 4)) * (lvl / 100)) + lvl + 30);
+      const calcOther = (base, ivv, evv) => Math.floor(((base * 2 + ivv + (evv / 4)) * (lvl / 100)) + 5);
 
-  const out = {
-    HP: calcHP(pokemon.hp, iv.hp, ev.hp),
-    Attack: calcOther(pokemon.attack, iv.atk, ev.atk),
-    Defense: calcOther(pokemon.defense, iv.def, ev.def),
-    "Sp. Attack": calcOther(pokemon.spAttack, iv.spa, ev.spa),
-    "Sp. Defense": calcOther(pokemon.spDefense, iv.spd, ev.spd),
-    Speed: calcOther(pokemon.speed, iv.spe, ev.spe)
-  };
+      const out = {
+        HP:           calcHP(pokemon.hp,         iv.hp,  ev.hp),
+        Attack:       calcOther(pokemon.attack,   iv.atk, ev.atk),
+        Defense:      calcOther(pokemon.defense,  iv.def, ev.def),
+        "Sp. Attack": calcOther(pokemon.spAttack, iv.spa, ev.spa),
+        "Sp. Defense":calcOther(pokemon.spDefense,iv.spd, ev.spd),
+        Speed:        calcOther(pokemon.speed,    iv.spe, ev.spe)
+      };
 
-  // Show sprite for the selected Pokémon (ensures sprite is present)
-  showSpriteFor(name);
+      showSpriteFor(name);
 
-  // Render results
-resultsDiv.innerHTML = `
-  <h3>${pokemon.name} — Calculated Stats (Level ${lvl})</h3>
-  <table>
-    <tr>
-      <th>Stat</th>
-      <th>Value</th>
-      <th>Modifier</th>
-    </tr>
-    <tr>
-      <td>HP</td>
-      <td>${out.HP}</td>
-      <td>${Math.floor((out.HP - (lvl + 25)) / 5)}</td>
-    </tr>
-    <tr>
-      <td>Attack</td>
-      <td>${out.Attack}</td>
-      <td>${Math.floor(out.Attack / 5)}</td>
-    </tr>
-    <tr>
-      <td>Defense</td>
-      <td>${out.Defense}</td>
-      <td>${Math.floor(out.Defense / 5)}</td>
-    </tr>
-    <tr>
-      <td>Sp. Attack</td>
-      <td>${out['Sp. Attack']}</td>
-      <td>${Math.floor(out['Sp. Attack'] / 5)}</td>
-    </tr>
-    <tr>
-      <td>Sp. Defense</td>
-      <td>${out['Sp. Defense']}</td>
-      <td>${Math.floor(out['Sp. Defense'] / 5)}</td>
-    </tr>
-    <tr>
-      <td>Speed</td>
-      <td>${out.Speed}</td>
-      <td>${Math.floor(out.Speed / 5)}</td>
-    </tr>
-  </table>
-`;
-});
-</script><br>
+      resultsDiv.innerHTML = `
+        <h3>${pokemon.name} — Calculated Stats (Level ${lvl})</h3>
+        <table>
+          <thead><tr><th>Stat</th><th>Value</th><th>Modifier</th></tr></thead>
+          <tbody>
+            <tr><td>HP</td>          <td>${out.HP}</td>           <td>${Math.floor((out.HP - (lvl + 25)) / 5)}</td></tr>
+            <tr><td>Attack</td>      <td>${out.Attack}</td>       <td>${Math.floor(out.Attack / 5)}</td></tr>
+            <tr><td>Defense</td>     <td>${out.Defense}</td>      <td>${Math.floor(out.Defense / 5)}</td></tr>
+            <tr><td>Sp. Attack</td>  <td>${out["Sp. Attack"]}</td><td>${Math.floor(out["Sp. Attack"] / 5)}</td></tr>
+            <tr><td>Sp. Defense</td> <td>${out["Sp. Defense"]}</td><td>${Math.floor(out["Sp. Defense"] / 5)}</td></tr>
+            <tr><td>Speed</td>       <td>${out.Speed}</td>        <td>${Math.floor(out.Speed / 5)}</td></tr>
+          </tbody>
+        </table>`;
+    });
+
+    /* ── Dropdown navigation (matches index.html) ── */
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+  </script>
 </body>
 </html>
