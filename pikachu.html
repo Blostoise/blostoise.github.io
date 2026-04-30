@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pikachu – PMD Campaign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --poke-red:     #3B4CCA;
+      --poke-red-dk:  #2a379f;
+      --poke-yellow:  #FFCB05;
+      --poke-blue:    #3B4CCA;
+      --poke-blue-lt: #6478E0;
+      --poke-white:   #F8F8F8;
+      --poke-dark:    #1a1a2e;
+      --poke-gray:    #333355;
+      --nav-h:        64px;
+
+      /* type colours */
+      --type-electric: #F7D02C;
+      --type-normal:   #A8A77A;
+      --type-psychic:  #F95587;
+      --type-ground:   #E2BF65;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f6f8fb;
+      color: var(--poke-dark);
+      min-height: 100vh;
+    }
+
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links > li { position: relative; }
+
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px;
+      min-width: 170px;
+      z-index: 999;
+    }
+
+    .nav-links > li.open .dropdown-menu { display: block; }
+
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover { background: var(--poke-yellow); color: var(--poke-red-dk); }
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 34px);
+      flex-direction: column;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+
+    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
+    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .mob-sub.open { max-height: 400px; }
+
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-site-name { display: none; }
+      nav { padding: 0 1rem; }
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ── SECTION CARD ── */
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid rgba(59,76,202,0.12);
+      box-shadow: 0 4px 18px rgba(20,30,60,0.07);
+      padding: 1.5rem 1.75rem;
+    }
+
+    .section-heading {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--poke-blue);
+      border-bottom: 2px solid rgba(59,76,202,0.12);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ── HERO CARD ── */
+    .hero-card {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .hero-img {
+      width: 180px;
+      height: 180px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #f0f4ff;
+      border: 2px solid rgba(59,76,202,0.12);
+    }
+
+    .hero-info { flex: 1; }
+
+    .poke-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 900;
+      color: var(--poke-dark);
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+    }
+
+    .poke-subtitle {
+      font-size: 0.88rem;
+      color: var(--poke-gray);
+      font-weight: 600;
+      margin-top: 0.4rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── TYPE BADGES ── */
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+    }
+
+    .badge-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--poke-gray);
+      align-self: center;
+      margin-right: 0.2rem;
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #1a1a2e;
+    }
+
+    .type-electric  { background: var(--type-electric); }
+    .type-normal    { background: var(--type-normal); color: #fff; }
+    .type-psychic   { background: var(--type-psychic); color: #fff; }
+    .type-ground    { background: var(--type-ground); }
+
+    /* ── BASE STATS ── */
+    .stat-list { display: flex; flex-direction: column; gap: 0.55rem; }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .stat-label {
+      font-weight: 700;
+      font-size: 0.82rem;
+      width: 110px;
+      flex-shrink: 0;
+      color: var(--poke-gray);
+    }
+
+    .stat-val {
+      font-weight: 900;
+      font-size: 0.88rem;
+      width: 30px;
+      text-align: right;
+      flex-shrink: 0;
+      color: var(--poke-dark);
+    }
+
+    .stat-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #e8ecf6;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .stat-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-blue-lt));
+      transition: width 0.6s ease;
+    }
+
+    .stat-bar.good  { background: linear-gradient(90deg, #48bb78, #68d391); }
+    .stat-bar.great { background: linear-gradient(90deg, #ed8936, #f6ad55); }
+
+    /* ── ABILITIES ── */
+    .ability-block { margin-bottom: 1rem; }
+    .ability-block:last-child { margin-bottom: 0; }
+
+    .ability-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--poke-dark);
+      letter-spacing: 0.04em;
+    }
+
+    .ability-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(59,76,202,0.1);
+      color: var(--poke-blue);
+      margin-left: 0.4rem;
+      vertical-align: middle;
+      text-transform: uppercase;
+    }
+
+    .ability-desc {
+      font-size: 0.88rem;
+      color: var(--poke-gray);
+      line-height: 1.65;
+      margin-top: 0.3rem;
+    }
+
+    /* ── CALC LINK ── */
+    .calc-link-wrap {
+      text-align: center;
+    }
+
+    .calc-link {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--poke-blue);
+      border: 2px solid var(--poke-blue);
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .calc-link:hover { background: var(--poke-blue); color: #fff; }
+
+    /* ── MOVE TABLE ── */
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.83rem;
+      min-width: 560px;
+    }
+
+    thead th {
+      background: var(--poke-blue);
+      color: #fff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      padding: 10px 12px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    thead th:first-child { border-radius: 0; }
+
+    tbody tr { border-bottom: 1px solid #e8ecf6; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: #f5f7ff; }
+
+    tbody td {
+      padding: 9px 12px;
+      color: var(--poke-gray);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    tbody td:first-child {
+      font-weight: 900;
+      color: var(--poke-dark);
+      text-align: center;
+      width: 48px;
+    }
+
+    .move-name {
+      font-weight: 700;
+      color: var(--poke-dark);
+    }
+
+    .power-val {
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: var(--poke-yellow); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .hero-card { flex-direction: column; align-items: center; text-align: center; }
+      .hero-img { width: 140px; height: 140px; }
+      .badges { justify-content: center; }
+      .stat-label { width: 90px; font-size: 0.78rem; }
+      .card { padding: 1.1rem 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-wrap">
+
+    <!-- Hero: image + name + meta -->
+    <div class="card hero-card">
+      <img src="/css/images/pikachu.png" alt="Pikachu" class="hero-img" />
+      <div class="hero-info">
+        <div class="poke-name">Pikachu</div>
+        <div class="poke-subtitle">Mouse Pokémon &nbsp;·&nbsp; 1'04" &nbsp;·&nbsp; 13.2 lbs</div>
+
+        <div class="badges" style="margin-top:1rem;">
+          <span class="badge-label">Type</span>
+          <span class="type-badge type-electric">Electric</span>
+        </div>
+
+        <div class="badges">
+          <span class="badge-label">Weak to</span>
+          <span class="type-badge type-ground">Ground</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abilities -->
+    <div class="card">
+      <div class="section-heading">Abilities</div>
+
+      <div class="ability-block">
+        <div class="ability-name">Static</div>
+        <div class="ability-desc">10% chance to paralyze when hit with a Physical move.</div>
+      </div>
+
+      <div class="ability-block">
+        <div class="ability-name">
+          Lightning Rod
+          <span class="ability-tag">Hidden</span>
+        </div>
+        <div class="ability-desc">If an ally within 5ft of you is hit with a single target Electric move, you absorb that attack (you take no damage) and raise your Sp. Attack by 1 stage.</div>
+      </div>
+    </div>
+
+    <!-- Base Stats -->
+    <div class="card">
+      <div class="section-heading">Base Stats</div>
+      <div class="stat-list">
+        <div class="stat-row">
+          <span class="stat-label">HP</span>
+          <span class="stat-val">35</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:calc(35/150*100%)"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Attack</span>
+          <span class="stat-val">55</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:calc(55/150*100%)"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Defense</span>
+          <span class="stat-val">40</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:calc(40/150*100%)"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Sp. Attack</span>
+          <span class="stat-val">50</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:calc(50/150*100%)"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Sp. Defense</span>
+          <span class="stat-val">50</span>
+          <div class="stat-bar-bg"><div class="stat-bar" style="width:calc(50/150*100%)"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Speed</span>
+          <span class="stat-val">90</span>
+          <div class="stat-bar-bg"><div class="stat-bar great" style="width:calc(90/150*100%)"></div></div>
+        </div>
+      </div>
+
+      <div class="calc-link-wrap" style="margin-top:1.4rem;">
+        <a href="/calc.html" class="calc-link">⚡ Calculate Your Stats Here!</a>
+      </div>
+    </div>
+
+    <!-- Level-Up Moves -->
+    <div class="card">
+      <div class="section-heading">Level Up Moves</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Lvl</th>
+              <th>Move</th>
+              <th>Type</th>
+              <th>Power</th>
+              <th>Category</th>
+              <th>PP</th>
+              <th>Acc</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td class="move-name">Tackle</td>
+              <td><span class="type-badge type-normal">Normal</span></td>
+              <td class="power-val">d4</td>
+              <td>Physical</td>
+              <td>35</td>
+              <td>100</td>
+              <td>Deals damage.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td class="move-name">Tail Whip</td>
+              <td><span class="type-badge type-normal">Normal</span></td>
+              <td class="power-val">—</td>
+              <td>Status</td>
+              <td>30</td>
+              <td>100</td>
+              <td>Lowers opponent Defense by 1 (−1 to Defense DR).</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td class="move-name">Thundershock</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">d4</td>
+              <td>Special</td>
+              <td>30</td>
+              <td>100</td>
+              <td>Deals damage and has a 10% chance to paralyze.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td class="move-name">Thunder Wave</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">—</td>
+              <td>Status</td>
+              <td>20</td>
+              <td>85</td>
+              <td>Paralyzes the opponent on hit.</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td class="move-name">Quick Attack</td>
+              <td><span class="type-badge type-normal">Normal</span></td>
+              <td class="power-val">d4</td>
+              <td>Physical</td>
+              <td>30</td>
+              <td>100</td>
+              <td>Attack has an extra 5ft reach (straight line, goes through allies).</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td class="move-name">Double Team</td>
+              <td><span class="type-badge type-normal">Normal</span></td>
+              <td class="power-val">—</td>
+              <td>Status</td>
+              <td>15</td>
+              <td>100</td>
+              <td>Raises Evasiveness by 1 stage (+1 DC to hit you with moves).</td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td class="move-name">Nuzzle</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">d3</td>
+              <td>Special</td>
+              <td>10</td>
+              <td>100</td>
+              <td>Deals damage and paralyzes.</td>
+            </tr>
+            <tr>
+              <td>21</td>
+              <td class="move-name">Spark</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">d6+1</td>
+              <td>Physical</td>
+              <td>15</td>
+              <td>100</td>
+              <td>Deals damage and has a 30% chance to Paralyze.</td>
+            </tr>
+            <tr>
+              <td>24</td>
+              <td class="move-name">Agility</td>
+              <td><span class="type-badge type-psychic">Psychic</span></td>
+              <td class="power-val">—</td>
+              <td>Status</td>
+              <td>30</td>
+              <td>100</td>
+              <td>You may move 10ft per turn for 5 turns.</td>
+            </tr>
+            <tr>
+              <td>28</td>
+              <td class="move-name">Slam</td>
+              <td><span class="type-badge type-normal">Normal</span></td>
+              <td class="power-val">d8</td>
+              <td>Physical</td>
+              <td>20</td>
+              <td>75</td>
+              <td>Deals damage and has a 10% chance to paralyze.</td>
+            </tr>
+            <tr>
+              <td>32</td>
+              <td class="move-name">Discharge</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">d8</td>
+              <td>Special</td>
+              <td>15</td>
+              <td>100</td>
+              <td>Deals damage to everyone within 5ft (including allies).</td>
+            </tr>
+            <tr>
+              <td>36</td>
+              <td class="move-name">Thunderbolt</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">d8+1</td>
+              <td>Special</td>
+              <td>10</td>
+              <td>100</td>
+              <td>Deals damage and has a 10% chance to paralyze.</td>
+            </tr>
+            <tr>
+              <td>40</td>
+              <td class="move-name">Light Screen</td>
+              <td><span class="type-badge type-psychic">Psychic</span></td>
+              <td class="power-val">—</td>
+              <td>Status</td>
+              <td>30</td>
+              <td>100</td>
+              <td>For 5 turns, incoming damage from Special Attacks is halved for your whole team.</td>
+            </tr>
+            <tr>
+              <td>44</td>
+              <td class="move-name">Thunder</td>
+              <td><span class="type-badge type-electric">Electric</span></td>
+              <td class="power-val">d12</td>
+              <td>Special</td>
+              <td>10</td>
+              <td>80</td>
+              <td>Hits every enemy in the room (you must roll separately to hit), 30% chance to paralyze.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /.page-wrap -->
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
+
+  <script>
+    /* ── Dropdown nav ── */
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+
+    /* ── Hamburger ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
+  </script>
+</body>
+</html>
