@@ -392,6 +392,52 @@
       letter-spacing: 0.05em;
     }
 
+    /* ── SAVE BUTTON (secondary style) ── */
+    .btn-save {
+      background: transparent;
+      color: var(--poke-blue);
+      border: 2px solid var(--poke-blue);
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+    }
+
+    .btn-save:hover { background: var(--poke-blue); color: #fff; }
+    .btn-save:active { transform: scale(0.97); }
+
+    /* ── TOAST ── */
+    #save-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--poke-dark);
+      color: var(--poke-yellow);
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 10px 24px;
+      border-radius: 30px;
+      border: 2px solid var(--poke-yellow);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+
+    #save-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--poke-red-dk);
@@ -487,6 +533,7 @@
         <div class="row">
           <label for="level">Level</label>
           <input type="number" id="level" value="50" min="1" max="100" />
+          <button type="button" class="btn-save" id="saveBtn">💾 Save</button>
         </div>
 
         <h3>IVs &amp; EVs Per Stat</h3>
@@ -521,6 +568,8 @@
       This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
     </p>
   </footer>
+
+  <div id="save-toast">✓ Character saved!</div>
 
   <script>
     /* ---- Data & Dex mapping ---- */
@@ -663,6 +712,85 @@
           </tbody>
         </table>`;
     });
+
+    /* ── Cookie helpers ── */
+    function setCookie(name, value, days) {
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires};path=/;SameSite=Lax`;
+    }
+
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    /* ── Save current form state to a single cookie ── */
+    function saveCharacter() {
+      const data = {
+        name:  pokeInput.value.trim(),
+        level: document.getElementById("level").value,
+        iv: {
+          hp:  document.getElementById("ivHP").value,
+          atk: document.getElementById("ivAtk").value,
+          def: document.getElementById("ivDef").value,
+          spa: document.getElementById("ivSpA").value,
+          spd: document.getElementById("ivSpD").value,
+          spe: document.getElementById("ivSpe").value
+        },
+        ev: {
+          hp:  document.getElementById("evHP").value,
+          atk: document.getElementById("evAtk").value,
+          def: document.getElementById("evDef").value,
+          spa: document.getElementById("evSpA").value,
+          spd: document.getElementById("evSpD").value,
+          spe: document.getElementById("evSpe").value
+        }
+      };
+      setCookie("pmd_character", JSON.stringify(data), 365);
+      showToast("✓ Character saved!");
+    }
+
+    /* ── Restore form state from cookie on page load ── */
+    function loadCharacter() {
+      const raw = getCookie("pmd_character");
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        if (data.name)  { pokeInput.value = data.name; showSpriteFor(data.name); }
+        if (data.level) document.getElementById("level").value = data.level;
+        if (data.iv) {
+          document.getElementById("ivHP").value  = data.iv.hp  ?? 0;
+          document.getElementById("ivAtk").value = data.iv.atk ?? 0;
+          document.getElementById("ivDef").value = data.iv.def ?? 0;
+          document.getElementById("ivSpA").value = data.iv.spa ?? 0;
+          document.getElementById("ivSpD").value = data.iv.spd ?? 0;
+          document.getElementById("ivSpe").value = data.iv.spe ?? 0;
+        }
+        if (data.ev) {
+          document.getElementById("evHP").value  = data.ev.hp  ?? 0;
+          document.getElementById("evAtk").value = data.ev.atk ?? 0;
+          document.getElementById("evDef").value = data.ev.def ?? 0;
+          document.getElementById("evSpA").value = data.ev.spa ?? 0;
+          document.getElementById("evSpD").value = data.ev.spd ?? 0;
+          document.getElementById("evSpe").value = data.ev.spe ?? 0;
+        }
+      } catch(e) { /* ignore malformed cookie */ }
+    }
+
+    /* ── Toast notification ── */
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById("save-toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", saveCharacter);
+
+    /* ── Auto-load on page open ── */
+    loadCharacter();
 
     /* ── Dropdown navigation (matches index.html) ── */
     document.querySelectorAll('.nav-links > li').forEach(li => {
