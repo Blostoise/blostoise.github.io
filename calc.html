@@ -161,6 +161,130 @@
 
     .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
 
+    /* ── HAMBURGER BUTTON ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── MOBILE MENU PANEL ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 34px);
+      flex-direction: column;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+
+    .mob-group-btn {
+      display: flex !important;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mob-arrow {
+      font-size: 0.65rem;
+      transition: transform 0.3s ease;
+    }
+
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .mob-sub.open { max-height: 400px; }
+
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mob-sub a:hover {
+      background: rgba(255,203,5,0.1);
+      color: var(--poke-yellow);
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
     /* ── PAGE CONTENT ── */
     .page-wrap {
       max-width: 960px;
@@ -507,7 +631,38 @@
         </div>
       </li>
     </ul>
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Mobile Menu Panel -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+
+      <button class="mob-group-btn" id="mobCharBtn">
+        Character <span class="mob-arrow">▼</span>
+      </button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+
+      <button class="mob-group-btn" id="mobGameBtn">
+        Game <span class="mob-arrow">▼</span>
+      </button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
 
   <!-- Page Content -->
   <div class="page-wrap">
@@ -791,6 +946,35 @@
 
     /* ── Auto-load on page open ── */
     loadCharacter();
+
+    /* ── Hamburger menu ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
 
     /* ── Dropdown navigation (matches index.html) ── */
     document.querySelectorAll('.nav-links > li').forEach(li => {
