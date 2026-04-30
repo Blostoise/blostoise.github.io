@@ -157,7 +157,7 @@
 
     .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
 
-    /* ── HAMBURGER BUTTON ── */
+    /* ── HAMBURGER ── */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -181,7 +181,7 @@
       height: 3px;
       border-radius: 2px;
       background: var(--poke-yellow);
-      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+      transition: transform 0.3s ease, opacity 0.3s ease;
       transform-origin: center;
     }
 
@@ -189,18 +189,15 @@
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-    /* ── MOBILE MENU PANEL ── */
+    /* ── MOBILE MENU ── */
     .mobile-menu {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: var(--poke-dark);
       z-index: 99;
       overflow-y: auto;
-      padding-top: calc(var(--nav-h) + 38px); /* banner + nav height */
+      padding-top: calc(var(--nav-h) + 38px);
       flex-direction: column;
     }
 
@@ -212,7 +209,6 @@
       padding: 1rem 0 3rem;
     }
 
-    /* flat top-level links */
     .mobile-menu a.mob-link,
     .mobile-menu button.mob-group-btn {
       display: block;
@@ -238,20 +234,10 @@
       color: var(--poke-yellow);
     }
 
-    .mob-group-btn {
-      display: flex !important;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .mob-arrow {
-      font-size: 0.65rem;
-      transition: transform 0.3s ease;
-    }
-
+    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
+    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
     .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
 
-    /* sub-links */
     .mob-sub {
       max-height: 0;
       overflow: hidden;
@@ -273,10 +259,7 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    .mob-sub a:hover {
-      background: rgba(255,203,5,0.1);
-      color: var(--poke-yellow);
-    }
+    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
 
     @media (max-width: 640px) {
       .nav-links { display: none; }
@@ -446,7 +429,74 @@
       transition: max-height 0.45s ease, padding 0.3s ease;
     }
 
-    .accordion-body.open { max-height: 1000px; }
+    .accordion-body.open { max-height: 99999px; }
+
+    /* ── SUB-ACCORDION (parts inside chapters) ── */
+    .sub-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .sub-item {
+      border: 1px solid rgba(59,76,202,0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .sub-btn {
+      width: 100%;
+      background: rgba(59,76,202,0.05);
+      border: none;
+      color: var(--poke-dark);
+      padding: 0.75rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+      text-align: left;
+      gap: 0.75rem;
+    }
+
+    .sub-btn:hover { background: rgba(59,76,202,0.1); }
+
+    .sub-btn.active {
+      background: rgba(59,76,202,0.14);
+      color: var(--poke-blue);
+    }
+
+    .sub-icon {
+      font-size: 0.7rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      color: var(--poke-blue);
+    }
+
+    .sub-btn.active .sub-icon { transform: rotate(180deg); }
+
+    .sub-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .sub-body.open { max-height: 99999px; }
+
+    .sub-body-inner {
+      padding: 1rem 1.2rem 1.2rem;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #333355;
+      border-top: 1px solid rgba(59,76,202,0.1);
+    }
+
+    .sub-body-inner p + p { margin-top: 0.8rem; }
 
     .accordion-body-inner {
       padding: 1.4rem 1.5rem 1.6rem;
@@ -558,29 +608,22 @@
         </div>
       </li>
     </ul>
-    <!-- Hamburger (mobile only) -->
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- Mobile Menu Panel -->
+  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <div class="mobile-menu-inner">
       <a href="/" class="mob-link">Home</a>
-
-      <button class="mob-group-btn" id="mobCharBtn">
-        Character <span class="mob-arrow">▼</span>
-      </button>
+      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
       <div class="mob-sub" id="mobCharSub">
         <a href="/calc">Calculator</a>
         <a href="/pokemon">Pokémon</a>
         <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
       </div>
-
-      <button class="mob-group-btn" id="mobGameBtn">
-        Game <span class="mob-arrow">▼</span>
-      </button>
+      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
       <div class="mob-sub" id="mobGameSub">
         <a href="/rules">Rules</a>
         <a href="/jobs">Jobs</a>
@@ -612,8 +655,96 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-body-inner">
-            <p>Your adventure begins here. Add the summary of Chapter 1 events — the party's first meeting, the inciting incident, and the mysteries that set the campaign in motion.</p>
-            <p>Describe the world your team woke up in, the first dungeon they braved, and the allies (or enemies) they encountered along the way.</p>
+            <div class="sub-accordion">
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.0 — Where am I?</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>You all awoke in a grassy field, in different forms. No longer human, you have all been transformed into Pokémon.</p>
+                    <p>While assessing your current situation (and arguing about who is the cutest), you all hear a voice: "You must stop them before they..." And the voice trailed off.</p>
+                    <p>After a bit more discussion, you all decide to head towards the big castle on the hill in the distance. However, shortly after you set out, you discover a parting in the tall grass that almost feels different somehow.</p>
+                    <p>After you watch Kako the Riolu walk in and disappear, you all filter in (with some hesitation). Once inside, you reunited with each other.</p>
+                    <p>You wandered around inside this maze, until you stumble upon a Rattata. However, this Rattata did not seem like he could be reasoned with, and immediately started attacking.</p>
+                    <p>After some teamwork, you managed to defeat the Rattata and move on. In the next room, you found another Rattata, and a set of stairs.</p>
+                    <p>After you defeated this Rattata and climbed the stairs, you exited the strange space and seemed to be significantly closer to the castle on the hill, which you could now tell to be a town below it.</p>
+                    <p>After several minutes of walking you reach the gates to the town. At that entrance, you are stopped by an Electabuzz named Surge, who asks what you are doing in Ristal Town. You kind of dodge the question, but eventually say you are here to join the Explorer's Guild.</p>
+                    <p>Surge leads you up the hill towards the castle that you noticed earlier. At the entrance, you noticed a large grate on the floor. After some time, you heard some yelling from below, asking you to step on the grate.</p>
+                    <p>After you all step on the grate and are identified, the gate opens, and a Machoke with a clipboard and tie greets you.</p>
+                    <p>He introduces himself as Howard and you all move out of the doorway for discussion. After speaking with you for a bit, Howard goes to fetch another Pokémon, an Alakazam named Kazz. Kazz stares at you all briefly and then tells Howard you used to be human, before walking off.</p>
+                    <p>Howard, never having heard of humans turning into Pokémon, brings you to the Guild Branch Leader's office, where you meet Buster the Blastoise.</p>
+                    <p>After some discussion, you agree to work for the Guild, and in exchange Buster would do his best to look into your situation. Buster explained that these strange places called Mystery Dungeons have been showing up all over the place, and the Pokémon inside are extremely hostile, and cannot be reasoned with. This is the primary focus of Exploration Teams — to do jobs in these Mystery Dungeons to help Pokémon.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.1 — Our First Job?</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>After you spoke with Buster, Howard shows you to the next room to begin your registration process. You all fill out forms about yourselves and decided on a team name: Team Xenith. You are all gifted an Exploration Team badge and a Bag to carry items.</p>
+                    <p>Howard then shows you around the facilities, showing you the cafeteria, sleeping quarters, and storage. He then shows you the Outlaw Notice Board, which houses bounties for Wanted Pokémon.</p>
+                    <p>Lastly you end up at the Job Bulletin Board. You all hold up your badges to the Board and see 1 job to rescue a Bidoof in the Verdant Plains dungeon.</p>
+                    <p>You accept the Job and head out into the field, towards the Verdant Plains dungeon.</p>
+                    <p>Once there you venture through Floors 1 and 2 with relatively no difficulty. However, when you reach the end of Floor 3, you see the Bidoof that you are supposed to rescue in the corner, trapped by 4 Rattata.</p>
+                    <p>You all rush in to save them, which makes the Rattata focus on you. You all start to fight them, but after a few turns, things are looking kinda dicey.</p>
+                    <p>Just as things were looking bleak for Kako, a Manectric rolls into the room with a Raticate. The Manectric notices you all, and notices the Normal Rank Badges on you. He says that Howard should not have sent rookies here and lets loose a Thunder, zapping all the Rattata and finishing off the Raticate.</p>
+                    <p>He tells you all to return to the Guild and completes his mission, which teleports him out.</p>
+                    <p>You all rescue the Bidoof, are prompted if you would like to return after completing the mission, and say no. You notice the room that Manectric came from — inside are the stairs, which when ascended completed the dungeon.</p>
+                    <p>Back at the Guild, you are all summoned to Buster's office. In the office are Buster, the Manectric who saved you, and Howard, looking quite distraught.</p>
+                    <p>Howard apologizes for sending you out on the mission — he was not aware that the Rattata Gang was there. You are gifted a special promotion to Bronze Rank and awarded 1000 P each, which includes your reward from the client for rescuing Bidoof.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.2 — Don't Shirk your Work</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>As a continuation of the apology for his blunder, Howard offers to show you around town to all the shops. You all accept and get on your way.</p>
+                    <p>When you finally enter town, you notice that the architecture here is sturdy, but primitive — nothing at all like the architecture from your world.</p>
+                    <p>Howard leads you towards the bazaar, where there are some shops that Rescue Teams may take advantage of.</p>
+                    <p>After visiting the shops and perusing their wares, you all decide to head back to the Guild and accept some missions. You end up accepting 2 missions in the Verdant Plains.</p>
+                    <p>Overall these missions go off without a hitch. You get your rewards and complete a hard day's work with a meal from Chef Lax.</p>
+                    <p>The next day, you all see that where those 2 Verdant Plains Missions were, there are now some more. Today, you all decide to accept 3 missions to head out to a new place, called Moonlight Grove.</p>
+                    <p>After some shopping and treasure box cracking, you all head out with the Nidorina you are supposed to escort in tow.</p>
+                    <p>This dungeon turns out to be a bit more difficult for the party, with higher levels and not very good type matchups. However, you all manage to get through successfully and complete all your missions.</p>
+                    <p>The next day, you all realize you are 10 points from ranking up, so you take the next batch of Jobs for Moonlight Grove. After some suffering, you finish the jobs and get your promotion. When you are promoted, your team decided to do a pose. For some reason, you decided that a tower would be the best pose to celebrate? After some difficulty you manage to finish the tower, and Howard walks up severely confused. Toto messes up while holding you all up, and you all end up on your butts — except for Kako, who manages to do a flip.</p>
+                    <p>After a deep sigh, Howard takes you to a room to give you your rank up rewards, and lets you know that Buster would like to see you tomorrow.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.3 — The Raticate Gang</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>You all get a meal and some rest before heading over to Buster's office in the morning.</p>
+                    <p>Once there, you are greeted by Buster, and a Weavile named Ava. Buster explains that they have located the Raticate Gang's hideout, and would like you all to go take care of them, with Ava's assistance.</p>
+                    <p>After some discussion you all agree to the mission, and head to town to get ready. Determined to make Ava wait as long as possible, you all meander through your shopping. Ava really doesn't care so you all set off for Sharpgrass Savannah.</p>
+                    <p>Here you climb all 9 floors, and find the Raticate Gang at the top.</p>
+                    <p>After some discussion, the fighting begins. With Ava's help, this went pretty smoothly.</p>
+                    <p>After you defeat them, you call for the Magnezone Police Force, and they arrest the Gang. Once they are gone, you notice a rock that is emitting a dark miasma.</p>
+                    <p>Kako cautiously steps forward, but notices that it is not doing anything to him. So he picks it up and brings it back to the Guild.</p>
+                    <p>Once you are back, you report to Buster's office for a debrief. You explain that the mission went well, and he gives you your reward.</p>
+                    <p>After that, you show him the rock you found, and he calls for Kaz. Kaz teleports into the office and mentions that the rock appears to be a chunk of meteorite. He takes it to his lab to study it, to see what this miasma is.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /.sub-accordion -->
           </div>
         </div>
       </div>
@@ -626,8 +757,68 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-body-inner">
-            <p>The stakes rise. Fill in what happened in Chapter 2 — new locations explored, plot twists uncovered, and the growing bonds between party members.</p>
-            <p>What secrets were revealed? Which mysteries deepened? Summarise the key moments that will shape the journey ahead.</p>
+            <div class="sub-accordion">
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>2.1 — Business As Usual?</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>In the morning after you took down the Raticate Gang, Howard informs you that Buster would like to see you about your situation.</p>
+                    <p>You all decide that you want to practice your pose in front of Buster's office door, and stack up. You call for Buster to open the door, and realize too late that the doors open outwards. You all crash down except for Kako, who does another dismounting flip from the top.</p>
+                    <p>Buster sighs and tells you to get in his office. You all enter and see another Pokémon in there, a Slowking named Kai, who serves as an Archivist.</p>
+                    <p>Kai tells you a story about a human who was turned into a Pokémon, hoping to maybe provide some insight into your predicament. The party asks him if he has ever heard of a human turned into a Pokémon, and he says he will look into it.</p>
+                    <p>After you are dismissed from Buster's office, you all head to town to do some shopping with the money you got from arresting Raticate. During your shopping, you try to see where Rascal puts your money by doing your pose in the middle of town, but can't see over the counter.</p>
+                    <p>After that you take some jobs from the Guild and head out to Sharpgrass Savannah. Once the jobs are complete, you all return to town and collect your rewards.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>2.2 — Bolt Mountain</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>After completing your missions, you get an urgent summons from Buster to meet him in his office.</p>
+                    <p>He says that there is a Shellos who is stuck at the peak of Bolt Mountain that needs rescued.</p>
+                    <p>While describing the mission, a Mew appears in the room, and contemplatively looks you all over. "So you guys are the ones..." she said. After she thinks it over, she moves over to Toto and does a flip, hitting Toto with her tail on the follow through. She then vanishes just as quick as she appeared.</p>
+                    <p>Toto begins to shine with a brilliant light, and evolves into a Croconaw. You all question Buster about this and he explains that Pokémon do not usually evolve like this.</p>
+                    <p>Once Toto adjusts to their new body, you all head out towards Bolt Mountain. You use the waystones that Kaz created to warp to the Sharpgrass Savannah, which is about 2 hours from Bolt Mountain.</p>
+                    <p>You all arrive at Bolt Mountain and begin the ascent. After a tough 10 floors, you arrive at the summit and see the Shellos off in the corner.</p>
+                    <p>Before you can head to its rescue, you all hear a voice, booming like thunder. Raikou emerges and claims you all are trespassing in his domain, just as the Shellos was.</p>
+                    <p>You try to reason with him, but he attacks out of rage. After a lengthy fight, 2 more beasts arrive — Entei and Suicune. They begin to fight Raikou, and Entei tells you to rescue the Shellos and leave.</p>
+                    <p>After you rescue the Shellos, you see a familiar reddish-purple miasma coming from a rock — another meteorite, like the one you already gave to Kaz to study.</p>
+                    <p>When you all finally return to the Guild Hall, it is late. You try to go to Buster's office, but he was not there anymore. Everyone except Fluffy went to the Dining Hall to get dinner, and you all went to bed. Fluffy opted to eat an apple because of her "incident" with the Cheri Berry Curry.</p>
+                    <p>The next day, you venture to Buster's office, and try (unsuccessfully) to open the door while in the team's "pose". After some more failed attempts you all collapse through the door to Buster's office, and then decide to forgo your pose for now.</p>
+                    <p>You inform Buster about the mission to rescue the Shellos, about confronting Raikou, and how Entei and Suicune showed up. After that you give him the newly acquired meteorite rock. He calls for Kaz and he takes it away to study it.</p>
+                    <p>He rewards you for your efforts, and then you all ask about building a house. He mentions the Hitmon Brothers as the local house builders.</p>
+                    <p>You locate them working on an existing project, and attempt to do your pose to get their attention. They are completely absorbed in their work and do not hear you. After a few minutes of fumbling your pose, a Tyrogue comes around the corner to help you. You all tell him what you are looking for in a house and he said he should have the blueprints and estimate in a few days.</p>
+                    <p>After that, you take some missions at Bolt Mountain and complete them all successfully.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>2.3 — Up the Volcano</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>After your missions at Bolt Mountain, your team ranks up to Gold Rank. You go see Buster for your reward, and he mentions that Kaz has figured out how to locate more shards — he discovers one at the peak of Cinder Volcano.</p>
+                    <p>After buying supplies, you all head out in the morning, travelling for about 12 hours. You get to the volcano, but decide to spend the night outside before heading in. In an effort to stay warm, Amp lights a tree on fire.</p>
+                    <p>In the morning you head into the volcano. On floor 3, you find a Quilava that seems to be friendly. After you talk with him, he explains that he used to be a human too. He joins the group for now, and you all head to the top.</p>
+                    <p>At the top, you all meet Moltres, who is very angry that you are up there. He immediately attacks, but you all fend him off.</p>
+                    <p>Quilbert discovers the meteor shard near the inactive crater.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /.sub-accordion -->
           </div>
         </div>
       </div>
@@ -650,7 +841,24 @@
   </footer>
 
   <script>
-    // ── Hamburger menu ──
+    // ── Dropdown: click to open/close, click outside to dismiss ──
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      const trigger = li.querySelector('span[data-dropdown]') || li.querySelector('span');
+      if (!li.querySelector('.dropdown-menu')) return;
+
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+
+    // ── Hamburger ──
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
 
@@ -663,7 +871,6 @@
       mobileMenu.setAttribute('aria-hidden', String(isOpen));
     });
 
-    // Close mobile menu on outside click
     document.addEventListener('click', (e) => {
       if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
         mobileMenu.classList.remove('open');
@@ -672,35 +879,15 @@
       }
     });
 
-    // Mobile sub-menus
     [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
       document.getElementById(btnId).addEventListener('click', function() {
         const sub = document.getElementById(subId);
-        const isOpen = sub.classList.contains('open');
-        sub.classList.toggle('open', !isOpen);
-        this.classList.toggle('open', !isOpen);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
       });
     });
 
-    // ── Dropdown: click to open/close, click outside to dismiss ──
-    document.querySelectorAll('.nav-links > li').forEach(li => {
-      const trigger = li.querySelector('span[data-dropdown]') || li.querySelector('span');
-      if (!li.querySelector('.dropdown-menu')) return;
-
-      li.querySelector('span').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = li.classList.contains('open');
-        // close all
-        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
-        if (!isOpen) li.classList.add('open');
-      });
-    });
-
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
-    });
-
-    // ── Accordion ──
+    // ── Chapter accordion (one open at a time) ──
     function toggleAccordion(btn) {
       const body = btn.nextElementSibling;
       const isOpen = body.classList.contains('open');
@@ -716,6 +903,15 @@
         btn.classList.add('active');
         btn.setAttribute('aria-expanded', 'true');
       }
+    }
+
+    // ── Sub-accordion (independent, multiple can be open) ──
+    function toggleSub(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      btn.classList.toggle('active', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
     }
   </script>
 
