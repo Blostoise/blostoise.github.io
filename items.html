@@ -620,12 +620,12 @@
                  (set priceText to show something other than "??")
        ══════════════════════════════════════════════════════════ */
     const SHOP_ITEMS = [
-      { name: "HP Up",            desc: "10 HP EVs",         price: 2000 },
-      { name: "Protein",          desc: "10 Attack EVs",     price: 2000 },
-      { name: "Iron",             desc: "10 Defense EVs",    price: 2000 },
-      { name: "Calcium",          desc: "10 Sp Attack EVs",  price: 2000 },
-      { name: "Zinc",             desc: "10 Sp Defense EVs", price: 2000 },
-      { name: "Carbos",           desc: "10 Speed EVs",      price: 2000 },
+      { name: "HP Up",            desc: "+10 HP EVs, cannot exceed 255",         price: 2000 },
+      { name: "Protein",          desc: "+10 Attack EVs, cannot exceed 255",     price: 2000 },
+      { name: "Iron",             desc: "+10 Defense EVs, cannot exceed 255",    price: 2000 },
+      { name: "Calcium",          desc: "+10 Sp Attack EVs, cannot exceed 255",  price: 2000 },
+      { name: "Zinc",             desc: "+10 Sp Defense EVs, cannot exceed 255", price: 2000 },
+      { name: "Carbos",           desc: "+10 Speed EVs, cannot exceed 255",      price: 2000 },
       
       { name: "All Mach Orb",   desc: "All allies in the same room gain 2 attacks per turn", price: 250 },
       { name: "Blowback Orb",   desc: "Knocks all enemies within 5 ft flying until they hit a wall or Pokemon. Does damage proportional to the distance travelled. If another pokemon is hit, they take half of the damage as well.", price: 250 },
@@ -679,7 +679,7 @@
       { name: "One-Way Orb",    desc: "If you faint in a dungeon, you can use this orb to return to your allies", price: 300 },
 
       { name: "Allure Seed",       desc: "Cannot determine friend from foe for 5 turns", price: 50 },
-      { name: "Blast Seed",        desc: "Deals damage in a 15 ft cone", price: 50 },
+      { name: "Blast Seed",        desc: "Deals 2d6 damage in a 15 ft cone", price: 50 },
       { name: "Eyedrop Seed",      desc: "Cures sight based status effects", price: 50 },
       { name: "Evil Seed",         desc: "Lowers Def and Sp Def by 6 stages", price: 50 },
       { name: "Golden Seed",       desc: "Spawn Money (1d100 × 5)", price: 1 },
@@ -703,18 +703,18 @@
 
       { name: "Cheri Berry",  desc: "Cure Paralysis", price: 6 },
       { name: "Chesto Berry", desc: "Cure Sleep", price: 6 },
-      { name: "Oran Berry",   desc: "Heal 150 HP", price: 12 },
+      { name: "Oran Berry",   desc: "Heal 100 HP", price: 12 },
       { name: "Pecha Berry",  desc: "Cure Poison", price: 6 },
       { name: "Rawst Berry",  desc: "Cure Burn", price: 6 },
       { name: "Sitrus Berry", desc: "Heal fully", price: 100 },
 
-      { name: "Goggle Specs",   desc: "Shows traps, and invisible pokemon", price: 2000 },
-      { name: "Insomniascope",  desc: "Prevents Sleep", price: 2000 },
-      { name: "Lockon Scope",   desc: "Boost accuracy of thrown items", price: 2000 },
-      { name: "No-Aim Scope",   desc: "Extended range for thrown items", price: 2000 },
-      { name: "Scope Lens",     desc: "Boost critical chance", price: 2500 },
-      { name: "Wise Glasses",   desc: "Special Attack Modifier +1", price: 2500 },
-      { name: "Muscle Band",    desc: "Attack Modifier +1", price: 2500 },
+      { name: "Goggle Specs",   desc: "Shows traps, and invisible pokemon when held", price: 2000 },
+      { name: "Insomniascope",  desc: "Prevents Sleep when held", price: 2000 },
+      { name: "Lockon Scope",   desc: "Boost accuracy of thrown items when held", price: 2000 },
+      { name: "No-Aim Scope",   desc: "Extended range for thrown items when held", price: 2000 },
+      { name: "Scope Lens",     desc: "Boost critical chance when held (crit on 19s)", price: 2500 },
+      { name: "Wise Glasses",   desc: "Special Attack Modifier +1 when held", price: 2500 },
+      { name: "Muscle Band",    desc: "Attack Modifier +1 when held", price: 2500 },
 
       { name: "Hearty Gummi",      desc: "Raise HP IV by 1", price: 3000 },
       { name: "Violent Gummi",     desc: "Raise Attack IV by 1", price: 3000 },
