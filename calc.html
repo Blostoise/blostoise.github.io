@@ -951,6 +951,7 @@
     /*{ name: "Lucario",hp: 70, attack: 110, defense: 70, spAttack: 115, spDefense: 70, speed: 90 } */
 
   let currentPokemon = null;
+  const ADAPTABILITY = new Set(["eevee"]);
     
     const pokemonStats = [
       { name: "Bulbasaur",  hp: 45, attack: 49, defense: 49, spAttack: 65, spDefense: 65, speed: 45 },
@@ -1006,7 +1007,7 @@
           pokeInput.value = name;
           suggestions.style.display = "none";
           showSpriteFor(name);
-          currentPokemon = pokemon.name.toLowerCase();
+          currentPokemon = name.toLowerCase();
         };
         suggestions.appendChild(d);
       });
@@ -1034,7 +1035,11 @@
       spriteLabel.textContent = name;
     }
 
-    pokeInput.addEventListener("change", () => showSpriteFor(pokeInput.value.trim()));
+    pokeInput.addEventListener("change", () => {
+      const n = pokeInput.value.trim();
+      showSpriteFor(n);
+      currentPokemon = n.toLowerCase();
+    });
 
     /* ── Dice helpers ── */
     // Calc modifier from stat value
@@ -1045,7 +1050,7 @@
     function halfCeil(n) { return Math.ceil(n / 2); }
 
     // STAB: half of mod rounded up, THEN 50% extra rounded up
-    function stabDice(baseDice) { return baseDice + Math.ceil(baseDice * 0.5);}
+    function stabDice(baseDice) { return adaptability ? baseDice * 1 : baseDice + Math.ceil(baseDice * 0.5););}
      
 
     /* ── Render dice section ── */
@@ -1054,11 +1059,14 @@
       if (existingDice) existingDice.remove();
       const existingExp = document.getElementById("exp-section");
       if (existingExp) existingExp.remove();
+      const adaptability = ADAPTABILITY.has((pokeName || currentPokemon || "").toLowerCase());
+      const stabBadge = `<span class="dice-stab-badge">STAB${adaptability ? " (Adaptability)" : ""}</span>`;
 
       const section = document.createElement("div");
       section.id = "dice-section";
       section.dataset.atkStat = atkStatVal;
       section.dataset.spaStat = spaStatVal;
+      section.dataset.adaptability = adaptability ? "1" : "";
 
       section.innerHTML = `
         <h3>Attack Dice</h3>
@@ -1079,7 +1087,7 @@
             <div class="dice-mod-note" id="dn-atk"></div>
           </div>
           <div class="dice-card" id="dc-atk-stab">
-            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">STAB</span></div>
+            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">${stabBadge}</span></div>
             <div class="dice-value" id="dv-atk-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-atk-stab"></div>
           </div>
@@ -1101,7 +1109,7 @@
             <div class="dice-mod-note" id="dn-spa"></div>
           </div>
           <div class="dice-card" id="dc-spa-stab">
-            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">STAB</span></div>
+            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">${stabBadge}</span></div>
             <div class="dice-value" id="dv-spa-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-spa-stab"></div>
           </div>
@@ -1148,14 +1156,14 @@
       const spaModVal  = baseSpaMod + (wiseGlasses ? 1 : 0);
 
       const atkDice     = halfCeil(atkModVal);
-      const atkDiceStab = stabDice(atkDice);
+      const atkDiceStab = stabDice(atkDice, adaptability);
       const spaDice     = halfCeil(spaModVal);
-      const spaDiceStab = stabDice(spaDice);
+      const spaDiceStab = stabDice(spaDice, adaptability);
 
-      setDiceDisplay("dv-atk",      "dn-atk",      atkDice,     baseAtkMod, muscleBand,  false);
-      setDiceDisplay("dv-atk-stab", "dn-atk-stab", atkDiceStab, baseAtkMod, muscleBand,  true,  atkDice);
-      setDiceDisplay("dv-spa",      "dn-spa",       spaDice,     baseSpaMod, wiseGlasses, false);
-      setDiceDisplay("dv-spa-stab", "dn-spa-stab",  spaDiceStab, baseSpaMod, wiseGlasses, true,  spaDice);
+      setDiceDisplay("dv-atk",      "dn-atk",      atkDice,     baseAtkMod, muscleBand,  false, null,     adaptability);
+      setDiceDisplay("dv-atk-stab", "dn-atk-stab", atkDiceStab, baseAtkMod, muscleBand,  true,  atkDice,  adaptability);
+      setDiceDisplay("dv-spa",      "dn-spa",      spaDice,     baseSpaMod, wiseGlasses, false, null,     adaptability);
+      setDiceDisplay("dv-spa-stab", "dn-spa-stab", spaDiceStab, baseSpaMod, wiseGlasses, true,  spaDice,  adaptability);
     }
 
     function setDiceDisplay(valId, noteId, dice, baseMod, boosted, isStab, priorDice) {
@@ -1166,7 +1174,7 @@
 
       let note = `Mod ${baseMod}${boosted ? " +1 (item)" : ""}`;
       if (isStab) {
-        note += ` → ${priorDice} base × STAB`;
+        note += ` → ${priorDice} base × ${adaptability ? "2 (Adaptability)" : "1.5"}`;
       }
       noteEl.textContent = note;
     }
@@ -1229,7 +1237,8 @@
         </table>`;
 
       // Render dice section with attack and sp. attack stat values
-      renderDice(out.Attack, out["Sp. Attack"], lvl);
+      currentPokemon = pokemon.name.toLowerCase();
+      renderDice(out.Attack, out["Sp. Attack"], lvl, pokemon.name);
     });
 
     /* ── Cookie helpers ── */
@@ -1275,7 +1284,7 @@
       if (!raw) return;
       try {
         const data = JSON.parse(raw);
-        if (data.name)  { pokeInput.value = data.name; showSpriteFor(data.name); }
+        if (data.name) { pokeInput.value = data.name; showSpriteFor(data.name); currentPokemon = data.name.toLowerCase(); }
         if (data.level) document.getElementById("level").value = data.level;
         if (data.iv) {
           document.getElementById("ivHP").value  = data.iv.hp  ?? 0;
