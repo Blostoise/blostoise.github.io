@@ -1042,7 +1042,7 @@
 
     // STAB: half of mod rounded up, THEN 50% extra rounded up
     function stabDice(baseDice) { 
-      if (pokemon = 'eevee') 
+      if (pokemon === 'eevee') 
       {
         return baseDice + Math.ceil(baseDice * 1);
       }
@@ -1052,10 +1052,12 @@
       }
     }
 
-    if pokemon = "eevee"
-    { const stabLbl = "STAB (Adaptability)";}
+    let stabLbl;
+
+    if pokemon === "eevee"
+    { stabLbl = "STAB (Adaptability)";}
     else
-    { const stabLbl = "STAB";}
+    { stabLbl = "STAB";}
 
     /* ── Render dice section ── */
     function renderDice(atkStatVal, spaStatVal, lvl) {
