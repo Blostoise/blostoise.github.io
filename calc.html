@@ -949,6 +949,9 @@
     /*{ name: "Typholosion",hp: 73, attack: 84, defense: 78, spAttack: 119, spDefense: 85, speed: 95 },*/
     /*{ name: "Feraligatr",hp: 85, attack: 105, defense: 100, spAttack: 79, spDefense: 83, speed: 78 },*/
     /*{ name: "Lucario",hp: 70, attack: 110, defense: 70, spAttack: 115, spDefense: 70, speed: 90 } */
+
+  let currentPokemon = null;
+    
     const pokemonStats = [
       { name: "Bulbasaur",  hp: 45, attack: 49, defense: 49, spAttack: 65, spDefense: 65, speed: 45 },
       { name: "Charmander", hp: 39, attack: 52, defense: 43, spAttack: 60, spDefense: 50, speed: 65 },
@@ -1003,6 +1006,7 @@
           pokeInput.value = name;
           suggestions.style.display = "none";
           showSpriteFor(name);
+          currentPokemon = pokemon.name.toLowerCase();
         };
         suggestions.appendChild(d);
       });
@@ -1090,7 +1094,7 @@
             <div class="dice-mod-note" id="dn-atk"></div>
           </div>
           <div class="dice-card" id="dc-atk-stab">
-            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">${StabLbl}</span></div>
+            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">${stabLbl}</span></div>
             <div class="dice-value" id="dv-atk-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-atk-stab"></div>
           </div>
@@ -1112,7 +1116,7 @@
             <div class="dice-mod-note" id="dn-spa"></div>
           </div>
           <div class="dice-card" id="dc-spa-stab">
-            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">${StabLbl}</span></div>
+            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">${stabLbl}</span></div>
             <div class="dice-value" id="dv-spa-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-spa-stab"></div>
           </div>
