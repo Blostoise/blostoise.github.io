@@ -1052,6 +1052,11 @@
       }
     }
 
+    if pokemon = "eevee"
+    { const stabLbl = "STAB (Adaptability)"}
+    else
+    { const stabLbl = "STAB"}
+
     /* ── Render dice section ── */
     function renderDice(atkStatVal, spaStatVal, lvl) {
       const existingDice = document.getElementById("dice-section");
@@ -1083,7 +1088,7 @@
             <div class="dice-mod-note" id="dn-atk"></div>
           </div>
           <div class="dice-card" id="dc-atk-stab">
-            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">STAB</span></div>
+            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">${StabLbl}</span></div>
             <div class="dice-value" id="dv-atk-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-atk-stab"></div>
           </div>
@@ -1105,7 +1110,7 @@
             <div class="dice-mod-note" id="dn-spa"></div>
           </div>
           <div class="dice-card" id="dc-spa-stab">
-            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">STAB</span></div>
+            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">${StabLbl}</span></div>
             <div class="dice-value" id="dv-spa-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-spa-stab"></div>
           </div>
