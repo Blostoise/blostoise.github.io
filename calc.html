@@ -1041,7 +1041,16 @@
     function halfCeil(n) { return Math.ceil(n / 2); }
 
     // STAB: half of mod rounded up, THEN 50% extra rounded up
-    function stabDice(baseDice) { return baseDice + Math.ceil(baseDice * 0.5); }
+    function stabDice(baseDice) { 
+      if (pokemon = 'eevee') 
+      {
+        return baseDice + Math.ceil(baseDice * 1);
+      }
+      else
+      {
+        return baseDice + Math.ceil(baseDice * 0.5);
+      }
+    }
 
     /* ── Render dice section ── */
     function renderDice(atkStatVal, spaStatVal, lvl) {
