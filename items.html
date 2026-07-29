@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Shop – PMD Campaign</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── SITE TOKENS (matches index.html) ── */
+    :root {
+      --poke-red:        #3B4CCA;
+      --poke-red-dk:     #2a379f;
+      --poke-yellow:     #FFCB05;
+      --poke-yellow-lt:  #FFE566;
+      --poke-blue:       #3B4CCA;
+      --poke-blue-lt:    #6478E0;
+      --poke-white:      #F8F8F8;
+      --poke-dark:       #1a1a2e;
+      --poke-gray:       #333355;
+      --nav-h:           64px;
+
+      --card-bg:  #fff;
+      --accent:   #3B4CCA;
+      --muted:    #f2f2f2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f6f8fb;
+      color: var(--poke-dark);
+      min-height: 100vh;
+    }
+
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .nav-links > li { position: relative; }
+
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px;
+      min-width: 170px;
+      z-index: 999;
+    }
+
+    .nav-links > li.open .dropdown-menu { display: block; }
+
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu a:last-child { border-bottom: none; }
+
+    .dropdown-menu a:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+
+    /* ── HAMBURGER BUTTON ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── MOBILE MENU PANEL ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 34px);
+      flex-direction: column;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+
+    .mob-group-btn {
+      display: flex !important;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mob-arrow {
+      font-size: 0.65rem;
+      transition: transform 0.3s ease;
+    }
+
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .mob-sub.open { max-height: 400px; }
+
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mob-sub a:hover {
+      background: rgba(255,203,5,0.1);
+      color: var(--poke-yellow);
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-site-name { display: none; }
+      nav { padding: 0 1rem; }
+    }
+
+    /* ── PAGE CONTENT ── */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .page-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 700;
+      color: var(--poke-blue);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.08em;
+      position: relative;
+    }
+
+    .page-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow));
+      border-radius: 2px;
+      margin-top: 0.5rem;
+    }
+
+    /* ── SEARCH CARD ── */
+    .card {
+      background: var(--card-bg);
+      padding: 14px 16px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.08);
+      border: 1px solid rgba(59,76,202,0.12);
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
+    .search-field {
+      flex: 1 1 260px;
+      min-width: 0;
+    }
+
+    .search-field label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--poke-gray);
+      letter-spacing: 0.04em;
+    }
+
+    .search-field input[type="search"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cfd8e6;
+      font-size: 14px;
+      font-family: 'Nunito', sans-serif;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .search-field input[type="search"]:focus {
+      outline: none;
+      border-color: var(--poke-blue);
+      box-shadow: 0 0 0 3px rgba(59,76,202,0.12);
+    }
+
+    .result-count {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #8090b0;
+      padding-bottom: 11px;
+      white-space: nowrap;
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: var(--poke-blue);
+      border: 2px solid var(--poke-blue);
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+    }
+
+    .btn-reset:hover { background: var(--poke-blue); color: #fff; }
+    .btn-reset:active { transform: scale(0.97); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(20,30,60,0.06);
+      border: 1px solid rgba(59,76,202,0.1);
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      text-align: left;
+      min-width: 600px;
+    }
+
+    th, td {
+      border: 1px solid #dde3f0;
+      padding: 10px 14px;
+      vertical-align: top;
+    }
+
+    thead th {
+      background: var(--poke-blue);
+      color: white;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      user-select: none;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    thead th:hover { background: var(--poke-red-dk); }
+
+    thead th:focus-visible {
+      outline: 3px solid var(--poke-yellow);
+      outline-offset: -3px;
+    }
+
+    .sort-arrow {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 0.62rem;
+      color: var(--poke-yellow);
+      opacity: 0.35;
+    }
+
+    thead th.sorted .sort-arrow { opacity: 1; }
+
+    td.col-name {
+      background: #eef1ff;
+      font-weight: 700;
+      color: var(--poke-dark);
+      white-space: nowrap;
+    }
+
+    td.col-desc { color: var(--poke-gray); line-height: 1.5; }
+
+    td.col-price {
+      text-align: right;
+      font-weight: 700;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th.col-price { text-align: right; }
+
+    tbody tr:nth-child(even) td.col-desc,
+    tbody tr:nth-child(even) td.col-price { background: var(--muted); }
+
+    tbody tr:hover td { background: #f5f6ff; }
+
+    .empty-row td {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #8090b0;
+      font-weight: 700;
+      background: #fff;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: var(--poke-yellow); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 760px) {
+      .page-wrap { padding: 1.5rem 1rem 3rem; }
+      .card { align-items: stretch; }
+      .result-count { padding-bottom: 0; }
+      .btn-reset { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu Panel -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+
+      <button class="mob-group-btn" id="mobCharBtn">
+        Character <span class="mob-arrow">▼</span>
+      </button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+
+      <button class="mob-group-btn" id="mobGameBtn">
+        Game <span class="mob-arrow">▼</span>
+      </button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/items">Items</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-wrap">
+    <h1 class="page-title">Shop</h1>
+
+    <div class="card">
+      <div class="search-field">
+        <label for="itemSearch">Search by name</label>
+        <input id="itemSearch" type="search" placeholder="Start typing (e.g. Orb, Reviver, Gummi)" autocomplete="off" />
+      </div>
+      <div class="result-count" id="resultCount">&nbsp;</div>
+      <button type="button" class="btn-reset" id="resetBtn">Clear</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="shopTable">
+        <thead>
+          <tr>
+            <th data-col="name"  tabindex="0" role="button" aria-sort="ascending">Item <span class="sort-arrow">▲</span></th>
+            <th data-col="desc"  tabindex="0" role="button" aria-sort="none">Description <span class="sort-arrow">▲</span></th>
+            <th data-col="price" tabindex="0" role="button" aria-sort="none" class="col-price">Sell Price <span class="sort-arrow">▲</span></th>
+          </tr>
+        </thead>
+        <tbody id="shopBody"></tbody>
+      </table>
+    </div>
+  </div><!-- /.page-wrap -->
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
+
+  <script>
+    /* ══════════════════════════════════════════════════════════
+       SHOP DATA
+       Add or edit items here. Fields:
+         name  – item name (string)
+         desc  – what it does (string)
+         price – number, or null for an unset/variable price
+                 (set priceText to show something other than "??")
+       ══════════════════════════════════════════════════════════ */
+    const SHOP_ITEMS = [
+      { name: "HP Up",            desc: "10 HP EVs",         price: 2000 },
+      { name: "Protein",          desc: "10 Attack EVs",     price: 2000 },
+      { name: "Iron",             desc: "10 Defense EVs",    price: 2000 },
+      { name: "Calcium",          desc: "10 Sp Attack EVs",  price: 2000 },
+      { name: "Zinc",             desc: "10 Sp Defense EVs", price: 2000 },
+      { name: "Carbos",           desc: "10 Speed EVs",      price: 2000 },
+      
+      { name: "All Mach Orb",   desc: "All allies in the same room gain 2 attacks per turn", price: 250 },
+      { name: "Blowback Orb",   desc: "Knocks all enemies within 5 ft flying until they hit a wall or Pokemon. Does damage proportional to the distance travelled. If another pokemon is hit, they take half of the damage as well.", price: 250 },
+      { name: "Brushoff Orb",   desc: "Warps all foes in the same room somewhere else on the floor. The enemy will know where you are though and try to come back", price: 250 },
+      { name: "Cleanse Orb",    desc: "Cleans all Murky items in your team's bags", price: 250 },
+      { name: "All Hit Orb",    desc: "All allies in the same room gain 3 stages of Accuracy. This effect ends after 10 turns", price: 250 },
+      { name: "Drought Orb",    desc: "Change the floor's weather to Drought", price: 250 },
+      { name: "Escape Orb",     desc: "Whole team escapes from the dungeon", price: 250 },
+      { name: "Evasion Orb",    desc: "Evasion +3 for 10 turns for all allies", price: 250 },
+      { name: "Fill-in Orb",    desc: "Turn all water or lava on the floor into walkable tiles", price: 250 },
+      { name: "Foe-Petrify Orb",desc: "All pokemon on the floor are Petrified (cannot move until they take damage)", price: 250 },
+      { name: "Foe-Seal Orb",   desc: "All Pokemon in the room are paused (cannot do anything for 4 turns)", price: 250 },
+      { name: "Foe-Stun Orb",   desc: "All foes in the room become frightened (run away from players for 5 turns)", price: 250 },
+      { name: "Hail Orb",       desc: "Change the floor's weather to Hail", price: 250 },
+      { name: "Hurl Orb",       desc: "Knock 1 pokemon in front back until they hit something. If the hurled enemy hits a pokemon, that pokemon takes half the hurl damage too.", price: 250 },
+      { name: "Invisify Orb",   desc: "User becomes invisible for 5 turns", price: 250 },
+      { name: "Itemizer Orb",   desc: "Replace the foe in front with a random item", price: 250 },
+      { name: "Longtoss Orb",   desc: "Items can now be thrown 30 ft for as long as you are on the floor", price: 250 },
+      { name: "Luminous Orb",   desc: "Reveal the entire floor layout and items/stairs/traps", price: 250 },
+      { name: "Mobile Orb",     desc: "Your movement speed is doubled for the entire floor", price: 250 },
+      { name: "Mug Orb",        desc: "Steal a foe's held item", price: 250 },
+      { name: "One-Room Orb",   desc: "Turns the entire floor into 1 room (all walls except exterior are erased)", price: 250 },
+      { name: "One-Shot Orb",   desc: "All enemies on the floor die in one hit (does not include bosses/mini bosses)", price: 250 },
+      { name: "Petrify Orb",    desc: "All pokemon in the room are Petrified (cannot move until they take damage)", price: 250 },
+      { name: "Pierce Orb",     desc: "Single target moves used on a target will also hit another target within 5 ft for 5 turns", price: 250 },
+      { name: "Pounce Orb",     desc: "Pounce directly next to an enemy in eye sight. If you cannot be right next to them for some reason (no space, tile you can't walk on) you will be teleported randomly to another room in the dungeon.", price: 250 },
+      { name: "Quick Orb",      desc: "Your entire party's movement speed is doubled for the floor", price: 250 },
+      { name: "Radar Orb",      desc: "Reveal all enemies on the floor", price: 250 },
+      { name: "Rainy Orb",      desc: "Change the weather on the floor to Rain", price: 250 },
+      { name: "Rebound Orb",    desc: "For 5 turns, 50% of all damage you take is also taken by the attacker", price: 250 },
+      { name: "Rollcall Orb",   desc: "Summon all team members on the floor to the same room as you", price: 250 },
+      { name: "Sandy Orb",      desc: "Changes the weather to a Sandstorm", price: 250 },
+      { name: "Scanner Orb",    desc: "Reveals all items on the floor", price: 250 },
+      { name: "See-Trap Orb",   desc: "Reveals all traps on the floor", price: 250 },
+      { name: "Shocker Orb",    desc: "All foes in the room become Paralyzed", price: 250 },
+      { name: "Silence Orb",    desc: "Foe cannot use any moves for 5 turns", price: 250 },
+      { name: "Sizeburst Orb",  desc: "Inflicts damage based on the enemies weight", price: 250 },
+      { name: "Slow Orb",       desc: "Enemies initiative is lowered by 1", price: 250 },
+      { name: "Slumber Orb",    desc: "All foes in the room go to Sleep", price: 250 },
+      { name: "Snatch Orb",     desc: "Snatch the foes item and deal damage (can only be used on a pokemon holding an item, you can roll to spot a pokemon holding something though)", price: 250 },
+      { name: "Stairs Orb",     desc: "Reveal the stairs", price: 250 },
+      { name: "Stayaway Orb",   desc: "The foe in front is Petrified and warped near the stairs", price: 250 },
+      { name: "Sunny Orb",      desc: "Change the weather on the floor to Harsh Sun", price: 250 },
+      { name: "Switcher Orb",   desc: "Switch places with any pokemon that you can see", price: 250 },
+      { name: "Totter Orb",     desc: "Confuses all foes in the room", price: 250 },
+      { name: "Devolve Orb",    desc: "All pokemon on the floor revert to their previous evolution", price: 250 },
+      { name: "Trapburst Orb",  desc: "Destroys all traps on the floor", price: 250 },
+      { name: "Trawl Orb",      desc: "All items on the floor teleport to you", price: 250 },
+      { name: "Two-Edge Orb",   desc: "All damage is doubled on the floor (for enemies and allies)", price: 250 },
+      { name: "Warp Orb",       desc: "Warp enemy in front to somewhere else on the floor", price: 250 },
+      { name: "One-Way Orb",    desc: "If you faint in a dungeon, you can use this orb to return to your allies", price: 300 },
+
+      { name: "Allure Seed",       desc: "Cannot determine friend from foe for 5 turns", price: 50 },
+      { name: "Blast Seed",        desc: "Deals damage in a 15 ft cone", price: 50 },
+      { name: "Eyedrop Seed",      desc: "Cures sight based status effects", price: 50 },
+      { name: "Evil Seed",         desc: "Lowers Def and Sp Def by 6 stages", price: 50 },
+      { name: "Golden Seed",       desc: "Spawn Money (1d100 × 5)", price: 1 },
+      { name: "Hardblow Seed",     desc: "Raise Attack and Sp Attack by 6 stages", price: 200 },
+      { name: "Heal Seed",         desc: "Heals any status", price: 50 },
+      { name: "Quick Seed",        desc: "Movement speed is increased for 3 turns", price: 50 },
+      { name: "Reviver Seed",      desc: "Fully recover from fainting and restore all PP and HP", price: 500 },
+      { name: "Sleep Seed",        desc: "Puts to Sleep", price: 10 },
+      { name: "Stun Seed",         desc: "Petrifies", price: 50 },
+      { name: "Totter Seed",       desc: "Get Confused", price: 50 },
+      { name: "Tiny Reviver Seed", desc: "Recover HP to 50%, no PP is restored", price: 125 },
+      { name: "Vanish Seed",       desc: "Become invisible for 3 turns", price: 300 },
+      { name: "Warp Seed",         desc: "Warp somewhere random on the floor", price: 150 },
+      { name: "Life Seed",         desc: "Raises Max HP by 10", price: 8000 },
+      { name: "Joy Seed",          desc: "Raises Level by 1", price: 10000 },
+
+      { name: "Apple",          desc: "Fills belly by 20", price: 25 },
+      { name: "Big Apple",      desc: "Fill belly by 50", price: 200 },
+      { name: "Enormous Apple", desc: "Fill belly entirely", price: 400 },
+      { name: "Golden Apple",   desc: "Fill belly and permanently raise belly size by 5", price: 2000 },
+
+      { name: "Cheri Berry",  desc: "Cure Paralysis", price: 6 },
+      { name: "Chesto Berry", desc: "Cure Sleep", price: 6 },
+      { name: "Oran Berry",   desc: "Heal 150 HP", price: 12 },
+      { name: "Pecha Berry",  desc: "Cure Poison", price: 6 },
+      { name: "Rawst Berry",  desc: "Cure Burn", price: 6 },
+      { name: "Sitrus Berry", desc: "Heal fully", price: 100 },
+
+      { name: "Goggle Specs",   desc: "Shows traps, and invisible pokemon", price: 2000 },
+      { name: "Insomniascope",  desc: "Prevents Sleep", price: 2000 },
+      { name: "Lockon Scope",   desc: "Boost accuracy of thrown items", price: 2000 },
+      { name: "No-Aim Scope",   desc: "Extended range for thrown items", price: 2000 },
+      { name: "Scope Lens",     desc: "Boost critical chance", price: 2500 },
+      { name: "Wise Glasses",   desc: "Special Attack Modifier +1", price: 2500 },
+      { name: "Muscle Band",    desc: "Attack Modifier +1", price: 2500 },
+
+      { name: "Hearty Gummi",      desc: "Raise HP IV by 1", price: 3000 },
+      { name: "Violent Gummi",     desc: "Raise Attack IV by 1", price: 3000 },
+      { name: "Sturdy Gummi",      desc: "Raise Defense IV by 1", price: 3000 },
+      { name: "Intelligent Gummi", desc: "Raise Special Attack IV by 1", price: 3000 },
+      { name: "Willpower Gummi",   desc: "Raise Special Defense IV by 1", price: 3000 },
+      { name: "Agile Gummi",       desc: "Raise Speed IV by 1", price: 3000 },
+
+      { name: "PP Up",  desc: "Increases the PP of a Move by a certain amount", price: 3000 },
+      { name: "PP Max", desc: "Maxes the PP of a Move", price: 6000 }
+    ];
+
+    /* ══════════════════════════════════════════════════════════
+       TABLE RENDERING / SORT / SEARCH
+       ══════════════════════════════════════════════════════════ */
+    const tbody       = document.getElementById("shopBody");
+    const searchInput = document.getElementById("itemSearch");
+    const resetBtn    = document.getElementById("resetBtn");
+    const countEl     = document.getElementById("resultCount");
+    const headers     = document.querySelectorAll("#shopTable thead th");
+
+    // Default sort: name, ascending
+    let sortCol = "name";
+    let sortDir = 1; // 1 = ascending, -1 = descending
+
+    function priceText(item) {
+      return item.price === null ? (item.priceText || "??") : item.price.toLocaleString();
+    }
+
+    // Unpriced items always sink to the bottom, in either direction
+    function priceValue(item) {
+      return item.price === null ? Infinity : item.price;
+    }
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, c => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+      ));
+    }
+
+    function compare(a, b) {
+      if (sortCol === "price") {
+        const av = priceValue(a), bv = priceValue(b);
+        if (av === Infinity && bv === Infinity) return a.name.localeCompare(b.name);
+        if (av === Infinity) return 1;   // always last
+        if (bv === Infinity) return -1;  // always last
+        if (av !== bv) return (av - bv) * sortDir;
+        return a.name.localeCompare(b.name); // tie-break by name
+      }
+      const av = a[sortCol], bv = b[sortCol];
+      const res = av.localeCompare(bv, undefined, { sensitivity: "base" });
+      if (res !== 0) return res * sortDir;
+      return a.name.localeCompare(b.name);
+    }
+
+    function render() {
+      const q = searchInput.value.trim().toLowerCase();
+      const rows = SHOP_ITEMS
+        .filter(item => !q || item.name.toLowerCase().includes(q))
+        .sort(compare);
+
+      countEl.textContent = rows.length === SHOP_ITEMS.length
+        ? `${rows.length} items`
+        : `${rows.length} of ${SHOP_ITEMS.length} items`;
+
+      if (!rows.length) {
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="3">No items match "${escapeHTML(searchInput.value.trim())}". Try a shorter search.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(item => `
+        <tr>
+          <td class="col-name">${escapeHTML(item.name)}</td>
+          <td class="col-desc">${escapeHTML(item.desc)}</td>
+          <td class="col-price">${escapeHTML(priceText(item))}</td>
+        </tr>`).join("");
+    }
+
+    function updateHeaderState() {
+      headers.forEach(th => {
+        const col = th.dataset.col;
+        const arrow = th.querySelector(".sort-arrow");
+        if (col === sortCol) {
+          th.classList.add("sorted");
+          arrow.textContent = sortDir === 1 ? "▲" : "▼";
+          th.setAttribute("aria-sort", sortDir === 1 ? "ascending" : "descending");
+        } else {
+          th.classList.remove("sorted");
+          arrow.textContent = "▲";
+          th.setAttribute("aria-sort", "none");
+        }
+      });
+    }
+
+    function sortBy(col) {
+      if (col === sortCol) {
+        sortDir = -sortDir;          // same column: flip direction
+      } else {
+        sortCol = col;
+        sortDir = 1;                 // new column: start ascending
+      }
+      updateHeaderState();
+      render();
+    }
+
+    headers.forEach(th => {
+      th.addEventListener("click", () => sortBy(th.dataset.col));
+      th.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sortBy(th.dataset.col); }
+      });
+    });
+
+    searchInput.addEventListener("input", render);
+
+    resetBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      render();
+      searchInput.focus();
+    });
+
+    updateHeaderState();
+    render();
+
+    /* ── Hamburger menu ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
+
+    /* ── Dropdown navigation (matches index.html) ── */
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+  </script>
+</body>
+</html>
