@@ -1045,23 +1045,8 @@
     function halfCeil(n) { return Math.ceil(n / 2); }
 
     // STAB: half of mod rounded up, THEN 50% extra rounded up
-    function stabDice(baseDice) { 
-      if (pokemon === 'eevee') 
-      {
-        return baseDice + Math.ceil(baseDice * 1);
-      }
-      else
-      {
-        return baseDice + Math.ceil(baseDice * 0.5);
-      }
-    }
-
-    let stabLbl;
-
-    if pokemon === "eevee"
-    { stabLbl = "STAB (Adaptability)";}
-    else
-    { stabLbl = "STAB";}
+    function stabDice(baseDice) { return baseDice + Math.ceil(baseDice * 0.5);}
+     
 
     /* ── Render dice section ── */
     function renderDice(atkStatVal, spaStatVal, lvl) {
@@ -1094,7 +1079,7 @@
             <div class="dice-mod-note" id="dn-atk"></div>
           </div>
           <div class="dice-card" id="dc-atk-stab">
-            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">${stabLbl}</span></div>
+            <div class="dice-card-title">Attack Dice <span class="dice-stab-badge">STAB/span></div>
             <div class="dice-value" id="dv-atk-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-atk-stab"></div>
           </div>
@@ -1116,7 +1101,7 @@
             <div class="dice-mod-note" id="dn-spa"></div>
           </div>
           <div class="dice-card" id="dc-spa-stab">
-            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">${stabLbl}</span></div>
+            <div class="dice-card-title">Sp. Attack Dice <span class="dice-stab-badge">STAB</span></div>
             <div class="dice-value" id="dv-spa-stab">—<span class="dice-label">dice</span></div>
             <div class="dice-mod-note" id="dn-spa-stab"></div>
           </div>
