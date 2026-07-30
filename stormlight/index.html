@@ -1,31 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Stormlight Archive DND</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <style>
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oathbound — A Stormlight Archive Campaign</title>
+  <meta name="description" content="Oathbound: a homebrew D&D 5e campaign set in the world of Brandon Sanderson's Stormlight Archive." />
+  <link rel="icon" type="image/svg+xml" href="css/images/favicon.svg" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
- 
-  <header>
-    <!-- Begin Navigation -->
-    <ul style = "list-sytle-type:disc">
-      <li><a href = "/">Home</a></li>
-      <li><a href = "/"></a>Link 1</li>
-      <li><a href = "/">Link 2</a></li>
-    </ul>
-    <!-- End Navigation -->
+<body id="top">
+
+  <!-- ===================== HEADER / NAV ===================== -->
+  <header class="site-header">
+    <div class="container">
+      <a href="#top" class="brand">
+        <img src="css/images/emblem.svg" alt="" />
+        <span class="brand-text">OATHBOUND</span>
+      </a>
+      <!-- Navigation is rendered by js/nav.js — edit that file to change these links -->
+      <div id="site-nav"></div>
+    </div>
   </header>
-  
+
   <main>
-    <h1>H1</h1>
-    <h2>H2</h2>
-    <h3>H3</h3>
-    <h4>H4</h4>
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <img class="hero-spren hero-spren--one" src="css/images/spren.svg" alt="" aria-hidden="true" />
+      <img class="hero-spren hero-spren--two" src="css/images/spren.svg" alt="" aria-hidden="true" />
+      <div class="container hero-content">
+        <span class="eyebrow">A Homebrew D&D 5e Campaign</span>
+        <h1>The storm is coming.<br />Will you bond the <span>light</span>?</h1>
+        <p class="hero-lede">
+          Somewhere on the Shattered Coast, gemhearts are cracking open early, chasmfiends
+          stir before their season, and ordinary people are waking up bonded to spren
+          they don't understand. Oathbound follows one warband of the newly Radiant
+          as they're pulled into a war that started centuries before they were born.
+        </p>
+        <div class="hero-actions">
+          <a href="#party" class="btn btn-primary">Meet the Party</a>
+          <a href="#sessions" class="btn btn-ghost">Read the Session Log</a>
+        </div>
+        <p class="hero-credit">Set in a world inspired by Brandon Sanderson's Stormlight Archive. Fan-made, non-commercial, for our table only.</p>
+      </div>
+    </section>
+
+    <!-- ===================== THE WORLD ===================== -->
+    <section id="world" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Roshar, Reforged</span>
+          <h2>A world shaped by storm and stone</h2>
+          <p>Everything here grows a shell, roots itself against the wind, or dies. Highstorms scour the land every few days, chasms split the plains into a maze, and the old magic — stormlight — is waking back up.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <img src="css/images/icon-storm.svg" alt="" />
+            <h3>The Highstorms</h3>
+            <p>Every few days a wall of wind and lightning rolls across the continent. It charges spheres with stormlight, floods the chasms, and kills anyone caught in the open.</p>
+          </div>
+          <div class="feature-card">
+            <img src="css/images/icon-chasm.svg" alt="" />
+            <h3>The Shattered Plains</h3>
+            <p>A maze of wind-carved chasms and rock plateaus, home to chasmfiends, bridge crews, and the warcamps still fighting a war nobody remembers starting.</p>
+          </div>
+          <div class="feature-card">
+            <img src="css/images/icon-blade.svg" alt="" />
+            <h3>The Radiants Return</h3>
+            <p>Shardblades are waking. Ordinary people are hearing spren speak for the first time in centuries — and swearing oaths they don't yet understand the weight of.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== THE PARTY ===================== -->
+    <section id="party" class="section section--alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">The Warband</span>
+          <h2>Meet the party</h2>
+          <p>Four strangers, four oaths, one storm. Swap in your own players' names, classes, and Radiant orders below — this section is built to be edited.</p>
+        </div>
+        <div class="party-grid">
+          <article class="character-card">
+            <div class="character-portrait"><img src="css/images/icon-blade.svg" alt="" /></div>
+            <div class="character-body">
+              <span class="role">Windrunner · Fighter</span>
+              <h3>Player Name</h3>
+              <p>A former bridge crewman who swore the first ideal on a chasm floor and hasn't stopped falling upward since.</p>
+            </div>
+          </article>
+          <article class="character-card">
+            <div class="character-portrait"><img src="css/images/icon-storm.svg" alt="" /></div>
+            <div class="character-body">
+              <span class="role">Edgedancer · Cleric</span>
+              <h3>Player Name</h3>
+              <p>Trained as a surgeon before the war found her anyway. Talks to her spren more than she talks to people.</p>
+            </div>
+          </article>
+          <article class="character-card">
+            <div class="character-portrait"><img src="css/images/spren.svg" alt="" /></div>
+            <div class="character-body">
+              <span class="role">Lightweaver · Bard</span>
+              <h3>Player Name</h3>
+              <p>Nobody at the warcamp knows her real face. That might be the point.</p>
+            </div>
+          </article>
+          <article class="character-card">
+            <div class="character-portrait"><img src="css/images/icon-chasm.svg" alt="" /></div>
+            <div class="character-body">
+              <span class="role">Stoneward · Barbarian</span>
+              <h3>Player Name</h3>
+              <p>Built like a warcamp wall and about as talkative. Doesn't yet know what he's promised to protect.</p>
+            </div>
+          </article>
+        </div>
+        <p class="party-note">GM note: replace the placeholder names, roles, and blurbs above with your actual players' characters — the layout will hold any length of text.</p>
+      </div>
+    </section>
+
+    <!-- ===================== SESSION LOG ===================== -->
+    <section id="sessions" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">The Chronicle</span>
+          <h2>Session log</h2>
+          <p>A running record of what the table has actually done — useful for catching up players who missed a week, and for remembering the promise nobody's paid off yet.</p>
+        </div>
+        <div class="timeline">
+          <div class="timeline-entry">
+            <span class="session-tag">Session 0 · Character creation</span>
+            <h3>Before the storm</h3>
+            <p>The table built their warband, set expectations for tone and safety, and decided how their characters know each other before the first spren ever spoke.</p>
+          </div>
+          <div class="timeline-entry">
+            <span class="session-tag">Session 1</span>
+            <h3>What the chasm gave up</h3>
+            <p>A routine gemheart run goes wrong when the chasm floods early. Someone hears a voice that isn't there — and it isn't the storm.</p>
+          </div>
+          <div class="timeline-entry">
+            <span class="session-tag">Session 2</span>
+            <h3>The warcamp takes notice</h3>
+            <p>Word of an oath sworn in the chasms reaches the highprinces. Not everyone is happy a new Radiant just complicated the chain of command.</p>
+          </div>
+          <div class="timeline-entry">
+            <span class="session-tag">Next session</span>
+            <h3>To be written</h3>
+            <p>Add each new session here after you play it, most recent at the bottom of the list.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HOUSE RULES ===================== -->
+    <section id="rules" class="section section--alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Before You Sit Down</span>
+          <h2>House rules</h2>
+          <p>Rules this table has agreed on, on top of standard 5e. Update freely as your campaign evolves.</p>
+        </div>
+        <div class="rules-grid">
+          <div class="rule-item">
+            <h3>Stormlight as a resource</h3>
+            <p>Infused spheres light the warcamps and fuel Radiant abilities. Track your stormlight like a consumable — it drains over time and during a highstorm's absence.</p>
+          </div>
+          <div class="rule-item">
+            <h3>Swearing the Ideals</h3>
+            <p>Radiant progression is tied to roleplay, not XP thresholds alone. A new Ideal is sworn at the table, out loud, when it's earned.</p>
+          </div>
+          <div class="rule-item">
+            <h3>Highstorm timing</h3>
+            <p>Highstorms strike on a rough real-world schedule the GM tracks between sessions. Getting caught outside during one is a serious threat, not flavor text.</p>
+          </div>
+          <div class="rule-item">
+            <h3>Table safety tools</h3>
+            <p>Lines, veils, and an open-door policy on stepping away from a scene apply every session. Speak up any time, no explanation required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== JOIN ===================== -->
+    <section id="join" class="section">
+      <div class="container">
+        <div class="join-panel">
+          <h2>Want a seat at the table?</h2>
+          <p>We run every other week. New players are welcome between arcs — reach out and we'll find you an oath to swear.</p>
+          <a href="#" class="btn btn-primary">Contact the GM</a>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Oathbound is a fan-made, non-commercial homebrew campaign inspired by Brandon Sanderson's Stormlight Archive. Not affiliated with or endorsed by the author or publisher.</p>
+      <div class="footer-links">
+        <a href="#top">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
 </body>
 </html>
