@@ -16,10 +16,7 @@
 const NAV_LINKS = [
   { label: "Home", href: "#top" },
   { label: "The World", href: "#world" },
-  { label: "The Party", href: "#party" },
-  { label: "Session Log", href: "#sessions" },
-  { label: "House Rules", href: "#rules" },
-  { label: "Join the Table", href: "#join" },
+  { label: "Timeline", href: "#timeline" },
 ];
 
 /* ------------------------------------------------------------- */
