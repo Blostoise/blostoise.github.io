@@ -490,6 +490,37 @@
 
     footer strong { color: var(--poke-yellow); }
 
+    .scroll-hint {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--poke-blue);
+      background: rgba(59,76,202,0.07);
+      border: 1px solid rgba(59,76,202,0.15);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 0.75rem;
+    }
+
+    .scroll-hint-icon {
+      font-size: 1rem;
+      animation: nudge 1.4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes nudge {
+      0%, 100% { transform: translateX(0); }
+      40%       { transform: translateX(5px); }
+      60%       { transform: translateX(-3px); }
+    }
+
+    @media (max-width: 760px) {
+      .scroll-hint { display: flex; }
+    }
+
+
     /* ── RESPONSIVE ── */
     @media (max-width: 760px) {
       .page-wrap { padding: 1.5rem 1rem 3rem; }
@@ -588,6 +619,10 @@
     </div>
 
     <div class="table-wrap">
+      <div class="scroll-hint">
+        <span class="scroll-hint-icon">👉</span>
+        Scroll sideways to see the full table
+      </div>
       <table id="shopTable">
         <thead>
           <tr>
