@@ -237,6 +237,32 @@
       .nav-site-name { display: none; }
       nav { padding: 0 1rem; }
     }
+    /* ── MOBILE: BOOK & HERO ── */
+    @media (max-width: 640px) {
+      .book-hero { padding: 2rem 1rem 1.5rem; }
+      .back-lore-btn {
+        font-size: 0.72rem;
+        padding: 0.55rem 1.1rem;
+        margin-bottom: 1.2rem;
+      }
+      .book-wrap { padding: 0 0.6rem; margin: -0.5rem auto 2.5rem; }
+      .book { padding: 8px; border-radius: 4px; }
+      .book-page {
+        padding: 1.6rem 1.1rem;
+        border-radius: 2px;
+      }
+      .book-title { font-size: 1.35rem; letter-spacing: 0.04em; }
+      .book-title-rule { width: 100px; margin: 0.6rem auto 1.3rem; }
+      .book-body { font-size: 1rem; line-height: 1.75; }
+      .book-body p { text-align: left; margin-bottom: 1rem; }
+      .book-drop-cap::first-letter { font-size: 2.6rem; padding: 0.05rem 0.35rem 0 0; }
+      .book-body p.dialogue { margin: 1.2rem 0; font-size: 1.02em; }
+      .back-lore-btn-bottom a { font-size: 0.72rem; padding: 0.55rem 1.1rem; }
+    }
+    @media (max-width: 400px) {
+      .book-page { padding: 1.3rem 0.85rem; }
+      .book-body { font-size: 0.96rem; }
+    }
     /* ── BOOK HERO ── */
     .book-hero {
       position: relative;
@@ -537,7 +563,7 @@
     <h1 class="book-hero-title">Knowledge, Emotions &amp; Will</h1>
     <p class="book-hero-subtitle">A Tale of the Lake Trio</p>
   </section>
-
+<br><br>
   <!-- Old Book -->
   <div class="book-wrap">
     <div class="book">
