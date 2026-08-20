@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Legend of Two Lives | PMD Campaign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --poke-red:     #3B4CCA;
+      --poke-red-dk:  #2a379f;
+      --poke-yellow:  #FFCB05;
+      --poke-yellow-lt: #FFE566;
+      --poke-blue:    #3B4CCA;
+      --poke-blue-lt: #6478E0;
+      --poke-white:   #F8F8F8;
+      --poke-dark:    #1a1a2e;
+      --poke-gray:    #333355;
+      --nav-h:        64px;
+      --banner-h:     38px;
+      --book-page:    #f1e4c3;
+      --book-page-dk: #e8d6a8;
+      --book-ink:     #3a2c1a;
+      --book-edge:    #6b4a2b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto;
+    }
+    .nav-links > li { position: relative; }
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px;
+      min-width: 170px;
+      z-index: 999;
+    }
+    .nav-links > li.open .dropdown-menu { display: block; }
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 38px);
+      flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
+    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+    .mob-sub.open { max-height: 400px; }
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-site-name { display: none; }
+      nav { padding: 0 1rem; }
+    }
+    /* ── MOBILE: BOOK & HERO ── */
+    @media (max-width: 640px) {
+      .book-hero { padding: 2rem 1rem 1.5rem; }
+      .back-lore-btn {
+        font-size: 0.72rem;
+        padding: 0.55rem 1.1rem;
+        margin-bottom: 1.2rem;
+      }
+      .book-wrap { padding: 0 0.6rem; margin: -0.5rem auto 2.5rem; }
+      .book { padding: 8px; border-radius: 4px; }
+      .book-page {
+        padding: 1.6rem 1.1rem;
+        border-radius: 2px;
+      }
+      .book-title { font-size: 1.35rem; letter-spacing: 0.04em; }
+      .book-title-rule { width: 100px; margin: 0.6rem auto 1.3rem; }
+      .book-body { font-size: 1rem; line-height: 1.75; }
+      .book-body p { text-align: left; margin-bottom: 1rem; }
+      .book-drop-cap::first-letter { font-size: 2.6rem; padding: 0.05rem 0.35rem 0 0; }
+      .book-body p.dialogue { margin: 1.2rem 0; font-size: 1.02em; }
+      .back-lore-btn-bottom a { font-size: 0.72rem; padding: 0.55rem 1.1rem; }
+    }
+    @media (max-width: 400px) {
+      .book-page { padding: 1.3rem 0.85rem; }
+      .book-body { font-size: 0.96rem; }
+    }
+    /* ── BOOK HERO ── */
+    .book-hero {
+      position: relative;
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(59,76,202,0.35) 0%, transparent 70%),
+        var(--poke-dark);
+      overflow: hidden;
+    }
+    .back-lore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--poke-yellow) 0%, var(--poke-yellow-lt) 100%);
+      color: var(--poke-red-dk);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding: 0.65rem 1.4rem;
+      border-radius: 30px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 1.6rem;
+    }
+    .back-lore-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+    .back-lore-btn .arrow { font-size: 0.9rem; }
+    .book-hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+      font-weight: 900;
+      color: var(--poke-yellow);
+      text-shadow: 2px 2px 0 var(--poke-red-dk), 0 0 40px rgba(255,203,5,0.3);
+      letter-spacing: 0.06em;
+      position: relative;
+      z-index: 1;
+    }
+    .book-hero-subtitle {
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      color: rgba(248,248,248,0.6);
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+    /* ── OLD BOOK ── */
+    .book-wrap {
+      max-width: 820px;
+      margin: -1rem auto 4rem;
+      padding: 0 1.2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .book {
+      background: var(--book-edge);
+      border-radius: 6px;
+      padding: 14px;
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.45),
+        0 4px 10px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .book::before {
+      /* spine shadow */
+      content: '';
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      left: 50%;
+      width: 24px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, rgba(0,0,0,0.25), rgba(0,0,0,0) 50%, rgba(0,0,0,0.25));
+      pointer-events: none;
+      z-index: 3;
+      display: none;
+    }
+    .book-page {
+      background:
+        radial-gradient(ellipse at 15% 10%, rgba(107,74,43,0.12), transparent 40%),
+        radial-gradient(ellipse at 85% 90%, rgba(107,74,43,0.14), transparent 45%),
+        linear-gradient(180deg, var(--book-page) 0%, var(--book-page-dk) 100%);
+      border: 1px solid rgba(107,74,43,0.4);
+      border-radius: 3px;
+      padding: clamp(1.6rem, 5vw, 3.2rem) clamp(1.4rem, 6vw, 4rem);
+      position: relative;
+      box-shadow: inset 0 0 60px rgba(107,74,43,0.25), inset 0 0 4px rgba(0,0,0,0.2);
+    }
+    .book-page::after {
+      /* torn/deckled edge feel via subtle vignette */
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 90px rgba(58,44,26,0.18);
+      pointer-events: none;
+      border-radius: 3px;
+    }
+    .book-ornament {
+      text-align: center;
+      color: var(--book-edge);
+      font-size: 1.1rem;
+      letter-spacing: 0.5em;
+      opacity: 0.55;
+      margin-bottom: 0.6rem;
+    }
+    .book-title {
+      font-family: 'IM Fell English SC', 'Cinzel', serif;
+      text-align: center;
+      color: var(--book-ink);
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    }
+    .book-title-rule {
+      display: block;
+      width: 140px;
+      height: 2px;
+      margin: 0.8rem auto 1.8rem;
+      background: linear-gradient(90deg, transparent, var(--book-edge), transparent);
+      opacity: 0.6;
+    }
+    .book-drop-cap::first-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 3.4rem;
+      font-weight: 900;
+      float: left;
+      line-height: 0.8;
+      padding: 0.1rem 0.5rem 0 0;
+      color: var(--poke-red-dk);
+      text-shadow: 1px 1px 0 rgba(255,203,5,0.4);
+    }
+    .book-body {
+      font-family: 'IM Fell English', 'Nunito', serif;
+      color: var(--book-ink);
+      font-size: clamp(1.02rem, 1.6vw, 1.15rem);
+      line-height: 1.9;
+    }
+    .book-body p {
+      margin-bottom: 1.15rem;
+      text-align: justify;
+    }
+    .book-body p.dialogue {
+      font-style: italic;
+      text-align: center;
+      color: var(--poke-red-dk);
+      font-weight: 600;
+      margin: 1.6rem 0;
+      font-size: 1.08em;
+    }
+    .book-end-mark {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      color: var(--book-edge);
+      opacity: 0.6;
+      letter-spacing: 0.4em;
+    }
+    .back-lore-btn-bottom {
+      display: flex;
+      justify-content: center;
+      margin: 2.4rem auto 0;
+    }
+    .back-lore-btn-bottom a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--poke-red);
+      border: 2px solid var(--poke-yellow);
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      padding: 0.65rem 1.4rem;
+      border-radius: 30px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .back-lore-btn-bottom a:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+    /* ── PIXEL DIVIDER ── */
+    .pixel-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0.5rem 0;
+      background: #ffffff;
+    }
+    .pixel-divider span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--poke-yellow);
+      opacity: 0.6;
+    }
+    .pixel-divider span:nth-child(2) { background: var(--poke-blue-lt); opacity: 0.8; }
+    .pixel-divider span:nth-child(3) { background: var(--poke-blue); opacity: 0.8; }
+    .pixel-divider span:nth-child(4) { background: var(--poke-yellow); opacity: 0.6; }
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    .footer-pokeball {
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+      opacity: 0.7;
+    }
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    footer strong { color: var(--poke-yellow); }
+  </style>
+</head>
+<body>
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/items">Items</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/items">Items</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book Hero -->
+  <section class="book-hero">
+    <a href="/lore" class="back-lore-btn"><span class="arrow">←</span> Return to Lore</a>
+    <h1 class="book-hero-title">The Legend of Two Lives</h1>
+    <p class="book-hero-subtitle">Two Lives Are More Than Most Get</p>
+  </section>
+<br><br>
+  <!-- Old Book -->
+  <div class="book-wrap">
+    <div class="book">
+      <div class="book-page">
+        <div class="book-ornament">❖ ❖ ❖</div>
+        <h2 class="book-title">The Legend of Two Lives</h2>
+        <span class="book-title-rule"></span>
+        <div class="book-body">
+          <p>Among the oldest tales told in remote villages, there is one that elders speak only on quiet nights, when the wind is gentle and the stars seem close enough to touch.</p>
+              <p>It is the tale of a Pokémon who lived twice.</p>
+              <p>Long ago, when forests stretched beyond the horizon, mountains touched the clouds, and every valley held its own stories. There, in a canyon of red stone, lived a Sneasel named Kael, known throughout the region for his clever tongue and quick claws.</p>
+              <p>Kael was not cruel, but neither was he kind. He spent his life looking after himself and little else. When food grew scarce, he took more than he needed. When travelers became lost, he ignored them. When friends asked for help, he always found a reason to walk away.</p>
+              <p class="dialogue">"There will always be someone else to help," he would say.</p>
+              <p>For many years, that belief served him well.</p>
+              <p>While others struggled, Kael prospered. He became strong, respected, and comfortable. Yet as seasons turned into years, he noticed something strange. The Pokémon around him laughed together, mourned together, and shared their stories beside evening fires. They built bonds that endured through hardship.</p>
+              <p>Kael stood outside all of it.</p>
+              <p>By the time he realized what he had traded away, most of those he had known were gone. Some had moved on. Some had grown old. Some had died. The opportunities he had ignored could not be reclaimed.</p>
+              <p>For the first time in his life, he understood regret.</p>
+              <p>The old stories claim that regret has weight. Enough of it can bend even fate itself.</p>
+              <p>One winter, while crossing a mountain pass alone, Kael was caught in a blizzard. Snow buried the trail, and darkness swallowed the sky. Exhausted and unable to find shelter, he finally collapsed beneath an ancient pine.</p>
+              <p>As the cold closed around him, Kael thought not of treasure, victories, or possessions.</p>
+              <p>He thought of every chance he had wasted, every kindness he had refused. Most of all, he wished for one more opportunity to live differently.</p>
+              <p>When the snow finally covered him, his last thought was a simple one.</p>
+              <p class="dialogue">"If I could begin again, I would choose better."</p>
+              <p>The stories say that somewhere beyond life and death stands a place called the Crossing, where wandering spirits gather before taking their final path. Whether such a place truly exists, no one knows. Yet the legend claims that Kael opened his eyes there and found himself standing beneath a sky without stars.</p>
+              <p>A voice spoke from the darkness. It asked him only one question.</p>
+              <p class="dialogue">"If given another life, what would you seek?"</p>
+              <p>Kael thought for a long time before answering.</p>
+              <p class="dialogue">"Not power. Not wealth. Just another chance."</p>
+              <p>The darkness remained silent. Then the world vanished.</p>
+              <p>When Kael awoke again, he found himself crying in the arms of a human mother.</p>
+              <p>At first he believed he was dreaming. He had no fur, no claws, no tail. The language around him was strange. The smells of the world felt distant and muted. Yet somewhere deep inside, memories lingered like fragments of a half-forgotten song.</p>
+              <p>As he grew, those memories never fully disappeared.</p>
+              <p>He remembered moonlit forests he had never visited. He remembered running on four legs through falling snow. Sometimes he would wake from dreams carrying emotions that belonged to another life.</p>
+              <p>Years passed before he learned the truth.</p>
+              <p>One evening, while traveling through a woodland path, he encountered an elderly Absol. The Pokémon stared at him for a long time before speaking.</p>
+              <p>Not with words. With recognition.</p>
+              <p>In that moment, memories returned like water bursting through a broken dam.</p>
+              <p>The canyon. The blizzard. The Crossing. The wish. Everything.</p>
+              <p>Kael spent the night beneath the trees, unable to sleep. By dawn he understood something that frightened him more than death ever had.</p>
+              <p>He had not been given a second life because he deserved one. He had been given a second life because he had asked for one.</p>
+              <p>What happened next was entirely his choice.</p>
+              <p>From that day forward, Kael lived differently. He helped when it was inconvenient. He listened when others needed to speak. He gave away time he could have spent pursuing his own ambitions. He made mistakes, as all people do, but each time he remembered the lonely Sneasel he had once been.</p>
+              <p>Years became decades.</p>
+              <p>Eventually, stories began to spread about a traveler who always seemed to arrive where he was needed most. Some called him fortunate. Others called him wise. A few believed he was guided by destiny.</p>
+              <p>Kael knew better.</p>
+              <p>There was nothing special about him.</p>
+              <p>He simply understood how precious a second chance truly was.</p>
+              <p>When he finally reached the end of his second life, he felt no fear. As the legend tells it, he closed his eyes and found himself once more beneath the starless sky of the Crossing.</p>
+              <p>The same voice greeted him.</p>
+              <p>For a time, neither spoke.</p>
+              <p class="dialogue">"And was another life enough?"</p>
+              <p>Kael smiled.</p>
+              <p class="dialogue">"No."</p>
+              <p>The voice seemed almost amused.</p>
+              <p class="dialogue">"No?"</p>
+              <p class="dialogue">"No," he replied. "But it was a beginning."</p>
+              <p>The old stories never say what happened next. Some claim he passed on at last. Others insist he was reborn again. A few even believe he still wanders the world somewhere, helping strangers and Pokémon alike. Yet every version ends with the same lesson.</p>
+              <p>A second chance is not a reward. It is a responsibility. And sometimes the greatest miracle is not being given another life, but choosing to live it better than the first.</p>
+      </div>
+        <div class="book-end-mark">❦</div>
+        <div class="back-lore-btn-bottom">
+          <a href="/lore"><span class="arrow">←</span> Return to Lore</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pixel-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-pokeball">⬤</div>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
+
+  <script>
+    // ── Dropdown: click to open/close, click outside to dismiss ──
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+    // ── Hamburger ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
+  </script>
+</body>
+</html>
