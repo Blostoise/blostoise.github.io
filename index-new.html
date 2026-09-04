@@ -375,12 +375,14 @@
       border-top: 1px dashed rgba(255,255,255,0.2);
     }
     .ar-icons-caption {
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.68rem;
-      color: rgba(255,255,255,0.45);
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
       text-align: center;
       margin-bottom: 0.7rem;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
     .ar-icons {
       display: flex;
@@ -397,15 +399,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
-      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-    }
-    .ar-icon-slot:hover {
-      transform: scale(1.08);
-      border-color: var(--poke-yellow);
     }
     .ar-icon-slot .ar-icon-img {
       width: 100%;
@@ -711,6 +707,7 @@
       </div>
 
       <div class="ar-divider"></div>
+      <div class="ar-icons-caption">Progress</div>
       <div class="ar-icons" id="arIcons">
         <!-- 17 icon slots — swap data-icon on each slot to point at a real Pokémon icon image later -->
       </div>
@@ -985,18 +982,19 @@
     }
 
     // ── Adventure Record: build 17 icon slots ──
-    // To attach a real Pokémon icon to a slot, set its data-icon to an image path,
-    // e.g. slot.dataset.icon = "/css/images/pokemon/025.png". Clicking a slot toggles
-    // it between "hidden" (silhouette/?) and "revealed" (shows the icon) — use this
-    // to mark off party members / defeated Pokémon as the campaign progresses.
+    // These are static display-only slots (no hover effect, not clickable).
+    // To reveal a Pokémon as it's beaten, uncomment/add the slot's markup with
+    // "revealed" added to its class and an <img class="ar-icon-img" src="..." style="display:block">
+    // in place of the placeholder, e.g.:
+    //   <div class="ar-icon-slot revealed">
+    //     <img class="ar-icon-img" src="/css/images/pokemon/025.png" style="display:block" alt="">
+    //   </div>
     (function buildAdventureRecordIcons() {
       const wrap = document.getElementById('arIcons');
       const TOTAL_SLOTS = 17;
       for (let i = 0; i < TOTAL_SLOTS; i++) {
         const slot = document.createElement('div');
         slot.className = 'ar-icon-slot';
-        slot.setAttribute('role', 'button');
-        slot.setAttribute('aria-pressed', 'false');
         slot.setAttribute('aria-label', 'Pokémon slot ' + (i + 1) + ', not yet revealed');
 
         const img = document.createElement('img');
@@ -1011,16 +1009,6 @@
 
         slot.appendChild(img);
         slot.appendChild(placeholder);
-
-        slot.addEventListener('click', function () {
-          const nowRevealed = !slot.classList.contains('revealed');
-          slot.classList.toggle('revealed', nowRevealed);
-          slot.setAttribute('aria-pressed', String(nowRevealed));
-          slot.setAttribute('aria-label', 'Pokémon slot ' + (i + 1) + (nowRevealed ? ', revealed' : ', not yet revealed'));
-          if (nowRevealed && slot.dataset.icon) {
-            img.src = slot.dataset.icon;
-          }
-        });
 
         wrap.appendChild(slot);
       }
