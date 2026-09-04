@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMD Campaign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --poke-red:     #3B4CCA;
+      --poke-red-dk:  #2a379f;
+      --poke-yellow:  #FFCB05;
+      --poke-yellow-lt: #FFE566;
+      --poke-blue:    #3B4CCA;
+      --poke-blue-lt: #6478E0;
+      --poke-white:   #F8F8F8;
+      --poke-dark:    #1a1a2e;
+      --poke-gray:    #333355;
+      --nav-h:        64px;
+      --banner-h:     38px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer-banner {
+      background: var(--poke-blue);
+      color: var(--poke-yellow);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px 16px;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--poke-yellow);
+      position: relative;
+      z-index: 200;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--poke-yellow);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--poke-red);
+      border-bottom: 4px solid var(--poke-yellow);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+      margin-left: auto; /* push links to the right */
+    }
+    .nav-links > li { position: relative; }
+    .nav-links > li > a,
+    .nav-links > li > span {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .nav-links > li > a:hover,
+    .nav-links > li > span:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+    /* Dropdown — JS toggled via .open class */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      padding-top: 6px; /* bridge gap so cursor doesn't escape */
+      min-width: 170px;
+      z-index: 999;
+    }
+    .nav-links > li.open .dropdown-menu { display: block; }
+    .dropdown-menu-inner {
+      background: var(--poke-red-dk);
+      border: 2px solid var(--poke-yellow);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.2);
+      transition: background 0.15s, color 0.15s;
+    }
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover {
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+    }
+    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .hamburger:hover { background: rgba(255,203,5,0.15); }
+    .hamburger span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--poke-yellow);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--poke-dark);
+      z-index: 99;
+      overflow-y: auto;
+      padding-top: calc(var(--nav-h) + 38px);
+      flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0 3rem;
+    }
+    .mobile-menu a.mob-link,
+    .mobile-menu button.mob-group-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      color: var(--poke-white);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,203,5,0.1);
+      transition: background 0.15s, color 0.15s;
+    }
+    .mobile-menu a.mob-link:hover,
+    .mobile-menu button.mob-group-btn:hover {
+      background: rgba(255,203,5,0.08);
+      color: var(--poke-yellow);
+    }
+    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
+    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
+    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
+    .mob-sub {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: rgba(0,0,0,0.25);
+    }
+    .mob-sub.open { max-height: 400px; }
+    .mob-sub a {
+      display: block;
+      padding: 0.75rem 2.5rem;
+      color: rgba(248,248,248,0.8);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,203,5,0.07);
+      transition: background 0.15s, color 0.15s;
+    }
+    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-site-name { display: none; }
+      nav { padding: 0 1rem; }
+    }
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 3rem 1rem 4rem;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(59,76,202,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse at 20% 80%, rgba(59,76,202,0.3) 0%, transparent 60%),
+        var(--poke-dark);
+    }
+    /* Pokéball decorative circle */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,203,5,0.07);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,203,5,0.05);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-logo {
+      width: min(300px, 70vw);
+      filter: drop-shadow(0 0 32px rgba(255,203,5,0.4)) drop-shadow(0 4px 16px rgba(0,0,0,0.6));
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title {
+      margin-top: 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 900;
+      color: var(--poke-yellow);
+      text-shadow:
+        2px 2px 0 var(--poke-red-dk),
+        0 0 40px rgba(255,203,5,0.3);
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-subtitle {
+      margin-top: 0.8rem;
+      font-size: 1rem;
+      color: rgba(248,248,248,0.65);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── ADVENTURE RECORD ── */
+    .adventure-record-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 0;
+    }
+    .adventure-record {
+      position: relative;
+      background:
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 14px),
+        linear-gradient(160deg, #0c1638 0%, #16225a 55%, #0c1638 100%);
+      border: 4px solid var(--poke-blue-lt);
+      border-radius: 10px;
+      box-shadow:
+        0 0 0 2px var(--poke-red-dk),
+        0 10px 30px rgba(0,0,0,0.55),
+        inset 0 0 24px rgba(100,120,224,0.15);
+      padding: 1.1rem 1.3rem 1.4rem;
+    }
+    .adventure-record::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+    .ar-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--poke-white);
+      letter-spacing: 0.12em;
+      padding-bottom: 0.6rem;
+      margin-bottom: 0.7rem;
+      border-bottom: 2px solid rgba(255,255,255,0.15);
+    }
+    .ar-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+    }
+    .ar-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .ar-label {
+      color: rgba(255,255,255,0.55);
+      font-weight: 700;
+      min-width: 74px;
+      flex-shrink: 0;
+    }
+    .ar-value {
+      color: #fff;
+      font-weight: 800;
+    }
+    .ar-value.name { color: #ff8fd6; }
+    .ar-value.dungeon { color: var(--poke-yellow); }
+    .ar-value.floor { color: #ffffff; }
+
+    .ar-divider {
+      margin: 1rem 0 0.8rem;
+      border-top: 1px dashed rgba(255,255,255,0.2);
+    }
+    .ar-icons-caption {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      margin-bottom: 0.7rem;
+      letter-spacing: 0.03em;
+    }
+    .ar-icons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .ar-icon-slot {
+      width: 44px;
+      height: 44px;
+      border-radius: 7px;
+      background: #0a1230;
+      border: 2px solid rgba(100,120,224,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .ar-icon-slot:hover {
+      transform: scale(1.08);
+      border-color: var(--poke-yellow);
+    }
+    .ar-icon-slot .ar-icon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+      image-rendering: pixelated;
+    }
+    .ar-icon-slot .ar-icon-placeholder {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.22);
+    }
+    .ar-icon-slot.revealed {
+      background: radial-gradient(circle, rgba(255,203,5,0.22) 0%, rgba(10,18,48,0.9) 75%);
+      border-color: var(--poke-yellow);
+    }
+    .ar-icon-slot.revealed .ar-icon-placeholder { display: none; }
+    .ar-icon-slot.revealed .ar-icon-img { display: block; }
+
+    /* ── STORY SECTION ── */
+    .story-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: var(--poke-blue);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow));
+      border-radius: 2px;
+      margin: 0.8rem auto 0;
+    }
+    /* Accordion */
+    .accordion { display: flex; flex-direction: column; gap: 1rem; }
+    .accordion-item {
+      border: 2px solid rgba(59,76,202,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+      background: #f5f6ff;
+    }
+    .accordion-item:hover { border-color: rgba(59,76,202,0.45); }
+    .accordion-btn {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(59,76,202,0.08) 0%, rgba(100,120,224,0.12) 100%);
+      border: none;
+      color: var(--poke-dark);
+      padding: 1.1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+    }
+    .accordion-btn:hover {
+      background: linear-gradient(135deg, rgba(59,76,202,0.15) 0%, rgba(100,120,224,0.2) 100%);
+    }
+    .accordion-btn.active {
+      background: linear-gradient(135deg, var(--poke-blue) 0%, var(--poke-blue-lt) 100%);
+      color: var(--poke-yellow);
+    }
+    .accordion-icon {
+      font-size: 1rem;
+      transition: transform 0.35s ease;
+      color: var(--poke-blue);
+    }
+    .accordion-btn.active .accordion-icon {
+      transform: rotate(180deg);
+      color: var(--poke-yellow);
+    }
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, padding 0.3s ease;
+    }
+    .accordion-body.open { max-height: 99999px; }
+    /* ── SUB-ACCORDION (parts inside chapters) ── */
+    .sub-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .sub-item {
+      border: 1px solid rgba(59,76,202,0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .sub-btn {
+      width: 100%;
+      background: rgba(59,76,202,0.05);
+      border: none;
+      color: var(--poke-dark);
+      padding: 0.75rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background 0.2s;
+      text-align: left;
+      gap: 0.75rem;
+    }
+    .sub-btn:hover { background: rgba(59,76,202,0.1); }
+    .sub-btn.active {
+      background: rgba(59,76,202,0.14);
+      color: var(--poke-blue);
+    }
+    .sub-icon {
+      font-size: 0.7rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      color: var(--poke-blue);
+    }
+    .sub-btn.active .sub-icon { transform: rotate(180deg); }
+    .sub-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .sub-body.open { max-height: 99999px; }
+    .sub-body-inner {
+      padding: 1rem 1.2rem 1.2rem;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #333355;
+      border-top: 1px solid rgba(59,76,202,0.1);
+    }
+    .sub-body-inner p + p { margin-top: 0.8rem; }
+    .accordion-body-inner {
+      padding: 1.4rem 1.5rem 1.6rem;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #333355;
+      border-top: 1px solid rgba(59,76,202,0.15);
+    }
+    .accordion-body-inner p + p { margin-top: 0.9rem; }
+    .chapter-badge {
+      display: inline-block;
+      background: var(--poke-yellow);
+      color: var(--poke-red-dk);
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-right: 0.75rem;
+      vertical-align: middle;
+    }
+    /* ── FOOTER ── */
+    footer {
+      background: var(--poke-red-dk);
+      border-top: 4px solid var(--poke-yellow);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    .footer-pokeball {
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+      opacity: 0.7;
+    }
+    footer p {
+      font-size: 0.72rem;
+      color: rgba(248,248,248,0.65);
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    footer strong { color: var(--poke-yellow); }
+    /* ── PIXEL DIVIDER ── */
+    .pixel-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0.5rem 0;
+      background: #ffffff;
+    }
+    .pixel-divider span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--poke-yellow);
+      opacity: 0.6;
+    }
+    .pixel-divider span:nth-child(2) { background: var(--poke-blue-lt); opacity: 0.8; }
+    .pixel-divider span:nth-child(3) { background: var(--poke-blue); opacity: 0.8; }
+    .pixel-divider span:nth-child(4) { background: var(--poke-yellow); opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <!-- Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
+  </div>
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
+      <span class="nav-site-name">PMD Campaign</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li>
+        <span>Character <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/calc">Calculator</a>
+            <a href="/pokemon">Pokémon</a>
+            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span>Game <span class="dropdown-arrow">▼</span></span>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a href="/rules">Rules</a>
+            <a href="/jobs">Jobs</a>
+            <a href="/map">Map</a>
+            <a href="/shop">Shop</a>
+            <a href="/items">Items</a>
+            <a href="/lore">Lore</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="/" class="mob-link">Home</a>
+      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobCharSub">
+        <a href="/calc">Calculator</a>
+        <a href="/pokemon">Pokémon</a>
+        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
+      </div>
+      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
+      <div class="mob-sub" id="mobGameSub">
+        <a href="/rules">Rules</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/map">Map</a>
+        <a href="/shop">Shop</a>
+        <a href="/items">Items</a>
+        <a href="/lore">Lore</a>
+      </div>
+    </div>
+  </div>
+  <!-- Hero -->
+  <section class="hero">
+    <img src="/css/images/logo.jpg" alt="PMD Campaign" class="hero-logo" />
+    <h1 class="hero-title">PMD Campaign</h1>
+    <p class="hero-subtitle">A Pokémon Mystery Dungeon Adventure</p>
+  </section>
+
+  <!-- Adventure Record -->
+  <div class="adventure-record-wrap">
+    <div class="adventure-record">
+      <div class="ar-title">Adventure Record</div>
+      <div class="ar-fields">
+        <div class="ar-row">
+          <span class="ar-label">Team:</span>
+          <span class="ar-value name" id="arTeamName">Team Xenith</span>
+        </div>
+        <div class="ar-row">
+          <span class="ar-label">Location:</span>
+          <span class="ar-value dungeon" id="arDungeon">Blooming Thicket</span>
+          <span class="ar-value floor" id="arFloor">1F</span>
+        </div>
+        <div class="ar-row">
+          <span class="ar-label">Play time:</span>
+          <span class="ar-value" id="arPlayTime">000:00:00</span>
+        </div>
+        <div class="ar-row">
+          <span class="ar-label">Adventures:</span>
+          <span class="ar-value" id="arAdventures">0</span>
+        </div>
+      </div>
+
+      <div class="ar-divider"></div>
+      <div class="ar-icons" id="arIcons">
+        <!-- 17 icon slots — swap data-icon on each slot to point at a real Pokémon icon image later -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Section -->
+  <main class="story-section">
+    <h2 class="section-title">The Story So Far</h2>
+    <div class="accordion">
+      <!-- Chapter 1 -->
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span><span class="chapter-badge">CH 1</span> Chapter 1</span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="sub-accordion">
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.0 — Where am I?</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>You all awoke in a grassy field, in different forms. No longer human, you have all been transformed into Pokémon.</p>
+                    <p>While assessing your current situation (and arguing about who is the cutest), you all hear a voice: "You must stop them before they..." And the voice trailed off.</p>
+                    <p>After a bit more discussion, you all decide to head towards the big castle on the hill in the distance. However, shortly after you set out, you discover a parting in the tall grass that almost feels different somehow.</p>
+                    <p>After you watch Kako the Riolu walk in and disappear, you all filter in (with some hesitation). Once inside, you reunited with each other.</p>
+                    <p>You wandered around inside this maze, until you stumble upon a Rattata. However, this Rattata did not seem like he could be reasoned with, and immediately started attacking.</p>
+                    <p>After some teamwork, you managed to defeat the Rattata and move on. In the next room, you found another Rattata, and a set of stairs.</p>
+                    <p>After you defeated this Rattata and climbed the stairs, you exited the strange space and seemed to be significantly closer to the castle on the hill, which you could now tell to be a town below it.</p>
+                    <p>After several minutes of walking you reach the gates to the town. At that entrance, you are stopped by an Electabuzz named Surge, who asks what you are doing in Ristal Town. You kind of dodge the question, but eventually say you are here to join the Explorer's Guild.</p>
+                    <p>Surge leads you up the hill towards the castle that you noticed earlier. At the entrance, you noticed a large grate on the floor. After some time, you heard some yelling from below, asking you to step on the grate.</p>
+                    <p>After you all step on the grate and are identified, the gate opens, and a Machoke with a clipboard and tie greets you.</p>
+                    <p>He introduces himself as Howard and you all move out of the doorway for discussion. After speaking with you for a bit, Howard goes to fetch another Pokémon, an Alakazam named Kazz. Kazz stares at you all briefly and then tells Howard you used to be human, before walking off.</p>
+                    <p>Howard, never having heard of humans turning into Pokémon, brings you to the Guild Branch Leader's office, where you meet Buster the Blastoise.</p>
+                    <p>After some discussion, you agree to work for the Guild, and in exchange Buster would do his best to look into your situation. Buster explained that these strange places called Mystery Dungeons have been showing up all over the place, and the Pokémon inside are extremely hostile, and cannot be reasoned with. This is the primary focus of Exploration Teams — to do jobs in these Mystery Dungeons to help Pokémon.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.1 — Our First Job?</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>After you spoke with Buster, Howard shows you to the next room to begin your registration process. You all fill out forms about yourselves and decided on a team name: Team Xenith. You are all gifted an Exploration Team badge and a Bag to carry items.</p>
+                    <p>Howard then shows you around the facilities, showing you the cafeteria, sleeping quarters, and storage. He then shows you the Outlaw Notice Board, which houses bounties for Wanted Pokémon.</p>
+                    <p>Lastly you end up at the Job Bulletin Board. You all hold up your badges to the Board and see 1 job to rescue a Bidoof in the Verdant Plains dungeon.</p>
+                    <p>You accept the Job and head out into the field, towards the Verdant Plains dungeon.</p>
+                    <p>Once there you venture through Floors 1 and 2 with relatively no difficulty. However, when you reach the end of Floor 3, you see the Bidoof that you are supposed to rescue in the corner, trapped by 4 Rattata.</p>
+                    <p>You all rush in to save them, which makes the Rattata focus on you. You all start to fight them, but after a few turns, things are looking kinda dicey.</p>
+                    <p>Just as things were looking bleak for Kako, a Manectric rolls into the room with a Raticate. The Manectric notices you all, and notices the Normal Rank Badges on you. He says that Howard should not have sent rookies here and lets loose a Thunder, zapping all the Rattata and finishing off the Raticate.</p>
+                    <p>He tells you all to return to the Guild and completes his mission, which teleports him out.</p>
+                    <p>You all rescue the Bidoof, are prompted if you would like to return after completing the mission, and say no. You notice the room that Manectric came from — inside are the stairs, which when ascended completed the dungeon.</p>
+                    <p>Back at the Guild, you are all summoned to Buster's office. In the office are Buster, the Manectric who saved you, and Howard, looking quite distraught.</p>
+                    <p>Howard apologizes for sending you out on the mission — he was not aware that the Rattata Gang was there. You are gifted a special promotion to Bronze Rank and awarded 1000 P each, which includes your reward from the client for rescuing Bidoof.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.2 — Don't Shirk your Work</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>As a continuation of the apology for his blunder, Howard offers to show you around town to all the shops. You all accept and get on your way.</p>
+                    <p>When you finally enter town, you notice that the architecture here is sturdy, but primitive — nothing at all like the architecture from your world.</p>
+                    <p>Howard leads you towards the bazaar, where there are some shops that Rescue Teams may take advantage of.</p>
+                    <p>After visiting the shops and perusing their wares, you all decide to head back to the Guild and accept some missions. You end up accepting 2 missions in the Verdant Plains.</p>
+                    <p>Overall these missions go off without a hitch. You get your rewards and complete a hard day's work with a meal from Chef Lax.</p>
+                    <p>The next day, you all see that where those 2 Verdant Plains Missions were, there are now some more. Today, you all decide to accept 3 missions to head out to a new place, called Moonlight Grove.</p>
+                    <p>After some shopping and treasure box cracking, you all head out with the Nidorina you are supposed to escort in tow.</p>
+                    <p>This dungeon turns out to be a bit more difficult for the party, with higher levels and not very good type matchups. However, you all manage to get through successfully and complete all your missions.</p>
+                    <p>The next day, you all realize you are 10 points from ranking up, so you take the next batch of Jobs for Moonlight Grove. After some suffering, you finish the jobs and get your promotion. When you are promoted, your team decided to do a pose. For some reason, you decided that a tower would be the best pose to celebrate? After some difficulty you manage to finish the tower, and Howard walks up severely confused. Toto messes up while holding you all up, and you all end up on your butts — except for Kako, who manages to do a flip.</p>
+                    <p>After a deep sigh, Howard takes you to a room to give you your rank up rewards, and lets you know that Buster would like to see you tomorrow.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>1.3 — The Raticate Gang</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>You all get a meal and some rest before heading over to Buster's office in the morning.</p>
+                    <p>Once there, you are greeted by Buster, and a Weavile named Ava. Buster explains that they have located the Raticate Gang's hideout, and would like you all to go take care of them, with Ava's assistance.</p>
+                    <p>After some discussion you all agree to the mission, and head to town to get ready. Determined to make Ava wait as long as possible, you all meander through your shopping. Ava really doesn't care so you all set off for Sharpgrass Savannah.</p>
+                    <p>Here you climb all 9 floors, and find the Raticate Gang at the top.</p>
+                    <p>After some discussion, the fighting begins. With Ava's help, this went pretty smoothly.</p>
+                    <p>After you defeat them, you call for the Magnezone Police Force, and they arrest the Gang. Once they are gone, you notice a rock that is emitting a dark miasma.</p>
+                    <p>Kako cautiously steps forward, but notices that it is not doing anything to him. So he picks it up and brings it back to the Guild.</p>
+                    <p>Once you are back, you report to Buster's office for a debrief. You explain that the mission went well, and he gives you your reward.</p>
+                    <p>After that, you show him the rock you found, and he calls for Kaz. Kaz teleports into the office and mentions that the rock appears to be a chunk of meteorite. He takes it to his lab to study it, to see what this miasma is.</p>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.sub-accordion -->
+          </div>
+        </div>
+      </div>
+      <!-- Chapter 2 -->
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+          <span><span class="chapter-badge">CH 2</span> Chapter 2</span>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div class="sub-accordion">
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>2.1 — Business As Usual?</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>In the morning after you took down the Raticate Gang, Howard informs you that Buster would like to see you about your situation.</p>
+                    <p>You all decide that you want to practice your pose in front of Buster's office door, and stack up. You call for Buster to open the door, and realize too late that the doors open outwards. You all crash down except for Kako, who does another dismounting flip from the top.</p>
+                    <p>Buster sighs and tells you to get in his office. You all enter and see another Pokémon in there, a Slowking named Kai, who serves as an Archivist.</p>
+                    <p>Kai tells you a story about a human who was turned into a Pokémon, hoping to maybe provide some insight into your predicament. The party asks him if he has ever heard of a human turned into a Pokémon, and he says he will look into it.</p>
+                    <p>After you are dismissed from Buster's office, you all head to town to do some shopping with the money you got from arresting Raticate. During your shopping, you try to see where Rascal puts your money by doing your pose in the middle of town, but can't see over the counter.</p>
+                    <p>After that you take some jobs from the Guild and head out to Sharpgrass Savannah. Once the jobs are complete, you all return to town and collect your rewards.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>2.2 — Bolt Mountain</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>After completing your missions, you get an urgent summons from Buster to meet him in his office.</p>
+                    <p>He says that there is a Shellos who is stuck at the peak of Bolt Mountain that needs rescued.</p>
+                    <p>While describing the mission, a Mew appears in the room, and contemplatively looks you all over. "So you guys are the ones..." she said. After she thinks it over, she moves over to Toto and does a flip, hitting Toto with her tail on the follow through. She then vanishes just as quick as she appeared.</p>
+                    <p>Toto begins to shine with a brilliant light, and evolves into a Croconaw. You all question Buster about this and he explains that Pokémon do not usually evolve like this.</p>
+                    <p>Once Toto adjusts to their new body, you all head out towards Bolt Mountain. You use the waystones that Kaz created to warp to the Sharpgrass Savannah, which is about 2 hours from Bolt Mountain.</p>
+                    <p>You all arrive at Bolt Mountain and begin the ascent. After a tough 10 floors, you arrive at the summit and see the Shellos off in the corner.</p>
+                    <p>Before you can head to its rescue, you all hear a voice, booming like thunder. Raikou emerges and claims you all are trespassing in his domain, just as the Shellos was.</p>
+                    <p>You try to reason with him, but he attacks out of rage. After a lengthy fight, 2 more beasts arrive — Entei and Suicune. They begin to fight Raikou, and Entei tells you to rescue the Shellos and leave.</p>
+                    <p>After you rescue the Shellos, you see a familiar reddish-purple miasma coming from a rock — another meteorite, like the one you already gave to Kaz to study.</p>
+                    <p>When you all finally return to the Guild Hall, it is late. You try to go to Buster's office, but he was not there anymore. Everyone except Fluffy went to the Dining Hall to get dinner, and you all went to bed. Fluffy opted to eat an apple because of her "incident" with the Cheri Berry Curry.</p>
+                    <p>The next day, you venture to Buster's office, and try (unsuccessfully) to open the door while in the team's "pose". After some more failed attempts you all collapse through the door to Buster's office, and then decide to forgo your pose for now.</p>
+                    <p>You inform Buster about the mission to rescue the Shellos, about confronting Raikou, and how Entei and Suicune showed up. After that you give him the newly acquired meteorite rock. He calls for Kaz and he takes it away to study it.</p>
+                    <p>He rewards you for your efforts, and then you all ask about building a house. He mentions the Hitmon Brothers as the local house builders.</p>
+                    <p>You locate them working on an existing project, and attempt to do your pose to get their attention. They are completely absorbed in their work and do not hear you. After a few minutes of fumbling your pose, a Tyrogue comes around the corner to help you. You all tell him what you are looking for in a house and he said he should have the blueprints and estimate in a few days.</p>
+                    <p>After that, you take some missions at Bolt Mountain and complete them all successfully.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-item">
+                <button class="sub-btn" onclick="toggleSub(this)" aria-expanded="false">
+                  <span>2.3 — Up the Volcano</span>
+                  <span class="sub-icon">▼</span>
+                </button>
+                <div class="sub-body">
+                  <div class="sub-body-inner">
+                    <p>After your missions at Bolt Mountain, your team ranks up to Gold Rank. You go see Buster for your reward, and he mentions that Kaz has figured out how to locate more shards — he discovers one at the peak of Cinder Volcano.</p>
+                    <p>After buying supplies, you all head out in the morning, travelling for about 12 hours. You get to the volcano, but decide to spend the night outside before heading in. In an effort to stay warm, Amp lights a tree on fire.</p>
+                    <p>In the morning you head into the volcano. On floor 3, you find a Quilava that seems to be friendly. After you talk with him, he explains that he used to be a human too. He joins the group for now, and you all head to the top.</p>
+                    <p>At the top, you all meet Moltres, who is very angry that you are up there. He immediately attacks, but you all fend him off.</p>
+                    <p>Quilbert discovers the meteor shard near the inactive crater.</p>
+                    <p>Meanwhile, the rest of the group is hurling insults at Moltres.</p>
+                    <p>You all leave the top of the Volcano and see Kaz and a Hitmonchan getting a waypoint set up. While you are about to leave, you realize that Quilbert doesn't have a rescue badge, and cannot use the waypoint to get back to town. You all leave Quilbert there while you head back to get him signed up.</p>
+                    <p>Once you get back to town, instead of heading to the guild to get the badge, you all decide this is a great time to go shopping. After an hour of shopping you head to the guild and explain your situation to Buster. He directs you to Howard who gives you a temporary badge for Quilbert.</p>
+                    <p>Meanwhile, Quilbert is soon left alone at the waypoint once Kaz finshes setting it up. Kaz took the meteor shard before he left, though.</p>
+                    <p/> You all return for Quilbert, while also gaslighting him that if he uses the teleporter twice he will die, and that you are all undead.</p>
+                    <p>When you return to town, Toto decides to introduce Quilbert to everyone who is "not Howard".</p>
+                    <p>Once that is over, she actually introduces him to Howard, who takes him into the office to finish the registration. Meanwhile, you all go to see Buster again.</p>
+                    <p>You give Buster the update on what happened at the Volcano. He gives you all a reward for the mission, and has Howard give Quilbert his reward.</p>
+                    <p>After Quilbert finishes with his paperwork, he heads up to Buster's office to introduce himself. After some discussion, Quilbert leaves and finds you guys outside on the floor. You all head to eat dinner, and Quilbert learns to tuck in his flames so he can sleep on a bed.</p>
+                    <p>The next day, you shop for a bit and grab some missions in Cinder Volcano. You head out to complete those.</p>
+                    <p>After some close encounters with some Graveller who Self Destructed, you all manage to get through the jobs at Cinder Volcano.</p>
+                    <p>The next day, you all head to town and buy some things, and store your money. You then begin looking for the Hitmonbros Construction team about your home estimate.</p>
+                    <p>After a confusing encounter with a different Tyrogue, you manage to find the one who originally began the plans for your house. He mentions the price, however you all say that you will need an additional bedroom. He asks you to come back tomorrow so he can redo the plans. He says that 380,000 Poke would be the price for the 5 bedroom house...</p>
+                    <p>You all express your interest in some way to make this cheaper, and he tells you he may have a way to help tomorrow.</p>
+                    <p>In the meantime, you take all the available jobs at Cinder Volcano, and begin your 4th trek up the mountain.</p>
+                    <p>You all complete these missions successfully and get paid.</p>
+                    <p>The next day, you all find the Hitmonbros Construction team and talk to Roro. He mentions that they are having trouble getting the lumber they need from Blooming Thicket lately, and if the group helps sort this out, he is authorized to give them a discount on their home.</p>
+                    <p>The group readily agrees to help, and heads out almost immediately.</p>
+                    <p>After arriving at Blooming Thicket, which is not that far from town, you all begin the trek into the dungeon.</p>
+                    <h3>END OF SESSION</h3>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.sub-accordion -->
+          </div>
+        </div>
+      </div>
+    </div><!-- /.accordion -->
+  </main>
+  <div class="pixel-divider">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-pokeball">⬤</div>
+    <p>
+      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
+      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
+      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
+    </p>
+  </footer>
+  <script>
+    // ── Dropdown: click to open/close, click outside to dismiss ──
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+      const trigger = li.querySelector('span[data-dropdown]') || li.querySelector('span');
+      if (!li.querySelector('.dropdown-menu')) return;
+      li.querySelector('span').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = li.classList.contains('open');
+        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
+    });
+    // ── Hamburger ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', !isOpen);
+      hamburger.classList.toggle('open', !isOpen);
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const sub = document.getElementById(subId);
+        sub.classList.toggle('open', !sub.classList.contains('open'));
+        this.classList.toggle('open', !this.classList.contains('open'));
+      });
+    });
+    // ── Chapter accordion (one open at a time) ──
+    function toggleAccordion(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.accordion-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        body.classList.add('open');
+        btn.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+    // ── Sub-accordion (independent, multiple can be open) ──
+    function toggleSub(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      btn.classList.toggle('active', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    // ── Adventure Record: build 17 icon slots ──
+    // To attach a real Pokémon icon to a slot, set its data-icon to an image path,
+    // e.g. slot.dataset.icon = "/css/images/pokemon/025.png". Clicking a slot toggles
+    // it between "hidden" (silhouette/?) and "revealed" (shows the icon) — use this
+    // to mark off party members / defeated Pokémon as the campaign progresses.
+    (function buildAdventureRecordIcons() {
+      const wrap = document.getElementById('arIcons');
+      const TOTAL_SLOTS = 17;
+      for (let i = 0; i < TOTAL_SLOTS; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'ar-icon-slot';
+        slot.setAttribute('role', 'button');
+        slot.setAttribute('aria-pressed', 'false');
+        slot.setAttribute('aria-label', 'Pokémon slot ' + (i + 1) + ', not yet revealed');
+
+        const img = document.createElement('img');
+        img.className = 'ar-icon-img';
+        img.alt = '';
+        img.onerror = function () { this.style.display = 'none'; };
+        // img.src = ''; // set per-slot via slot.dataset.icon when you have real icon paths
+
+        const placeholder = document.createElement('span');
+        placeholder.className = 'ar-icon-placeholder';
+        placeholder.textContent = '?';
+
+        slot.appendChild(img);
+        slot.appendChild(placeholder);
+
+        slot.addEventListener('click', function () {
+          const nowRevealed = !slot.classList.contains('revealed');
+          slot.classList.toggle('revealed', nowRevealed);
+          slot.setAttribute('aria-pressed', String(nowRevealed));
+          slot.setAttribute('aria-label', 'Pokémon slot ' + (i + 1) + (nowRevealed ? ', revealed' : ', not yet revealed'));
+          if (nowRevealed && slot.dataset.icon) {
+            img.src = slot.dataset.icon;
+          }
+        });
+
+        wrap.appendChild(slot);
+      }
+    })();
+  </script>
+</body>
+</html>
