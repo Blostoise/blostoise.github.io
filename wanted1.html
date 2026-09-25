@@ -446,69 +446,8 @@
 </head>
 <body>
 
-  <!-- Disclaimer Banner -->
-  <div class="disclaimer-banner">
-    ⚠️ This is a fan made site with no affiliation to the Pokémon Company ©
-  </div>
-
-  <!-- Navigation -->
-  <nav>
-    <a href="/" class="nav-brand">
-      <img src="/css/images/logo.jpg" alt="PMD Campaign Logo" class="nav-logo" onerror="this.style.display='none'" />
-      <span class="nav-site-name">PMD Campaign</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li>
-        <span>Character <span class="dropdown-arrow">▼</span></span>
-        <div class="dropdown-menu">
-          <div class="dropdown-menu-inner">
-            <a href="/calc">Calculator</a>
-            <a href="/pokemon">Pokémon</a>
-            <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
-          </div>
-        </div>
-      </li>
-      <li>
-        <span>Game <span class="dropdown-arrow">▼</span></span>
-        <div class="dropdown-menu">
-          <div class="dropdown-menu-inner">
-            <a href="/rules">Rules</a>
-            <a href="/jobs">Jobs</a>
-            <a href="/map">Map</a>
-            <a href="/shop">Shop</a>
-            <a href="/items">Items</a>
-            <a href="/lore">Lore</a>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <div class="mobile-menu-inner">
-      <a href="/" class="mob-link">Home</a>
-      <button class="mob-group-btn" id="mobCharBtn">Character <span class="mob-arrow">▼</span></button>
-      <div class="mob-sub" id="mobCharSub">
-        <a href="/calc">Calculator</a>
-        <a href="/pokemon">Pokémon</a>
-        <a href="https://drive.google.com/file/d/1-PPZYwp9lDPKSIE1H84srav0aA2Z-R61/view?usp=drive_link" target="_blank" rel="noopener">Character Sheet ↗</a>
-      </div>
-      <button class="mob-group-btn" id="mobGameBtn">Game <span class="mob-arrow">▼</span></button>
-      <div class="mob-sub" id="mobGameSub">
-        <a href="/rules">Rules</a>
-        <a href="/jobs">Jobs</a>
-        <a href="/map">Map</a>
-        <a href="/shop">Shop</a>
-        <a href="/items">Items</a>
-        <a href="/lore">Lore</a>
-      </div>
-    </div>
-  </div>
+  <!-- Navigation Script -->
+  <script src="/js/nav.js" defer></script>
 
   <!-- Page Content -->
   <div class="page-wrap">
