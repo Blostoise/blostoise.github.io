@@ -419,45 +419,6 @@
   </footer>
 
   <script>
-    // ── Dropdown ──
-    document.querySelectorAll('.nav-links > li').forEach(li => {
-      if (!li.querySelector('.dropdown-menu')) return;
-      li.querySelector('span').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = li.classList.contains('open');
-        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
-        if (!isOpen) li.classList.add('open');
-      });
-    });
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
-    });
-    // ── Hamburger ──
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    hamburger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = mobileMenu.classList.contains('open');
-      mobileMenu.classList.toggle('open', !isOpen);
-      hamburger.classList.toggle('open', !isOpen);
-      hamburger.setAttribute('aria-expanded', String(!isOpen));
-      mobileMenu.setAttribute('aria-hidden', String(isOpen));
-    });
-    document.addEventListener('click', (e) => {
-      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      }
-    });
-    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
-      document.getElementById(btnId).addEventListener('click', function() {
-        const sub = document.getElementById(subId);
-        sub.classList.toggle('open', !sub.classList.contains('open'));
-        this.classList.toggle('open', !this.classList.contains('open'));
-      });
-    });
-
     // ── Button Tiles ──
     // To add, remove, or edit a button, just edit this array.
     // Each entry needs: title (shown bottom-right), link (where the button goes),
