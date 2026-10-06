@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Server Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=MedievalSharp&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#120d1a;--panel:#1d1428;--edge:#c8962e;--gold:#f4cf6b;--text:#e8dcc0;--dim:#9a8aa8;--glow:#ffb83d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120d1a;--panel:#1d1428;--edge:#c8962e;--gold:#f4cf6b;--text:#e8dcc0;--dim:#9a8aa8}}
+:root[data-theme="dark"]{--bg:#120d1a;--panel:#1d1428;--edge:#c8962e;--gold:#f4cf6b;--text:#e8dcc0;--dim:#9a8aa8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#2a1a3d 0,var(--bg) 60%);color:var(--text);font-family:'Cinzel',Georgia,serif;display:flex;justify-content:center;padding:24px 16px}
+.wrap{width:100%;max-width:760px}
+h1{font-family:'MedievalSharp','Cinzel',Georgia,serif;text-align:center;font-size:clamp(2.2rem,8vw,3.8rem);margin:8px 0 4px;color:var(--gold);letter-spacing:.08em;text-shadow:0 0 18px var(--glow),0 2px 0 #000}
+.sub{text-align:center;color:var(--dim);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:22px}
+.orn{text-align:center;color:var(--edge);letter-spacing:.6em;margin:0 0 18px}
+.panel{background:linear-gradient(180deg,var(--panel),#150e1f);border:2px solid var(--edge);border-radius:10px;box-shadow:0 0 0 4px #000,0 0 0 6px var(--edge),0 0 30px rgba(200,150,46,.25);padding:22px 14px}
+.day{text-align:center;font-size:1.1rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase}
+.daynum{text-align:center;font-weight:800;font-size:clamp(4rem,18vw,7.5rem);line-height:1;color:var(--gold);text-shadow:0 0 24px var(--glow);margin:4px 0 16px}
+.clock{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{background:#0b0712;border:1px solid var(--edge);border-radius:6px;padding:10px 4px;text-align:center}
+.cell b{display:block;font-size:clamp(1.6rem,7vw,2.8rem);color:var(--text);font-variant-numeric:tabular-nums}
+.cell span{font-size:.65rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase}
+.next{text-align:center;color:var(--dim);font-size:.75rem;margin-top:14px;letter-spacing:.15em}
+h2{font-family:'MedievalSharp','Cinzel',Georgia,serif;color:var(--gold);text-align:center;margin:28px 0 12px;letter-spacing:.1em}
+.ev{background:var(--panel);border:1px solid var(--edge);border-left:5px solid var(--glow);border-radius:6px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.ev .n{font-weight:800;color:var(--gold)}
+.ev .d{font-size:.7rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.ev .t{font-variant-numeric:tabular-nums;font-size:1.1rem}
+.ev.done{opacity:.55;border-left-color:var(--dim)}
+.empty{text-align:center;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Server Time</h1>
+  <div class="sub">Realm Chronicle</div>
+  <div class="orn">&#9876; &#10022; &#9876;</div>
+
+  <div class="panel">
+    <div class="day">Current Day</div>
+    <div class="daynum" id="day">--</div>
+    <div class="clock">
+      <div class="cell"><b id="h">--</b><span>Hours</span></div>
+      <div class="cell"><b id="m">--</b><span>Minutes</span></div>
+      <div class="cell"><b id="s">--</b><span>Seconds</span></div>
+    </div>
+    <div class="next" id="next"></div>
+  </div>
+
+  <h2>Upcoming Events</h2>
+  <div id="events"></div>
+</div>
+
+<script>
+// ===== EDIT YOUR EVENTS HERE: name + day number =====
+const EVENTS = [
+  { name: "Dragon Raid", day: 30 },
+  { name: "Guild Tournament", day: 45 },
+  { name: "Winter Festival", day: 60 }
+];
+// ====================================================
+
+const TZ = "America/New_York";   // 9:00 AM Eastern (EST/EDT as observed)
+const ANCHOR_DAY = 24;           // Day number reached...
+const ANCHOR = [2026, 10, 12];    // ...on Mon Oct 12, 2026 at 9:00 AM Eastern [y, month(1-12), d]
+
+function tzOffset(ms){ // offset (ms) of TZ from UTC at instant ms
+  const p = {};
+  new Intl.DateTimeFormat("en-US",{timeZone:TZ,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"})
+    .formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);
+  return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second) - Math.floor(ms/1000)*1000;
+}
+function nineAM(y,mo,d){ // UTC ms of 9:00 AM Eastern on given date
+  const guess = Date.UTC(y,mo-1,d,9,0,0);
+  let t = guess - tzOffset(guess);
+  t = guess - tzOffset(t);
+  return t;
+}
+function dayStart(n){ return nineAM(ANCHOR[0],ANCHOR[1],ANCHOR[2] + (n - ANCHOR_DAY)); }
+
+function currentDay(now){
+  let n = ANCHOR_DAY + Math.floor((now - dayStart(ANCHOR_DAY))/86400000);
+  while (dayStart(n+1) <= now) n++;
+  while (dayStart(n) > now) n--;
+  return n;
+}
+const pad = x => String(x).padStart(2,"0");
+function split(ms){
+  let s = Math.max(0, Math.floor(ms/1000));
+  const d = Math.floor(s/86400); s%=86400;
+  const h = Math.floor(s/3600); s%=3600;
+  return { d, h, m: Math.floor(s/60), s: s%60 };
+}
+
+const el = id => document.getElementById(id);
+function tick(){
+  const now = Date.now();
+  const n = currentDay(now);
+  const t = split(now - dayStart(n));
+  el("day").textContent = n;
+  el("h").textContent = pad(t.h);
+  el("m").textContent = pad(t.m);
+  el("s").textContent = pad(t.s);
+  const nx = split(dayStart(n+1) - now);
+  el("next").textContent = "Day " + (n+1) + " dawns in " + pad(nx.h) + ":" + pad(nx.m) + ":" + pad(nx.s);
+
+  const list = [...EVENTS].sort((a,b)=>a.day-b.day);
+  el("events").innerHTML = list.length ? list.map(e=>{
+    const diff = dayStart(e.day) - now;
+    const done = diff <= 0;
+    const r = split(diff);
+    const txt = done ? "Underway!" : r.d + "d " + pad(r.h) + "h " + pad(r.m) + "m " + pad(r.s) + "s";
+    const safe = String(e.name).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    return '<div class="ev'+(done?' done':'')+'"><div><div class="n">'+safe+'</div><div class="d">Day '+e.day+'</div></div><div class="t">'+txt+'</div></div>';
+  }).join("") : '<div class="empty">No events scheduled.</div>';
+}
+tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>
