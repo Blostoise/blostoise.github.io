@@ -53,6 +53,9 @@ h2{font-family:'MedievalSharp','Cinzel',Georgia,serif;color:var(--gold);text-ali
 
   <h2>Upcoming Events</h2>
   <div id="events"></div>
+
+  <h2>Helpful Links</h2>
+  <div id="links"></div>
 </div>
 
 <script>
@@ -64,6 +67,14 @@ const EVENTS = [
   { name: "End of season 1 (approximate)", day: 45 }
 ];
 // ====================================================
+
+// ===== EDIT YOUR LINKS HERE: name + url (+ optional note) =====
+const LINKS = [
+  { name: "Generic Game Calendar", url: "https://qymaple.github.io/sxs-research-global/maple-sxs-timeline.html", note: "Raw Calendar Data" },
+  { name: "Guides and Calculators", url: "https://eog.gg/games/sword-x-staff/", note: "Tons of Guides and Builds" },
+  { name: "Datamined Information", url: "https://purrwikimania.vercel.app/index.html", note: "Info Datamined directly from the code" }
+];
+// ==============================================================
 
 const TZ = "America/New_York";   // 9:00 AM Eastern (EST/EDT as observed)
 const ANCHOR_DAY = 24;           // Day number reached...
@@ -119,6 +130,10 @@ function tick(){
     return '<div class="ev'+(done?' done':'')+'"><div><div class="n">'+safe+'</div><div class="d">Day '+e.day+'</div></div><div class="t">'+txt+'</div></div>';
   }).join("") : '<div class="empty">No events scheduled.</div>';
 }
+const esc = v => String(v).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+el("links").innerHTML = LINKS.filter(l=>/^https?:\/\//i.test(l.url)).map(l=>
+  '<a class="lk" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">&#10148; '+esc(l.name)+(l.note?'<small>'+esc(l.note)+'</small>':'')+'</a>'
+).join("") || '<div class="empty">No links yet.</div>';
 tick(); setInterval(tick, 1000);
 </script>
 </body>
