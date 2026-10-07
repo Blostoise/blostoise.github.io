@@ -3,45 +3,64 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Server Time</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=MedievalSharp&display=swap" rel="stylesheet">
+<title>Snowlotus Server Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#120d1a;--panel:#1d1428;--edge:#c8962e;--gold:#f4cf6b;--text:#e8dcc0;--dim:#9a8aa8;--glow:#ffb83d;
+:root{--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7;--frost:#bfe8ff;--lotus:#ff8fc0;
+--c-rec:#6fd6f5;--c-evt:#ff8fc0;--c-link:#f4cf6b;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120d1a;--panel:#1d1428;--edge:#c8962e;--gold:#f4cf6b;--text:#e8dcc0;--dim:#9a8aa8}}
-:root[data-theme="dark"]{--bg:#120d1a;--panel:#1d1428;--edge:#c8962e;--gold:#f4cf6b;--text:#e8dcc0;--dim:#9a8aa8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7}}
+:root[data-theme="dark"]{--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#2a1a3d 0,var(--bg) 60%);color:var(--text);font-family:'Cinzel',Georgia,serif;display:flex;justify-content:center;padding:24px 16px}
-.wrap{width:100%;max-width:760px}
-h1{font-family:'MedievalSharp','Cinzel',Georgia,serif;text-align:center;font-size:clamp(2.2rem,8vw,3.8rem);margin:8px 0 4px;color:var(--gold);letter-spacing:.08em;text-shadow:0 0 18px var(--glow),0 2px 0 #000}
-.sub{text-align:center;color:var(--dim);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:22px}
-.orn{text-align:center;color:var(--edge);letter-spacing:.6em;margin:0 0 18px}
-.panel{background:linear-gradient(180deg,var(--panel),#150e1f);border:2px solid var(--edge);border-radius:10px;box-shadow:0 0 0 4px #000,0 0 0 6px var(--edge),0 0 30px rgba(200,150,46,.25);padding:22px 14px}
-.day{text-align:center;font-size:1.1rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase}
-.daynum{text-align:center;font-weight:800;font-size:clamp(4rem,18vw,7.5rem);line-height:1;color:var(--gold);text-shadow:0 0 24px var(--glow);margin:4px 0 16px}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,var(--bg2) 0,var(--bg) 65%) fixed;color:var(--text);font-family:'Cinzel',Georgia,serif;display:flex;justify-content:center;padding:24px 16px;overflow-x:hidden}
+.snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.snow i{position:absolute;top:-10px;border-radius:50%;background:#fff;opacity:.7;animation:fall linear infinite}
+@keyframes fall{to{transform:translate3d(var(--dx),105vh,0)}}
+@media (prefers-reduced-motion:reduce){.snow{display:none}}
+.wrap{position:relative;z-index:1;width:100%;max-width:760px}
+.lotus{display:block;margin:0 auto;filter:drop-shadow(0 0 10px rgba(255,143,192,.7))}
+h1{font-family:'Cinzel Decorative','Cinzel',Georgia,serif;text-align:center;font-size:clamp(1.9rem,7.5vw,3.4rem);margin:6px 0 4px;color:var(--frost);letter-spacing:.06em;text-shadow:0 0 18px rgba(111,214,245,.7),0 2px 0 #000}
+h1 em{font-style:normal;color:var(--lotus);text-shadow:0 0 18px rgba(255,143,192,.7),0 2px 0 #000}
+.sub{text-align:center;color:var(--dim);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:22px}
+.panel{background:linear-gradient(180deg,var(--panel),#0b1229);border:2px solid var(--frost);border-radius:14px;box-shadow:0 0 0 4px #000,0 0 0 6px var(--lotus),0 0 34px rgba(111,214,245,.25);padding:22px 14px}
+.day{text-align:center;font-size:1.05rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase}
+.daynum{text-align:center;font-weight:800;font-size:clamp(4rem,18vw,7.5rem);line-height:1;color:var(--frost);text-shadow:0 0 26px rgba(111,214,245,.8);margin:4px 0 16px}
 .clock{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.cell{background:#0b0712;border:1px solid var(--edge);border-radius:6px;padding:10px 4px;text-align:center}
-.cell b{display:block;font-size:clamp(1.6rem,7vw,2.8rem);color:var(--text);font-variant-numeric:tabular-nums}
+.cell{background:var(--cell);border:1px solid var(--frost);border-radius:8px;padding:10px 4px;text-align:center}
+.cell b{display:block;font-size:clamp(1.6rem,7vw,2.8rem);font-variant-numeric:tabular-nums}
 .cell span{font-size:.65rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase}
 .next{text-align:center;color:var(--dim);font-size:.75rem;margin-top:14px;letter-spacing:.15em}
-h2{font-family:'MedievalSharp','Cinzel',Georgia,serif;color:var(--gold);text-align:center;margin:28px 0 12px;letter-spacing:.1em}
-.ev{background:var(--panel);border:1px solid var(--edge);border-left:5px solid var(--glow);border-radius:6px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.ev .n{font-weight:800;color:var(--gold)}
-.ev .d{font-size:.7rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
-.ev .t{font-variant-numeric:tabular-nums;font-size:1.1rem}
-.ev.done{opacity:.55;border-left-color:var(--dim)}
-.lk{display:block;background:var(--panel);border:1px solid var(--edge);border-left:5px solid var(--gold);border-radius:6px;padding:12px 14px;margin-bottom:10px;color:var(--gold);text-decoration:none;font-weight:800;letter-spacing:.05em}
-.lk:hover{box-shadow:0 0 14px rgba(255,184,61,.4);color:var(--text)}
-.lk small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;letter-spacing:.1em;margin-top:2px}
+.sec{margin-top:30px}
+.sec.rec{--c:var(--c-rec)}.sec.evt{--c:var(--c-evt)}.sec.lnk{--c:var(--c-link)}
+h2{font-family:'Cinzel Decorative','Cinzel',Georgia,serif;color:var(--c);text-align:center;margin:0 0 4px;font-size:1.3rem;letter-spacing:.1em;text-shadow:0 0 14px var(--c)}
+.hint{text-align:center;color:var(--dim);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.rule{height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);margin:0 auto 14px;max-width:320px}
+.card{background:var(--panel);border:1px solid var(--c);border-left:5px solid var(--c);border-radius:8px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 0 12px -6px var(--c)}
+.card .n{font-weight:800;color:var(--c)}
+.card .d{font-size:.7rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.card .t{font-variant-numeric:tabular-nums;font-size:1.1rem}
+.card.done{opacity:.55}
+a.card{text-decoration:none;color:var(--c);font-weight:800;letter-spacing:.05em;display:block}
+a.card:hover{box-shadow:0 0 18px -2px var(--c);color:var(--text)}
+a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;letter-spacing:.1em;margin-top:2px}
 .empty{text-align:center;color:var(--dim)}
 </style>
 </head>
 <body>
+<div class="snow" id="snow"></div>
 <div class="wrap">
-  <h1>Snowlotus Server Time</h1>
+  <svg class="lotus" width="72" height="44" viewBox="0 0 64 40" aria-hidden="true">
+    <g fill="#ff8fc0" stroke="#ffd3e6" stroke-width="1">
+      <path id="p" d="M32 3C41 14 41 28 32 37 23 28 23 14 32 3Z"/>
+      <use href="#p" transform="rotate(-32 32 37)" fill="#ff6fae"/>
+      <use href="#p" transform="rotate(32 32 37)" fill="#ff6fae"/>
+      <use href="#p" transform="rotate(-62 32 37)" fill="#d9559a"/>
+      <use href="#p" transform="rotate(62 32 37)" fill="#d9559a"/>
+    </g>
+  </svg>
+  <h1><em>Snowlotus</em> Server Time</h1>
   <div class="sub">How long since the server started</div>
-  <div class="orn">&#9876; &#10022; &#9876;</div>
 
   <div class="panel">
     <div class="day">Current Day</div>
@@ -54,52 +73,63 @@ h2{font-family:'MedievalSharp','Cinzel',Georgia,serif;color:var(--gold);text-ali
     <div class="next" id="next"></div>
   </div>
 
-  <h2>Upcoming Events</h2>
-  <div id="events"></div>
+  <div class="sec rec">
+    <h2>Recurring Events</h2><div class="hint">Repeats on a cycle</div><div class="rule"></div>
+    <div id="recurring"></div>
+  </div>
 
-  <h2>Helpful Links</h2>
-  <div id="links"></div>
+  <div class="sec evt">
+    <h2>Server Events</h2><div class="hint">One-time milestones</div><div class="rule"></div>
+    <div id="events"></div>
+  </div>
+
+  <div class="sec lnk">
+    <h2>Helpful Links</h2><div class="hint">Guides &amp; tools</div><div class="rule"></div>
+    <div id="links"></div>
+  </div>
 </div>
 
 <script>
-// ===== EDIT YOUR EVENTS HERE: name + day number =====
+// ===== RECURRING EVENTS: name, day = first occurrence, every = repeat interval in days =====
+const RECURRING = [
+  { name: "Weekly Reset", day: 24, every: 7 },
+  { name: "Server Tournament begins", day: 24, every: 7 },
+  { name: "Grand Treasure Hunt resets", day: 24, every: 7}
+];
+
+// ===== SERVER EVENTS (one-time): name + day number =====
 const EVENTS = [
-  { name: "Server Tournament begins", day: 22 },
-  { name: "Grand Treasure Hunt resets", day: 22 },
-  { name: "Weekly Reset", day: 24 },
   { name: "Aquorigin Shrine dungeon opens", day: 24 },
   { name: "Whaleback Island arrives", day: 26 },
   { name: "Hellhold dungeon opens", day: 33 },
   { name: "End of season 1 (approximate)", day: 45 }
 ];
-// ====================================================
 
-// ===== EDIT YOUR LINKS HERE: name + url (+ optional note) =====
+// ===== LINKS: name + url (+ optional note) =====
 const LINKS = [
   { name: "Generic Game Calendar", url: "https://qymaple.github.io/sxs-research-global/maple-sxs-timeline.html", note: "Raw Calendar Data" },
   { name: "Guides and Calculators", url: "https://eog.gg/games/sword-x-staff/", note: "Tons of Guides and Builds" },
   { name: "Datamined Information", url: "https://purrwikimania.vercel.app/index.html", note: "Info Datamined directly from the code" }
 ];
-// ==============================================================
+// ======================================================
 
 const TZ = "America/New_York";   // 9:00 AM Eastern (EST/EDT as observed)
-const ANCHOR_DAY = 24;           // Day number reached...
-const ANCHOR = [2026, 10, 12];    // ...on Mon Oct 12, 2026 at 9:00 AM Eastern [y, month(1-12), d]
+const ANCHOR_DAY = 24;
+const ANCHOR = [2026, 10, 12];   // Day 24 starts Mon Oct 12, 2026 9:00 AM Eastern
 
-function tzOffset(ms){ // offset (ms) of TZ from UTC at instant ms
+function tzOffset(ms){
   const p = {};
   new Intl.DateTimeFormat("en-US",{timeZone:TZ,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"})
     .formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);
   return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second) - Math.floor(ms/1000)*1000;
 }
-function nineAM(y,mo,d){ // UTC ms of 9:00 AM Eastern on given date
+function nineAM(y,mo,d){
   const guess = Date.UTC(y,mo-1,d,9,0,0);
   let t = guess - tzOffset(guess);
   t = guess - tzOffset(t);
   return t;
 }
 function dayStart(n){ return nineAM(ANCHOR[0],ANCHOR[1],ANCHOR[2] + (n - ANCHOR_DAY)); }
-
 function currentDay(now){
   let n = ANCHOR_DAY + Math.floor((now - dayStart(ANCHOR_DAY))/86400000);
   while (dayStart(n+1) <= now) n++;
@@ -113,8 +143,18 @@ function split(ms){
   const h = Math.floor(s/3600); s%=3600;
   return { d, h, m: Math.floor(s/60), s: s%60 };
 }
+const esc = v => String(v).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = ms => { const r = split(ms); return r.d+"d "+pad(r.h)+"h "+pad(r.m)+"m "+pad(r.s)+"s"; };
+const card = (name, label, txt, done) =>
+  '<div class="card'+(done?' done':'')+'"><div><div class="n">'+esc(name)+'</div><div class="d">'+label+'</div></div><div class="t">'+txt+'</div></div>';
 
 const el = id => document.getElementById(id);
+function nextOccurrence(e, cur, now){
+  const k = e.day >= cur ? 0 : Math.ceil((cur - e.day)/e.every);
+  let n = e.day + k*e.every;
+  if (dayStart(n) <= now) n += e.every;
+  return n;
+}
 function tick(){
   const now = Date.now();
   const n = currentDay(now);
@@ -124,22 +164,32 @@ function tick(){
   el("m").textContent = pad(t.m);
   el("s").textContent = pad(t.s);
   const nx = split(dayStart(n+1) - now);
-  el("next").textContent = "Day " + (n+1) + " dawns in " + pad(nx.h) + ":" + pad(nx.m) + ":" + pad(nx.s);
+  el("next").textContent = "Day "+(n+1)+" dawns in "+pad(nx.h)+":"+pad(nx.m)+":"+pad(nx.s);
+
+  const rec = RECURRING.map(e=>({e, d:nextOccurrence(e,n,now)})).sort((a,b)=>a.d-b.d);
+  el("recurring").innerHTML = rec.length ? rec.map(x=>
+    card(x.e.name, "Next: Day "+x.d+" &middot; every "+x.e.every+" days", fmt(dayStart(x.d)-now), false)).join("")
+    : '<div class="empty">No recurring events.</div>';
 
   const list = [...EVENTS].sort((a,b)=>a.day-b.day);
   el("events").innerHTML = list.length ? list.map(e=>{
     const diff = dayStart(e.day) - now;
-    const done = diff <= 0;
-    const r = split(diff);
-    const txt = done ? "Underway!" : r.d + "d " + pad(r.h) + "h " + pad(r.m) + "m " + pad(r.s) + "s";
-    const safe = String(e.name).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-    return '<div class="ev'+(done?' done':'')+'"><div><div class="n">'+safe+'</div><div class="d">Day '+e.day+'</div></div><div class="t">'+txt+'</div></div>';
+    return card(e.name, "Day "+e.day, diff<=0 ? "Underway!" : fmt(diff), diff<=0);
   }).join("") : '<div class="empty">No events scheduled.</div>';
 }
-const esc = v => String(v).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
 el("links").innerHTML = LINKS.filter(l=>/^https?:\/\//i.test(l.url)).map(l=>
-  '<a class="lk" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">&#10148; '+esc(l.name)+(l.note?'<small>'+esc(l.note)+'</small>':'')+'</a>'
+  '<a class="card" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">&#10048; '+esc(l.name)+(l.note?'<small>'+esc(l.note)+'</small>':'')+'</a>'
 ).join("") || '<div class="empty">No links yet.</div>';
+
+(function(){ // snowfall
+  const box = el("snow");
+  for (let i=0;i<36;i++){
+    const f = document.createElement("i"), s = 2+Math.random()*4;
+    f.style.cssText = "left:"+Math.random()*100+"%;width:"+s+"px;height:"+s+"px;animation-duration:"+(8+Math.random()*10)+"s;animation-delay:-"+Math.random()*14+"s;--dx:"+(Math.random()*80-40)+"px;opacity:"+(.35+Math.random()*.5);
+    box.appendChild(f);
+  }
+})();
 tick(); setInterval(tick, 1000);
 </script>
 </body>
