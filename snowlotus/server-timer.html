@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#080d1c">
-<title>Snowlotus Server Time</title>
+<title>Snowlotus/Mapledawn Server Time</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7;--frost:#bfe8ff;--lotus:#ff8fc0;
---c-rec:#6fd6f5;--c-evt:#ff8fc0;--c-link:#f4cf6b;
+--c-rec:#6fd6f5;--c-evt:#ff8fc0;--c-dgn:#b69cff;--c-link:#f4cf6b;
 color-scheme:dark;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7}}
@@ -36,19 +36,33 @@ h1 em{font-style:normal;color:var(--lotus);text-shadow:0 0 18px rgba(255,143,192
 .cell span{font-size:.65rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase}
 .next{text-align:center;color:var(--dim);font-size:.75rem;margin-top:14px;letter-spacing:.15em}
 .sec{margin-top:30px}
-.sec.rec{--c:var(--c-rec)}.sec.evt{--c:var(--c-evt)}.sec.lnk{--c:var(--c-link)}
+.sec.rec{--c:var(--c-rec)}.sec.evt{--c:var(--c-evt)}.sec.dgn{--c:var(--c-dgn)}.sec.lnk{--c:var(--c-link)}
 h2{font-family:'Cinzel Decorative','Cinzel',Georgia,serif;color:var(--c);text-align:center;margin:0 0 4px;font-size:1.3rem;letter-spacing:.1em;text-shadow:0 0 14px var(--c)}
 .hint{text-align:center;color:var(--dim);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
 .rule{height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);margin:0 auto 14px;max-width:320px}
 .card{background:var(--panel);border:1px solid var(--c);border-left:5px solid var(--c);border-radius:8px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 0 12px -6px var(--c)}
-.card .n{font-weight:800;color:var(--c)}
-.card .d{font-size:.7rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.card .n,.dg .n{font-weight:800;color:var(--c)}
+.card .d,.dg .d{font-size:.7rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
 .card .t{font-variant-numeric:tabular-nums;font-size:1.1rem}
 .card.done{opacity:.55}
 a.card{text-decoration:none;color:var(--c);font-weight:800;letter-spacing:.05em;display:block}
 a.card:hover{box-shadow:0 0 18px -2px var(--c);color:var(--text)}
 a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;letter-spacing:.1em;margin-top:2px}
 .empty{text-align:center;color:var(--dim)}
+/* dungeons (expandable) */
+.dg{background:var(--panel);border:1px solid var(--c);border-left:5px solid var(--c);border-radius:8px;margin-bottom:10px;box-shadow:0 0 12px -6px var(--c)}
+.dg[open]{box-shadow:0 0 18px -4px var(--c)}
+.dg summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dg summary::-webkit-details-marker{display:none}
+.dg summary:focus-visible{outline:2px solid var(--c);outline-offset:2px;border-radius:6px}
+.dg .st{display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums;font-size:1rem}
+.dg .st::after{content:"";width:8px;height:8px;border-right:2px solid var(--c);border-bottom:2px solid var(--c);transform:rotate(45deg);transition:transform .2s;margin-bottom:3px}
+.dg[open] .st::after{transform:rotate(-135deg);margin-bottom:-3px}
+.dg .body{padding:12px 14px 14px;border-top:1px dashed var(--c)}
+.dg p{margin:0 0 12px;font-size:.85rem;line-height:1.55;font-weight:600}
+.dg dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:.85rem}
+.dg dt{color:var(--dim);letter-spacing:.12em;text-transform:uppercase;font-size:.65rem;align-self:center}
+.dg dd{margin:0;font-weight:600}
 </style>
 </head>
 <body>
@@ -64,8 +78,8 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
       <use href="#p" transform="rotate(62 32 37)" fill="#d9559a"/>
     </g>
   </svg>
-  <h1><em>Snowlotus</em> Server Time</h1>
-  <div class="sub">How long since the server started</div>
+  <h1><em>Snowlotus/Mapledawn</em> Server Time</h1>
+  <div class="sub">How long since the servers started</div>
 
   <div class="panel">
     <div class="day">Current Day</div>
@@ -86,6 +100,11 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
   <div class="sec evt">
     <h2>Server Events</h2><div class="hint">One-time milestones</div><div class="rule"></div>
     <div id="events"></div>
+  </div>
+
+  <div class="sec dgn">
+    <h2>Dungeons</h2><div class="hint">Tap to expand</div><div class="rule"></div>
+    <div id="dungeons"></div>
   </div>
 
   <div class="sec lnk">
@@ -109,11 +128,24 @@ const RECURRING = [
 const EVENTS = [
   { name: "Aquorigin Shrine dungeon opens", day: 24 },
   { name: "Whaleback Island arrives", day: 26 },
-  { name: "Lucky Draw event ends", day: 29 },
   { name: "Hellhold dungeon opens", day: 33 },
   { name: "Wonder Flavors event ends", day: 36 },
   { name: "Stellar Plume gacha ends", day: 36 },
   { name: "End of season 1 (approximate)", day: 45 }
+];
+
+// ===== DUNGEONS (tap to expand) =====
+// name  = dungeon name
+// day   = (optional) day it opens; shows a countdown, then "Open"
+// desc  = (optional) short description paragraph
+// info  = (optional) list of ["Label", "Value"] rows
+const DUNGEONS = [
+  { name: "Aquorigin Shrine", day: 24,
+    desc: "A sacred shring for river deitiies. In its depths an ancient entity stands eternal watch.",
+    info: [["Level Requiremnt", "100"],["Normal", "930K"], ["Hard", "1.45M"], ["Nightmare", "2.05M"]] },
+  { name: "Hellhold", day: 33,
+    desc: "A ruined ancient city built overnight. It stands like a ghost-infested gateway, leading straight into the underworld.",
+    info: [["Normal", "2.25M"], ["Hard", "2.75M"], ["Nightmare", "3.9M"], ["Purgatory", "6.2M"]] }
 ];
 
 // ===== LINKS: name + url (+ optional note) =====
@@ -187,7 +219,23 @@ function tick(){
     const diff = dayStart(e.day) - now;
     return card(e.name, "Day "+e.day, diff<=0 ? "Underway!" : fmt(diff), diff<=0);
   }).join("") : '<div class="empty">No events scheduled.</div>';
+
+  // dungeon countdowns (updated in place so expanded cards stay open)
+  document.querySelectorAll("#dungeons [data-day]").forEach(s=>{
+    const diff = dayStart(+s.dataset.day) - now;
+    s.textContent = diff <= 0 ? "Open" : fmt(diff);
+  });
 }
+
+// dungeons render once so open/closed state isn't reset every second
+el("dungeons").innerHTML = DUNGEONS.map(d=>{
+  const hasDay = d.day !== undefined && d.day !== null;
+  const rows = (d.info||[]).map(r=>'<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>').join("");
+  return '<details class="dg"><summary><div><div class="n">'+esc(d.name)+'</div>'+
+    (hasDay?'<div class="d">Opens Day '+esc(d.day)+'</div>':'')+'</div>'+
+    '<div class="st">'+(hasDay?'<span data-day="'+esc(d.day)+'"></span>':'')+'</div></summary>'+
+    '<div class="body">'+(d.desc?'<p>'+esc(d.desc)+'</p>':'')+(rows?'<dl>'+rows+'</dl>':'')+'</div></details>';
+}).join("") || '<div class="empty">No dungeons listed.</div>';
 
 el("links").innerHTML = LINKS.filter(l=>/^https?:\/\//i.test(l.url)).map(l=>
   '<a class="card" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">&#10048; '+esc(l.name)+(l.note?'<small>'+esc(l.note)+'</small>':'')+'</a>'
