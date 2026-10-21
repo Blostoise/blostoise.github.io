@@ -1,948 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jobs – PMD Campaign</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --poke-red:     #3B4CCA;
-      --poke-red-dk:  #2a379f;
-      --poke-yellow:  #FFCB05;
-      --poke-blue:    #3B4CCA;
-      --poke-blue-lt: #6478E0;
-      --poke-white:   #F8F8F8;
-      --poke-dark:    #1a1a2e;
-      --poke-gray:    #333355;
-      --nav-h:        64px;
-
-      --rank-b: #6390F0;   /* blue */
-      --rank-c: #7AC74C;   /* green */
-      --rank-d: #F7D02C;   /* yellow */
-      --rank-e: #A8A77A;   /* grey */
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: #f6f8fb;
-      color: var(--poke-dark);
-      min-height: 100vh;
-    }
-
-    /* ── DISCLAIMER BANNER ── */
-    .disclaimer-banner {
-      background: var(--poke-blue);
-      color: var(--poke-yellow);
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-align: center;
-      padding: 8px 16px;
-      letter-spacing: 0.04em;
-      border-bottom: 2px solid var(--poke-yellow);
-      position: relative;
-      z-index: 200;
-    }
-
-    /* ── NAVBAR ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--poke-red);
-      border-bottom: 4px solid var(--poke-yellow);
-      height: var(--nav-h);
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      gap: 1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-
-    .nav-logo {
-      height: 44px;
-      width: auto;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-    }
-
-    .nav-site-name {
-      font-family: 'Cinzel', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--poke-yellow);
-      letter-spacing: 0.1em;
-      white-space: nowrap;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 0.15rem;
-      list-style: none;
-      margin-left: auto;
-    }
-
-    .nav-links > li { position: relative; }
-
-    .nav-links > li > a,
-    .nav-links > li > span {
-      display: block;
-      padding: 0.5rem 1rem;
-      color: var(--poke-white);
-      text-decoration: none;
-      font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .nav-links > li > a:hover,
-    .nav-links > li > span:hover {
-      background: var(--poke-yellow);
-      color: var(--poke-red-dk);
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      padding-top: 6px;
-      min-width: 170px;
-      z-index: 999;
-    }
-
-    .nav-links > li.open .dropdown-menu { display: block; }
-
-    .dropdown-menu-inner {
-      background: var(--poke-red-dk);
-      border: 2px solid var(--poke-yellow);
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    }
-
-    .dropdown-menu a {
-      display: block;
-      padding: 0.6rem 1rem;
-      color: var(--poke-white);
-      text-decoration: none;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      border-bottom: 1px solid rgba(255,203,5,0.2);
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .dropdown-menu a:last-child { border-bottom: none; }
-    .dropdown-menu a:hover { background: var(--poke-yellow); color: var(--poke-red-dk); }
-    .dropdown-arrow { margin-left: 4px; font-size: 0.6rem; }
-
-    /* ── HAMBURGER ── */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      margin-left: auto;
-      border-radius: 6px;
-      transition: background 0.2s;
-    }
-
-    .hamburger:hover { background: rgba(255,203,5,0.15); }
-
-    .hamburger span {
-      display: block;
-      height: 3px;
-      border-radius: 2px;
-      background: var(--poke-yellow);
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      transform-origin: center;
-    }
-
-    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-
-    /* ── MOBILE MENU ── */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--poke-dark);
-      z-index: 99;
-      overflow-y: auto;
-      padding-top: calc(var(--nav-h) + 34px);
-      flex-direction: column;
-    }
-
-    .mobile-menu.open { display: flex; }
-
-    .mobile-menu-inner {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem 0 3rem;
-    }
-
-    .mobile-menu a.mob-link,
-    .mobile-menu button.mob-group-btn {
-      display: block;
-      width: 100%;
-      padding: 1rem 1.5rem;
-      color: var(--poke-white);
-      text-decoration: none;
-      font-family: 'Cinzel', serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      border: none;
-      background: none;
-      text-align: left;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(255,203,5,0.1);
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .mobile-menu a.mob-link:hover,
-    .mobile-menu button.mob-group-btn:hover {
-      background: rgba(255,203,5,0.08);
-      color: var(--poke-yellow);
-    }
-
-    .mob-group-btn { display: flex !important; justify-content: space-between; align-items: center; }
-    .mob-arrow { font-size: 0.65rem; transition: transform 0.3s ease; }
-    .mob-group-btn.open .mob-arrow { transform: rotate(180deg); }
-
-    .mob-sub {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s ease;
-      background: rgba(0,0,0,0.25);
-    }
-
-    .mob-sub.open { max-height: 400px; }
-
-    .mob-sub a {
-      display: block;
-      padding: 0.75rem 2.5rem;
-      color: rgba(248,248,248,0.8);
-      text-decoration: none;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      border-bottom: 1px solid rgba(255,203,5,0.07);
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .mob-sub a:hover { background: rgba(255,203,5,0.1); color: var(--poke-yellow); }
-
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .nav-site-name { display: none; }
-      nav { padding: 0 1rem; }
-    }
-
-    /* ── PAGE LAYOUT ── */
-    .page-wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 5rem;
-    }
-
-    .board-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      font-weight: 900;
-      color: var(--poke-dark);
-      letter-spacing: 0.06em;
-      margin-bottom: 0.5rem;
-    }
-
-    .board-title::after {
-      content: '';
-      display: block;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow));
-      border-radius: 2px;
-      margin-top: 0.5rem;
-    }
-
-    /* ── RANK ACCORDION ── */
-    .rank-accordion { display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1.5rem; }
-
-    .rank-item {
-      background: #fff;
-      border-radius: 12px;
-      border: 1px solid rgba(59,76,202,0.13);
-      box-shadow: 0 3px 12px rgba(20,30,60,0.06);
-      overflow: hidden;
-    }
-
-    .rank-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 1rem 1.4rem;
-      background: linear-gradient(135deg, rgba(59,76,202,0.06) 0%, rgba(100,120,224,0.1) 100%);
-      border: none;
-      cursor: pointer;
-      font-family: 'Cinzel', serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--poke-dark);
-      letter-spacing: 0.06em;
-      transition: background 0.2s;
-      text-align: left;
-    }
-
-    .rank-btn:hover {
-      background: linear-gradient(135deg, rgba(59,76,202,0.12) 0%, rgba(100,120,224,0.18) 100%);
-    }
-
-    .rank-btn.active {
-      background: linear-gradient(135deg, var(--poke-blue) 0%, var(--poke-blue-lt) 100%);
-      color: var(--poke-yellow);
-    }
-
-    .rank-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
-      font-weight: 900;
-      flex-shrink: 0;
-      color: #fff;
-    }
-
-    .rank-badge.b { background: var(--rank-b); }
-    .rank-badge.c { background: var(--rank-c); color: #1a1a2e; }
-    .rank-badge.d { background: var(--rank-d); color: #1a1a2e; }
-    .rank-badge.e { background: var(--rank-e); }
-
-    .rank-icon {
-      font-size: 0.85rem;
-      transition: transform 0.35s ease;
-      flex-shrink: 0;
-    }
-
-    .rank-btn.active .rank-icon { transform: rotate(180deg); }
-
-    .rank-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-    }
-
-    .rank-body.open { max-height: 9999px; }
-
-    .rank-body-inner {
-      padding: 1rem 1.4rem 1.4rem;
-      border-top: 1px solid rgba(59,76,202,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    /* ── DUNGEON SUB-ACCORDION ── */
-    .loc-item {
-      border: 1px solid rgba(59,76,202,0.12);
-      border-radius: 10px;
-      overflow: hidden;
-      background: #f8f9ff;
-    }
-
-    .loc-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.75rem 1.1rem;
-      background: rgba(59,76,202,0.05);
-      border: none;
-      cursor: pointer;
-      font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--poke-blue);
-      letter-spacing: 0.08em;
-      transition: background 0.2s;
-      text-align: left;
-    }
-
-    .loc-btn:hover { background: rgba(59,76,202,0.1); }
-    .loc-btn.active { background: rgba(59,76,202,0.14); }
-
-    .loc-icon {
-      font-size: 0.75rem;
-      transition: transform 0.3s ease;
-      flex-shrink: 0;
-      color: var(--poke-blue);
-    }
-
-    .loc-btn.active .loc-icon { transform: rotate(180deg); }
-
-    .loc-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-    }
-
-    .loc-body.open { max-height: 9999px; }
-
-    .loc-body-inner {
-      padding: 0.65rem 1.1rem 1.1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-      border-top: 1px solid rgba(59,76,202,0.1);
-    }
-
-    /* ── DUNGEON DESCRIPTION (italic, appears under name once expanded) ── */
-    .loc-description {
-      font-family: 'Nunito', sans-serif;
-      font-style: italic;
-      font-size: 0.82rem;
-      line-height: 1.55;
-      color: var(--poke-gray);
-      padding-top: 0.15rem;
-      border-bottom: 1px dashed rgba(59,76,202,0.15);
-      padding-bottom: 0.6rem;
-    }
-
-    /* ── JOB CARD ── */
-    .job-card {
-      background: #fff;
-      border: 1px solid rgba(59,76,202,0.1);
-      border-radius: 10px;
-      padding: 0.9rem 1.1rem;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0.3rem 1rem;
-    }
-
-    .job-request {
-      font-family: 'Cinzel', serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--poke-dark);
-      grid-column: 1 / -1;
-      letter-spacing: 0.04em;
-    }
-
-    .job-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      grid-column: 1;
-    }
-
-    .job-meta span {
-      font-size: 0.82rem;
-      color: var(--poke-gray);
-    }
-
-    .job-meta span b {
-      color: var(--poke-dark);
-      font-weight: 700;
-    }
-
-    .pokemon-list {
-      list-style: none;
-      margin-top: 0.35rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .pokemon-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    .pokemon-row-name {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--poke-dark);
-      margin-right: 0.15rem;
-    }
-
-    .type-pill {
-      display: inline-flex;
-      align-items: center;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      padding: 2px 9px;
-      border-radius: 20px;
-      line-height: 1.6;
-    }
-
-    .job-reward {
-      grid-column: 1 / -1;
-      margin-top: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--poke-blue);
-      background: rgba(59,76,202,0.07);
-      border-radius: 20px;
-      padding: 3px 10px;
-      width: fit-content;
-    }
-
-    /* ── BOARD DIVIDER ── */
-    .board-divider {
-      height: 4px;
-      background: linear-gradient(90deg, var(--poke-blue), var(--poke-yellow), var(--poke-blue));
-      border-radius: 2px;
-      margin: 2.5rem 0;
-      opacity: 0.3;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--poke-red-dk);
-      border-top: 4px solid var(--poke-yellow);
-      text-align: center;
-      padding: 2rem 1.5rem;
-    }
-
-    footer p {
-      font-size: 0.72rem;
-      color: rgba(248,248,248,0.65);
-      line-height: 1.7;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    footer strong { color: var(--poke-yellow); }
-
-    @media (max-width: 560px) {
-      .job-card { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#080d1c">
+<title>Snowlotus Server Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7;--frost:#bfe8ff;--lotus:#ff8fc0;
+--c-rec:#6fd6f5;--c-evt:#ff8fc0;--c-dgn:#b69cff;--c-link:#f4cf6b;
+color-scheme:dark;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7}}
+:root[data-theme="dark"]{--bg:#080d1c;--bg2:#16224a;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px);overscroll-behavior-y:none}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;background:transparent;color:var(--text);font-family:'Cinzel',Georgia,serif;display:flex;justify-content:center;padding:24px 16px;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,var(--bg2) 0,var(--bg) 65%)}
+.snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.snow i{position:absolute;top:-10px;border-radius:50%;background:#fff;opacity:.7;animation:fall linear infinite}
+@keyframes fall{to{transform:translate3d(var(--dx),105vh,0)}}
+@media (prefers-reduced-motion:reduce){.snow{display:none}}
+.wrap{position:relative;z-index:1;width:100%;max-width:760px}
+.lotus{display:block;margin:0 auto;filter:drop-shadow(0 0 10px rgba(255,143,192,.7))}
+h1{font-family:'Cinzel Decorative','Cinzel',Georgia,serif;text-align:center;font-size:clamp(1.9rem,7.5vw,3.4rem);margin:6px 0 4px;color:var(--frost);letter-spacing:.06em;text-shadow:0 0 18px rgba(111,214,245,.7),0 2px 0 #000}
+h1 em{font-style:normal;color:var(--lotus);text-shadow:0 0 18px rgba(255,143,192,.7),0 2px 0 #000}
+.sub{text-align:center;color:var(--dim);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:22px}
+.panel{background:linear-gradient(180deg,var(--panel),#0b1229);border:2px solid var(--frost);border-radius:14px;box-shadow:0 0 0 4px #000,0 0 0 6px var(--lotus),0 0 34px rgba(111,214,245,.25);padding:22px 14px}
+.day{text-align:center;font-size:1.05rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase}
+.daynum{text-align:center;font-weight:800;font-size:clamp(4rem,18vw,7.5rem);line-height:1;color:var(--frost);text-shadow:0 0 26px rgba(111,214,245,.8);margin:4px 0 16px}
+.clock{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{background:var(--cell);border:1px solid var(--frost);border-radius:8px;padding:10px 4px;text-align:center}
+.cell b{display:block;font-size:clamp(1.6rem,7vw,2.8rem);font-variant-numeric:tabular-nums}
+.cell span{font-size:.65rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase}
+.next{text-align:center;color:var(--dim);font-size:.75rem;margin-top:14px;letter-spacing:.15em}
+.sec{margin-top:30px}
+.sec.rec{--c:var(--c-rec)}.sec.evt{--c:var(--c-evt)}.sec.dgn{--c:var(--c-dgn)}.sec.lnk{--c:var(--c-link)}
+h2{font-family:'Cinzel Decorative','Cinzel',Georgia,serif;color:var(--c);text-align:center;margin:0 0 4px;font-size:1.3rem;letter-spacing:.1em;text-shadow:0 0 14px var(--c)}
+.hint{text-align:center;color:var(--dim);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.rule{height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);margin:0 auto 14px;max-width:320px}
+.card{background:var(--panel);border:1px solid var(--c);border-left:5px solid var(--c);border-radius:8px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 0 12px -6px var(--c)}
+.card .n,.dg .n{font-weight:800;color:var(--c)}
+.card .d,.dg .d{font-size:.7rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.card .t{font-variant-numeric:tabular-nums;font-size:1.1rem}
+.card.done{opacity:.55}
+a.card{text-decoration:none;color:var(--c);font-weight:800;letter-spacing:.05em;display:block}
+a.card:hover{box-shadow:0 0 18px -2px var(--c);color:var(--text)}
+a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;letter-spacing:.1em;margin-top:2px}
+.empty{text-align:center;color:var(--dim)}
+/* dungeons (expandable) */
+.dg{background:var(--panel);border:1px solid var(--c);border-left:5px solid var(--c);border-radius:8px;margin-bottom:10px;box-shadow:0 0 12px -6px var(--c)}
+.dg[open]{box-shadow:0 0 18px -4px var(--c)}
+.dg summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dg summary::-webkit-details-marker{display:none}
+.dg summary:focus-visible{outline:2px solid var(--c);outline-offset:2px;border-radius:6px}
+.dg .st{display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums;font-size:1rem}
+.dg .st::after{content:"";width:8px;height:8px;border-right:2px solid var(--c);border-bottom:2px solid var(--c);transform:rotate(45deg);transition:transform .2s;margin-bottom:3px}
+.dg[open] .st::after{transform:rotate(-135deg);margin-bottom:-3px}
+.dg .body{padding:12px 14px 14px;border-top:1px dashed var(--c)}
+.dg p{margin:0 0 12px;font-size:.85rem;line-height:1.55;font-weight:600}
+.dg dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:.85rem}
+.dg dt{color:var(--dim);letter-spacing:.12em;text-transform:uppercase;font-size:.65rem;align-self:center}
+.dg dd{margin:0;font-weight:600}
+</style>
 </head>
 <body>
+<div class="bg"></div>
+<div class="snow" id="snow"></div>
+<div class="wrap">
+  <svg class="lotus" width="72" height="44" viewBox="0 0 64 40" aria-hidden="true">
+    <g fill="#ff8fc0" stroke="#ffd3e6" stroke-width="1">
+      <path id="p" d="M32 3C41 14 41 28 32 37 23 28 23 14 32 3Z"/>
+      <use href="#p" transform="rotate(-32 32 37)" fill="#ff6fae"/>
+      <use href="#p" transform="rotate(32 32 37)" fill="#ff6fae"/>
+      <use href="#p" transform="rotate(-62 32 37)" fill="#d9559a"/>
+      <use href="#p" transform="rotate(62 32 37)" fill="#d9559a"/>
+    </g>
+  </svg>
+  <h1><em>Snowlotus</em> Server Time</h1>
+  <div class="sub">How long since the server started</div>
 
-  <!-- Navigaation Script -->
-  <script src="/js/nav.js" defer></script>
-
-  <!-- Page Content -->
-  <div class="page-wrap">
-
-    <!-- ══ BULLETIN BOARD ══ -->
-    <h1 class="board-title">Bulletin Board</h1>
-
-    <div class="rank-accordion" id="rankAccordion">
-      <!-- Rendered from the DUNGEONS array by renderBoard() below -->
+  <div class="panel">
+    <div class="day">Current Day</div>
+    <div class="daynum" id="day">--</div>
+    <div class="clock">
+      <div class="cell"><b id="h">--</b><span>Hours</span></div>
+      <div class="cell"><b id="m">--</b><span>Minutes</span></div>
+      <div class="cell"><b id="s">--</b><span>Seconds</span></div>
     </div>
+    <div class="next" id="next"></div>
+  </div>
 
-    <div class="board-divider"></div>
+  <div class="sec rec">
+    <h2>Recurring Events</h2><div class="hint">Repeats on a cycle</div><div class="rule"></div>
+    <div id="recurring"></div>
+  </div>
 
-  </div><!-- /.page-wrap -->
+  <div class="sec evt">
+    <h2>Server Events</h2><div class="hint">One-time milestones</div><div class="rule"></div>
+    <div id="events"></div>
+  </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>
-      <strong>Pokémon © Nintendo / Game Freak.</strong><br />
-      I do not own any Pokémon content; all trademarks and copyrights belong to their respective owners.
-      This site is fan-made and not affiliated with Nintendo, Game Freak, or The Pokémon Company.
-    </p>
-  </footer>
+  <div class="sec dgn">
+    <h2>Dungeons</h2><div class="hint">Tap to expand</div><div class="rule"></div>
+    <div id="dungeons"></div>
+  </div>
 
-  <script>
-    /* ══════════════════════════════════════════════════════════════
-       DUNGEON DATA
-       Add new ranks or dungeons here — the board below renders itself
-       from this array, so no HTML editing is required for new jobs.
+  <div class="sec lnk">
+    <h2>Helpful Links</h2><div class="hint">Guides &amp; tools</div><div class="rule"></div>
+    <div id="links"></div>
+  </div>
+</div>
 
-       Each rank has:
-         rank        — display label, e.g. "B"
-         badgeClass  — one of 'b' | 'c' | 'd' | 'e' (controls badge color)
-         dungeons    — array of dungeon objects, each with:
-           name        — dungeon location name
-           description — italic flavor text shown once expanded
-           level       — recommended level (number or string)
-           floors      — floor count, e.g. "10F"
-           pokemon     — array of { name, type } objects
-           reward      — { pokedollars, rp } for the standard job
-           outlaw      — optional { difficulty, note, pokedollars, rp }
-                         omit this field entirely if there's no outlaw job
-    ═══════════════════════════════════════════════════════════════ */
-    const DUNGEONS = [
-      {
-        rank: 'B',
-        badgeClass: 'b',
-        dungeons: [
-          {
-            name: 'Sunlight Canyon',
-            description: 'A hot, vast canyon, carved over years of erosion. The river that once flowed through here has dried up.',
-            level: 18,
-            floors: '10F',
-            pokemon: [
-              { name: 'Sandshrew', type: 'Ground' },
-              { name: 'Hippopotas', type: 'Ground' },
-              { name: 'Cacnea', type: 'Grass' },
-              { name: 'Natu', type: 'Psychic/Flying' },
-              { name: 'Baltoy', type: 'Ground/Psychic' },
-              { name: 'Cubone', type: 'Ground' },
-            ],
-            reward: { pokedollars: 2250, rp: 225 },
-            outlaw: { difficulty: '+5', note: 'Random Type: May affect Personal Difficulty', pokedollars: 2150, rp: 125 },
-          },
-        ],
-      {
-        rank: 'B',
-        badgeClass: 'b',
-        dungeons: [
-          {
-            name: 'Booming Thicket',
-            description: 'A dense, flowering woodland alive with buzzing wings and the sweet smell of pollen drifting between the branches.',
-            level: 18,
-            floors: '10F',
-            pokemon: [
-              { name: 'Butterfree', type: 'Bug/Flying' },
-              { name: 'Beedrill', type: 'Bug/Poison' },
-              { name: 'Sudowoodo', type: 'Rock' },
-              { name: 'Gloom', type: 'Grass/Poison' },
-              { name: 'Combee', type: 'Bug/Flying' },
-              { name: 'Roselia', type: 'Grass/Poison' },
-            ],
-            reward: { pokedollars: 1850, rp: 185 },
-            outlaw: { difficulty: '+5', note: 'Random Type: May affect Personal Difficulty', pokedollars: 1750, rp: 90 },
-          },
-          {
-            name: 'Cinder Volcano',
-            description: 'Lower slopes of the volcano, where fire-types nest among cooled obsidian flows and drifting embers.',
-            level: 15,
-            floors: '11F',
-            pokemon: [
-              { name: 'Slugma', type: 'Fire' },
-              { name: 'Magmar', type: 'Fire' },
-              { name: 'Graveller', type: 'Rock/Ground' },
-              { name: 'Numel', type: 'Fire/Ground' },
-              { name: 'Vulpix', type: 'Fire' },
-              { name: 'Growlithe', type: 'Fire' },
-            ],
-            reward: { pokedollars: 1650, rp: 165 },
-            outlaw: { difficulty: '+5', note: 'Random Type: May affect Personal Difficulty', pokedollars: 1500, rp: 70 },
-          },
-        ],
-      },
-      {
-        rank: 'C',
-        badgeClass: 'c',
-        dungeons: [
-          {
-            name: 'Bolt Mountain',
-            description: 'A jagged range charged with static electricity; storms roll through the peaks without warning.',
-            level: 11,
-            floors: '10F',
-            pokemon: [
-              { name: 'Electirke', type: 'Electric' },
-              { name: 'Plusle', type: 'Electric' },
-              { name: 'Minun', type: 'Electric' },
-              { name: 'Shinx', type: 'Electric' },
-              { name: 'Geodude', type: 'Rock/Ground' },
-              { name: 'Aron', type: 'Steel/Rock' },
-            ],
-            reward: { pokedollars: 1450, rp: 145 },
-            outlaw: { difficulty: '+5', note: 'Random Type: May affect Personal Difficulty', pokedollars: 1250, rp: 60 },
-          },
-          {
-            name: 'Sharpgrass Savannah',
-            description: 'Wide golden grassland where tall grass cuts like blades and small Pokémon dart between the brush.',
-            level: 10,
-            floors: '9F',
-            pokemon: [
-              { name: 'Bidoof', type: 'Normal' },
-              { name: 'Rattata', type: 'Normal' },
-              { name: 'Pidgey', type: 'Normal/Flying' },
-              { name: 'Hoothoot', type: 'Normal/Flying' },
-              { name: 'Poochyena', type: 'Dark' },
-            ],
-            reward: { pokedollars: 1250, rp: 125 },
-            outlaw: { difficulty: '+5', note: 'Random Type: May affect Personal Difficulty', pokedollars: 1000, rp: 50 },
-          },
-        ],
-      },
-      {
-        rank: 'D',
-        badgeClass: 'd',
-        dungeons: [
-          {
-            name: 'Moonlight Grove',
-            description: 'A quiet forest bathed in pale light after dusk, favored by shy Pokémon that rarely stray far from the treeline.',
-            level: 6,
-            floors: '6F',
-            pokemon: [
-              { name: 'Igglybuff', type: 'Normal/Fairy' },
-              { name: 'Cleffa', type: 'Fairy' },
-              { name: 'Bellsprout', type: 'Grass/Poison' },
-              { name: 'Paras', type: 'Bug/Grass' },
-            ],
-            reward: { pokedollars: 850, rp: 85 },
-          },
-        ],
-      },
-      {
-        rank: 'E',
-        badgeClass: 'e',
-        dungeons: [
-          {
-            name: 'Verdant Plains',
-            description: 'Gentle rolling fields just outside of Ristal Town.',
-            level: 4,
-            floors: '3F',
-            pokemon: [
-              { name: 'Rattata', type: 'Normal' },
-              { name: 'Ledyba', type: 'Bug/Flying' },
-              { name: 'Wurmple', type: 'Bug' },
-            ],
-            reward: { pokedollars: 200, rp: 20 },
-          },
-        ],
-      },
-    ];
+<script>
+// ===== RECURRING EVENTS: name, day = first occurrence, every = repeat interval in days =====
+const RECURRING = [
+  { name: "Server Tournament begins", day: 22, every: 7 },
+  { name: "Weekly Reset", day: 24, every: 7 },
+  { name: "Grand Treasure Hunt resets", day: 22, every: 7 },
+  { name: "Pilgrimage Pass resets", day: 15, every: 14 },
+  { name: "Void Rift event", day: 37, every: 14 },
+  { name: "Chaos Invasion event", day: 30, every: 14 }
+];
 
-    /* ── Preset type colors (standard Pokémon type palette) ──
-       Text color is not hardcoded per type — it's computed from each
-       background's relative luminance so it stays readable. */
-    const TYPE_COLORS = {
-      Normal:   '#A8A77A',
-      Fire:     '#EE8130',
-      Water:    '#6390F0',
-      Electric: '#F7D02C',
-      Grass:    '#7AC74C',
-      Ice:      '#96D9D6',
-      Fighting: '#C22E28',
-      Poison:   '#A33EA1',
-      Ground:   '#E2BF65',
-      Flying:   '#A98FF3',
-      Psychic:  '#F95587',
-      Bug:      '#A6B91A',
-      Rock:     '#B6A136',
-      Ghost:    '#735797',
-      Dragon:   '#6F35FC',
-      Dark:     '#705746',
-      Steel:    '#B7B7CE',
-      Fairy:    '#D685AD',
-    };
-    const DEFAULT_TYPE_COLOR = '#8A8A99';
+// ===== SERVER EVENTS (one-time): name + day number =====
+const EVENTS = [
+  { name: "Aquorigin Shrine dungeon opens", day: 24 },
+  { name: "Whaleback Island arrives", day: 26 },
+  { name: "Lucky Draw event ends", day: 29 },
+  { name: "Hellhold dungeon opens", day: 33 },
+  { name: "Wonder Flavors event ends", day: 36 },
+  { name: "Stellar Plume gacha ends", day: 36 },
+  { name: "End of season 1 (approximate)", day: 45 }
+];
 
-    function typeColor(type) {
-      return TYPE_COLORS[type] || DEFAULT_TYPE_COLOR;
-    }
+// ===== DUNGEONS (tap to expand) =====
+// name  = dungeon name
+// day   = (optional) day it opens; shows a countdown, then "Open"
+// desc  = (optional) short description paragraph
+// info  = (optional) list of ["Label", "Value"] rows
+const DUNGEONS = [
+  { name: "Aquorigin Shrine", day: 24,
+    desc: "Add a description of this dungeon here.",
+    info: [["Recommended Power", "TBD"], ["Entries", "TBD"], ["Rewards", "TBD"]] },
+  { name: "Hellhold", day: 33,
+    desc: "Add a description of this dungeon here.",
+    info: [["Recommended Power", "TBD"], ["Entries", "TBD"], ["Rewards", "TBD"]] }
+];
 
-    /* Relative luminance (WCAG) → pick light or dark text for contrast */
-    function contrastTextColor(hex) {
-      const c = hex.replace('#', '');
-      const r = parseInt(c.substring(0, 2), 16) / 255;
-      const g = parseInt(c.substring(2, 4), 16) / 255;
-      const b = parseInt(c.substring(4, 6), 16) / 255;
-      const lin = (v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
-      const luminance = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-      return luminance > 0.45 ? '#1a1a2e' : '#F8F8F8';
-    }
+// ===== LINKS: name + url (+ optional note) =====
+const LINKS = [
+  { name: "Generic Game Calendar", url: "https://qymaple.github.io/sxs-research-global/maple-sxs-timeline.html", note: "Raw Calendar Data" },
+  { name: "Guides and Calculators", url: "https://eog.gg/games/sword-x-staff/", note: "Tons of Guides and Builds" },
+  { name: "Datamined Information", url: "https://purrwikimania.vercel.app/index.html", note: "Info Datamined directly from the code" }
+];
+// ======================================================
 
-    /* ── Helpers ── */
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
+const TZ = "America/New_York";   // 9:00 AM Eastern (EST/EDT as observed)
+const ANCHOR_DAY = 24;
+const ANCHOR = [2026, 10, 12];   // Day 24 starts Mon Oct 12, 2026 9:00 AM Eastern
 
-    function formatReward(reward) {
-      return `${reward.pokedollars.toLocaleString()}P per participant &nbsp;·&nbsp; ${reward.rp} RP`;
-    }
+function tzOffset(ms){
+  const p = {};
+  new Intl.DateTimeFormat("en-US",{timeZone:TZ,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"})
+    .formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);
+  return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second) - Math.floor(ms/1000)*1000;
+}
+function nineAM(y,mo,d){
+  const guess = Date.UTC(y,mo-1,d,9,0,0);
+  let t = guess - tzOffset(guess);
+  t = guess - tzOffset(t);
+  return t;
+}
+function dayStart(n){ return nineAM(ANCHOR[0],ANCHOR[1],ANCHOR[2] + (n - ANCHOR_DAY)); }
+function currentDay(now){
+  let n = ANCHOR_DAY + Math.floor((now - dayStart(ANCHOR_DAY))/86400000);
+  while (dayStart(n+1) <= now) n++;
+  while (dayStart(n) > now) n--;
+  return n;
+}
+const pad = x => String(x).padStart(2,"0");
+function split(ms){
+  let s = Math.max(0, Math.floor(ms/1000));
+  const d = Math.floor(s/86400); s%=86400;
+  const h = Math.floor(s/3600); s%=3600;
+  return { d, h, m: Math.floor(s/60), s: s%60 };
+}
+const esc = v => String(v).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = ms => { const r = split(ms); return r.d+"d "+pad(r.h)+"h "+pad(r.m)+"m "+pad(r.s)+"s"; };
+const card = (name, label, txt, done) =>
+  '<div class="card'+(done?' done':'')+'"><div><div class="n">'+esc(name)+'</div><div class="d">'+label+'</div></div><div class="t">'+txt+'</div></div>';
 
-    function typePillHtml(type) {
-      const bg = typeColor(type);
-      const fg = contrastTextColor(bg);
-      return `<span class="type-pill" style="background:${bg};color:${fg};">${escapeHtml(type)}</span>`;
-    }
+const el = id => document.getElementById(id);
+function nextOccurrence(e, cur, now){
+  const k = e.day >= cur ? 0 : Math.ceil((cur - e.day)/e.every);
+  let n = e.day + k*e.every;
+  if (dayStart(n) <= now) n += e.every;
+  return n;
+}
+function tick(){
+  const now = Date.now();
+  const n = currentDay(now);
+  const t = split(now - dayStart(n));
+  el("day").textContent = n;
+  el("h").textContent = pad(t.h);
+  el("m").textContent = pad(t.m);
+  el("s").textContent = pad(t.s);
+  const nx = split(dayStart(n+1) - now);
+  el("next").textContent = "Day "+(n+1)+" dawns in "+pad(nx.h)+":"+pad(nx.m)+":"+pad(nx.s);
 
-    function pokemonListHtml(pokemon) {
-      const rows = pokemon.map(p => {
-        const types = p.type.split('/').map(t => t.trim());
-        return `<li class="pokemon-row">
-          <span class="pokemon-row-name">${escapeHtml(p.name)}</span>
-          ${types.map(typePillHtml).join('')}
-        </li>`;
-      }).join('');
-      return `<ul class="pokemon-list">${rows}</ul>`;
-    }
+  const rec = RECURRING.map(e=>({e, d:nextOccurrence(e,n,now)})).sort((a,b)=>a.d-b.d);
+  el("recurring").innerHTML = rec.length ? rec.map(x=>
+    card(x.e.name, "Next: Day "+x.d+" &middot; every "+x.e.every+" days", fmt(dayStart(x.d)-now), false)).join("")
+    : '<div class="empty">No recurring events.</div>';
 
-    function dungeonJobCardHtml(dungeon) {
-      return `
-        <div class="job-card">
-          <div class="job-request">Recommended Level: ${escapeHtml(dungeon.level)}</div>
-          <div class="job-meta">
-            <span><b>Pokemon:</b> ${pokemonListHtml(dungeon.pokemon)}</span>
-            <span><b>Floors: ${escapeHtml(dungeon.floors)}</b></span>
-          </div>
-          <div class="job-reward">${formatReward(dungeon.reward)}</div>
-        </div>`;
-    }
+  const list = [...EVENTS].sort((a,b)=>a.day-b.day);
+  el("events").innerHTML = list.length ? list.map(e=>{
+    const diff = dayStart(e.day) - now;
+    return card(e.name, "Day "+e.day, diff<=0 ? "Underway!" : fmt(diff), diff<=0);
+  }).join("") : '<div class="empty">No events scheduled.</div>';
 
-    function outlawCardHtml(outlaw) {
-      if (!outlaw) return '';
-      return `
-        <div class="job-card">
-          <div class="job-request">OUTLAW</div>
-          <div class="job-meta">
-            <span><b>${escapeHtml(outlaw.difficulty)} Diffculty</b><br>
-            <b>${escapeHtml(outlaw.note)}</b></span>
-          </div>
-          <div class="job-reward">${formatReward({ pokedollars: outlaw.pokedollars, rp: outlaw.rp })}</div>
-        </div>`;
-    }
+  // dungeon countdowns (updated in place so expanded cards stay open)
+  document.querySelectorAll("#dungeons [data-day]").forEach(s=>{
+    const diff = dayStart(+s.dataset.day) - now;
+    s.textContent = diff <= 0 ? "Open" : fmt(diff);
+  });
+}
 
-    function dungeonItemHtml(dungeon) {
-      const descHtml = dungeon.description
-        ? `<div class="loc-description">${escapeHtml(dungeon.description)}</div>`
-        : '';
-      return `
-        <div class="loc-item">
-          <button class="loc-btn" onclick="toggleLoc(this)" aria-expanded="false">
-            ${escapeHtml(dungeon.name)}
-            <span class="loc-icon">▼</span>
-          </button>
-          <div class="loc-body">
-            <div class="loc-body-inner">
-              ${descHtml}
-              ${dungeonJobCardHtml(dungeon)}
-              ${outlawCardHtml(dungeon.outlaw)}
-            </div>
-          </div>
-        </div>`;
-    }
+// dungeons render once so open/closed state isn't reset every second
+el("dungeons").innerHTML = DUNGEONS.map(d=>{
+  const hasDay = d.day !== undefined && d.day !== null;
+  const rows = (d.info||[]).map(r=>'<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>').join("");
+  return '<details class="dg"><summary><div><div class="n">'+esc(d.name)+'</div>'+
+    (hasDay?'<div class="d">Opens Day '+esc(d.day)+'</div>':'')+'</div>'+
+    '<div class="st">'+(hasDay?'<span data-day="'+esc(d.day)+'"></span>':'')+'</div></summary>'+
+    '<div class="body">'+(d.desc?'<p>'+esc(d.desc)+'</p>':'')+(rows?'<dl>'+rows+'</dl>':'')+'</div></details>';
+}).join("") || '<div class="empty">No dungeons listed.</div>';
 
-    function rankItemHtml(rankGroup) {
-      return `
-        <div class="rank-item">
-          <button class="rank-btn" onclick="toggleRank(this)" aria-expanded="false">
-            <span style="display:flex;align-items:center;gap:0.7rem;">
-              <span class="rank-badge ${rankGroup.badgeClass}">${escapeHtml(rankGroup.rank)}</span>
-              ${escapeHtml(rankGroup.rank)} Rank Dungeons
-            </span>
-            <span class="rank-icon">▼</span>
-          </button>
-          <div class="rank-body">
-            <div class="rank-body-inner">
-              ${rankGroup.dungeons.map(dungeonItemHtml).join('')}
-            </div>
-          </div>
-        </div>`;
-    }
+el("links").innerHTML = LINKS.filter(l=>/^https?:\/\//i.test(l.url)).map(l=>
+  '<a class="card" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">&#10048; '+esc(l.name)+(l.note?'<small>'+esc(l.note)+'</small>':'')+'</a>'
+).join("") || '<div class="empty">No links yet.</div>';
 
-    function renderBoard() {
-      const container = document.getElementById('rankAccordion');
-      container.innerHTML = DUNGEONS.map(rankItemHtml).join('');
-    }
-
-    renderBoard();
-
-    /* ── Rank accordion (only one open at a time) ── */
-    function toggleRank(btn) {
-      const body = btn.nextElementSibling;
-      const isOpen = body.classList.contains('open');
-      document.querySelectorAll('.rank-body').forEach(b => b.classList.remove('open'));
-      document.querySelectorAll('.rank-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-expanded','false'); });
-      if (!isOpen) {
-        body.classList.add('open');
-        btn.classList.add('active');
-        btn.setAttribute('aria-expanded','true');
-      }
-    }
-
-    /* ── Dungeon sub-accordion (independent, multiple can be open) ── */
-    function toggleLoc(btn) {
-      const body = btn.nextElementSibling;
-      const isOpen = body.classList.contains('open');
-      body.classList.toggle('open', !isOpen);
-      btn.classList.toggle('active', !isOpen);
-      btn.setAttribute('aria-expanded', String(!isOpen));
-    }
-
-    /* ── Dropdown nav ── */
-    document.querySelectorAll('.nav-links > li').forEach(li => {
-      if (!li.querySelector('.dropdown-menu')) return;
-      li.querySelector('span').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = li.classList.contains('open');
-        document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
-        if (!isOpen) li.classList.add('open');
-      });
-    });
-
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.nav-links > li').forEach(x => x.classList.remove('open'));
-    });
-
-    /* ── Hamburger ── */
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = mobileMenu.classList.contains('open');
-      mobileMenu.classList.toggle('open', !isOpen);
-      hamburger.classList.toggle('open', !isOpen);
-      hamburger.setAttribute('aria-expanded', String(!isOpen));
-      mobileMenu.setAttribute('aria-hidden', String(isOpen));
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    [['mobCharBtn','mobCharSub'],['mobGameBtn','mobGameSub']].forEach(([btnId, subId]) => {
-      document.getElementById(btnId).addEventListener('click', function() {
-        const sub = document.getElementById(subId);
-        sub.classList.toggle('open', !sub.classList.contains('open'));
-        this.classList.toggle('open', !this.classList.contains('open'));
-      });
-    });
-  </script>
+(function(){ // snowfall
+  const box = el("snow");
+  for (let i=0;i<36;i++){
+    const f = document.createElement("i"), s = 2+Math.random()*4;
+    f.style.cssText = "left:"+Math.random()*100+"%;width:"+s+"px;height:"+s+"px;animation-duration:"+(8+Math.random()*10)+"s;animation-delay:-"+Math.random()*14+"s;--dx:"+(Math.random()*80-40)+"px;opacity:"+(.35+Math.random()*.5);
+    box.appendChild(f);
+  }
+})();
+tick(); setInterval(tick, 1000);
+</script>
 </body>
 </html>
