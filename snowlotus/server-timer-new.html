@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#080d1c">
-<title>Snowlotus/Mapledawn Season Time</title>
+<title>Season Timer</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#080d1c;--bg2:#1b2c5c;--bg3:#41190f;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7;--frost:#bfe8ff;--ember:#ff9d4d;
@@ -26,18 +26,27 @@ body{margin:0;min-height:100vh;min-height:100dvh;background:transparent;color:va
 @media (prefers-reduced-motion:reduce){.snow{display:none}}
 .wrap{position:relative;z-index:1;width:100%;max-width:760px}
 
-/* title lockup */
+/* title lockup: 4 realms */
 h1{margin:4px 0 6px;text-align:center;font-weight:700}
-.realms{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
-.realm{display:flex;flex-direction:column;align-items:center;gap:6px}
-.realm svg{display:block}
-.realm.snowr svg{filter:drop-shadow(0 0 8px rgba(111,214,245,.8))}
-.realm.maple svg{filter:drop-shadow(0 0 8px rgba(255,140,60,.8))}
-.nm{display:block;font-family:'Cinzel Decorative','Cinzel',Georgia,serif;font-size:clamp(1.05rem,4.6vw,2.2rem);letter-spacing:.04em;line-height:1.1;-webkit-background-clip:text;background-clip:text;color:transparent}
+.realms{display:grid;grid-template-columns:repeat(4,1fr);align-items:start;gap:10px}
+.realm{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 4px}
+.realm+.realm::before{content:"";position:absolute;left:-5px;top:2px;bottom:2px;width:2px;background:linear-gradient(180deg,transparent,rgba(191,232,255,.7) 30%,rgba(255,157,77,.7) 70%,transparent)}
+.ic{height:36px;display:flex;align-items:center;justify-content:center}
+.ic svg{display:block}
+.snowr .ic svg{filter:drop-shadow(0 0 8px rgba(111,214,245,.8))}
+.maple .ic svg{filter:drop-shadow(0 0 8px rgba(255,140,60,.8))}
+.sunr .ic svg{filter:drop-shadow(0 0 8px rgba(249,226,125,.8))}
+.flame .ic svg{filter:drop-shadow(0 0 8px rgba(255,90,54,.85))}
+.nm{display:block;text-align:center;font-family:'Cinzel Decorative','Cinzel',Georgia,serif;font-size:clamp(.9rem,3.5vw,1.4rem);letter-spacing:.03em;line-height:1.15;-webkit-background-clip:text;background-clip:text;color:transparent}
 .snowr .nm{background-image:linear-gradient(180deg,#ffffff,#9fdcff);filter:drop-shadow(0 0 10px rgba(111,214,245,.5))}
 .maple .nm{background-image:linear-gradient(180deg,#ffe29a,#ff9d4d 55%,#e0522d);filter:drop-shadow(0 0 10px rgba(255,140,60,.5))}
-.vr{width:2px;align-self:stretch;min-height:64px;background:linear-gradient(180deg,transparent,#bfe8ff 25%,#ff9d4d 75%,transparent)}
-.ttl{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px;font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:clamp(.9rem,3.4vw,1.25rem);letter-spacing:.5em;text-transform:uppercase;color:var(--text)}
+.sunr .nm{background-image:linear-gradient(180deg,#fffbe0,#f9e27d 50%,#8fd3a8);filter:drop-shadow(0 0 10px rgba(249,226,125,.45))}
+.flame .nm{background-image:linear-gradient(180deg,#ff9b73,#f0372d 55%,#a3101f);filter:drop-shadow(0 0 10px rgba(255,90,54,.5))}
+@media (max-width:560px){
+  .realms{grid-template-columns:1fr 1fr;row-gap:18px}
+  .realm:nth-child(3)::before{display:none}
+}
+.ttl{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:clamp(.85rem,3.2vw,1.2rem);letter-spacing:.4em;text-transform:uppercase;color:var(--text)}
 .ttl::before,.ttl::after{content:"";flex:1;max-width:90px;height:1px}
 .ttl::before{background:linear-gradient(90deg,transparent,#bfe8ff)}
 .ttl::after{background:linear-gradient(90deg,#ff9d4d,transparent)}
@@ -89,27 +98,53 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 <div class="wrap">
   <h1>
     <span class="realms">
+
       <span class="realm snowr">
-        <svg width="54" height="33" viewBox="0 0 64 40" aria-hidden="true">
-          <g fill="#cfeeff" stroke="#ffffff" stroke-width="1">
-            <path id="p" d="M32 3C41 14 41 28 32 37 23 28 23 14 32 3Z"/>
-            <use href="#p" transform="rotate(-32 32 37)" fill="#8fd0f2"/>
-            <use href="#p" transform="rotate(32 32 37)" fill="#8fd0f2"/>
-            <use href="#p" transform="rotate(-62 32 37)" fill="#5aa9e0"/>
-            <use href="#p" transform="rotate(62 32 37)" fill="#5aa9e0"/>
-          </g>
-        </svg>
+        <span class="ic">
+          <svg width="54" height="33" viewBox="0 0 64 40" aria-hidden="true">
+            <g fill="#cfeeff" stroke="#ffffff" stroke-width="1">
+              <path id="p" d="M32 3C41 14 41 28 32 37 23 28 23 14 32 3Z"/>
+              <use href="#p" transform="rotate(-32 32 37)" fill="#8fd0f2"/>
+              <use href="#p" transform="rotate(32 32 37)" fill="#8fd0f2"/>
+              <use href="#p" transform="rotate(-62 32 37)" fill="#5aa9e0"/>
+              <use href="#p" transform="rotate(62 32 37)" fill="#5aa9e0"/>
+            </g>
+          </svg>
+        </span>
         <span class="nm">Snowlotus</span>
       </span>
-      <span class="vr"></span>
+
       <span class="realm maple">
-        <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 1L14.2 6 18 4.5 17 10.5 22 9.5 19 14 21 15.5 13 17 13 23 11 23 11 17 3 15.5 5 14 2 9.5 7 10.5 6 4.5 9.8 6Z" fill="#ff9d4d" stroke="#ffd2a1" stroke-width=".8" stroke-linejoin="round"/>
-        </svg>
+        <span class="ic">
+          <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 1L14.2 6 18 4.5 17 10.5 22 9.5 19 14 21 15.5 13 17 13 23 11 23 11 17 3 15.5 5 14 2 9.5 7 10.5 6 4.5 9.8 6Z" fill="#ff9d4d" stroke="#ffd2a1" stroke-width=".8" stroke-linejoin="round"/>
+          </svg>
+        </span>
         <span class="nm">Mapledawn</span>
       </span>
+
+      <span class="realm sunr">
+        <span class="ic">
+          <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.6" fill="#f9e27d" stroke="#fffbe0" stroke-width=".8"/>
+            <path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="#f9e27d" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </span>
+        <span class="nm">Sunmist Vale</span>
+      </span>
+
+      <span class="realm flame">
+        <span class="ic">
+          <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C13 6 18 8.5 18 14a6 6 0 0 1-12 0c0-3 1.7-4.7 3-6.2.3 1.6 1.2 2.4 2 2.7C11.3 8.3 11 5 12 2z" fill="#f0372d" stroke="#ff9b73" stroke-width=".8" stroke-linejoin="round"/>
+            <path d="M12 19.5a2.8 2.8 0 0 1-2.8-2.8c0-1.5 1.1-2.4 1.9-3.5.3.9.8 1.3 1.3 1.6.5.4 1.4 1.2 1.4 1.9a2.8 2.8 0 0 1-1.8 2.8z" fill="#ffd36b"/>
+          </svg>
+        </span>
+        <span class="nm">Flame Dancer</span>
+      </span>
+
     </span>
-    <span class="ttl">Season Time</span>
+    <span class="ttl" id="ttl">Season Timer</span>
   </h1>
   <div class="sub">How long since the season started</div>
 
@@ -153,6 +188,7 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 //  TIMER RESETS  (the only lines you edit to reset a timer)
 //  Both start at 9:00 AM Eastern on the date given. month is 1-12.
 //
+//  SEASON_NUMBER -> shown in the title ("Season 2 Timer"). Update by hand.
 //  NEW SEASON  -> change SEASON_START to the new season's start date.
 //                 The season day counter restarts at Day 0 on that date.
 //                 Event/dungeon day numbers below count from the season
@@ -160,6 +196,7 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 //  SERVER RESET (rare) -> change SERVER_START. Leave it alone when only
 //                 the season resets: total server time keeps counting.
 // =====================================================================
+const SEASON_NUMBER = 2;
 const SEASON_START = { year: 2026, month: 9, day: 18 };
 const SERVER_START = { year: 2026, month: 9, day: 18 };
 // =====================================================================
@@ -244,6 +281,10 @@ const card = (name, label, txt, done) =>
   '<div class="card'+(done?' done':'')+'"><div><div class="n">'+esc(name)+'</div><div class="d">'+label+'</div></div><div class="t">'+txt+'</div></div>';
 
 const el = id => document.getElementById(id);
+const TITLE = "Season " + SEASON_NUMBER + " Timer";
+el("ttl").textContent = TITLE;
+document.title = TITLE;
+
 function nextOccurrence(e, cur, now){
   const k = e.day >= cur ? 0 : Math.ceil((cur - e.day)/e.every);
   let n = e.day + k*e.every;
