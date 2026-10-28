@@ -197,7 +197,7 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 //                 the season resets: total server time keeps counting.
 // =====================================================================
 const SEASON_NUMBER = 2;
-const SEASON_START = { year: 2026, month: 9, day: 18 };
+const SEASON_START = { year: 2026, month: 11, day: 4 };
 const SERVER_START = { year: 2026, month: 9, day: 18 };
 // =====================================================================
 
@@ -213,12 +213,10 @@ const RECURRING = [
 
 // ===== SERVER EVENTS (one-time): name + day number =====
 const EVENTS = [
-  { name: "Aquorigin Shrine dungeon opens", day: 24 },
-  { name: "Whaleback Island arrives", day: 26 },
-  { name: "Hellhold dungeon opens", day: 33 },
-  { name: "Wonder Flavors event ends", day: 36 },
-  { name: "Stellar Plume gacha ends", day: 36 },
-  { name: "End of season 1 (approximate)", day: 45 }
+  { name: "Acme Nexus opens", day: 15 },
+  { name: "Second Gacha releases", day: 32 },
+  { name: "Pandarial releases", day: 46 },
+  { name: "End of season 2 (approximate)", day: 67 }
 ];
 
 // ===== DUNGEONS (tap to expand) =====
@@ -227,12 +225,21 @@ const EVENTS = [
 // desc  = (optional) short description paragraph
 // info  = (optional) list of ["Label", "Value"] rows
 const DUNGEONS = [
-  { name: "Aquorigin Shrine", day: 24,
-    desc: "A sacred shrine for river deities. In its depths an ancient entity stands eternal watch.",
-    info: [["Level Requirement", "100"],["Normal", "930K"], ["Hard", "1.45M"], ["Nightmare", "2.05M"]] },
-  { name: "Hellhold", day: 33,
-    desc: "A ruined ancient city built overnight. It stands like a ghost-infested gateway, leading straight into the underworld.",
-    info: [["Normal", "2.25M"], ["Hard", "2.75M"], ["Nightmare", "3.9M"], ["Purgatory", "6.2M"]] }
+{ name: "Demonseal Gorge", day: 1,
+desc: "A gorge that once imprisoned legions of monsters. Its seal now falters.",
+info: [["Level Requirement", "100"],["Normal", "none"], ["Hard", "2.35M"]] },
+{ name: "Warlord's Rest", day: 14,
+desc: "Famed generals rest in peace here. The place is now overrun by monsters.",
+info: [["Level Requirement", "130"],["Normal", "3.55M"], ["Hard", "5M"], ["Nightmare", "6M"]] },
+{ name: "Cloudcrest Temple", day: 27,
+desc: "A temple embrace by lush greenery and drifting clouds. Now in ruins, it's former grandeur still lingers.",
+info: [["Normal", "6.2M"], ["Hard", "7.7M"], ["Nightmare", "9.8M"]] },
+{ name: "Bladeshire", day: 40,
+desc: "The shire stands firm atop a spiritual leyline. A guardian of time, watching over the ancient kingdom.",
+info: [["Normal", "10M"], ["Hard", "12.5M"], ["Nightmare", "15.8M"]] },
+{ name: "Celestship", day: 53,
+desc: "A massive warship shaped like a fortress. Once a legendary "weapon" in the Loong Haven's conquest.",
+info: [["Normal", "16.5M"], ["Hard", "20M"], ["Nightmare", "24.5M"], ["Purgatory", "40M"] ] }
 ];
 
 // ===== LINKS: name + url (+ optional note) =====
