@@ -90,6 +90,19 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 .dg dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:.85rem}
 .dg dt{color:var(--dim);letter-spacing:.12em;text-transform:uppercase;font-size:.65rem;align-self:center}
 .dg dd{margin:0;font-weight:600}
+  /* stable countdown layout: no wrapping decisions based on timer width */
+.card,.dg summary{flex-wrap:nowrap}
+.card>div:first-child,.dg summary>div:first-child{flex:1 1 0;min-width:0}
+.card .t,.dg .st{flex:none;white-space:nowrap;font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum","lnum"}
+.card .t{min-width:16ch;text-align:right}
+.dg .st span{display:inline-block;min-width:16ch;text-align:right}
+.dg .st::after{margin-left:auto}
+@media (max-width:560px){
+  .card,.dg summary{flex-direction:column;align-items:stretch;gap:6px}
+  .card .t{min-width:0;text-align:left}
+  .dg .st{justify-content:space-between}
+  .dg .st span{min-width:0;text-align:left}
+}
 </style>
 </head>
 <body>
