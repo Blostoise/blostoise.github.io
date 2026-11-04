@@ -266,7 +266,8 @@ const LINKS = [
 ];
 // ======================================================
 
-const TZ = "America/New_York";   // 8:00 AM Eastern (EST/EDT as observed)
+const TZ = "America/New_York";   // Eastern time (EST/EDT as observed)
+const ROLLOVER_HOUR = 8;         // day rolls over at 8:00 AM Eastern
 
 function tzOffset(ms){
   const p = {};
@@ -274,15 +275,15 @@ function tzOffset(ms){
     .formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);
   return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second) - Math.floor(ms/1000)*1000;
 }
-function nineAM(y,mo,d){
-  const guess = Date.UTC(y,mo-1,d,9,0,0);
+function rolloverTime(y,mo,d){ // UTC ms of ROLLOVER_HOUR:00 Eastern on the given date
+  const guess = Date.UTC(y,mo-1,d,ROLLOVER_HOUR,0,0);
   let t = guess - tzOffset(guess);
   t = guess - tzOffset(t);
   return t;
 }
-// start (UTC ms) of season day n = 9 AM Eastern, n days after SEASON_START
-function dayStart(n){ return nineAM(SEASON_START.year, SEASON_START.month, SEASON_START.day + n); }
-const SERVER_MS = nineAM(SERVER_START.year, SERVER_START.month, SERVER_START.day);
+// start (UTC ms) of season day n = rollover time, n days after SEASON_START
+function dayStart(n){ return rolloverTime(SEASON_START.year, SEASON_START.month, SEASON_START.day + n); }
+const SERVER_MS = rolloverTime(SERVER_START.year, SERVER_START.month, SERVER_START.day);
 
 function currentDay(now){
   let n = Math.floor((now - dayStart(0))/86400000);
