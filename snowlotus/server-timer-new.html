@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#080d1c;--bg2:#1b2c5c;--bg3:#41190f;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7;--frost:#bfe8ff;--ember:#ff9d4d;
---c-ms:#ff8fc0;--c-rec:#6fd6f5;--c-evt:#ff8a3d;--c-dgn:#b69cff;--c-ssn:#6fe3b0;--c-link:#f4cf6b;
+--c-ms:#ff8fc0;--c-rec:#6fd6f5;--c-evt:#ff8a3d;--c-dgn:#b69cff;--c-ssn:#6fe3b0;--c-gift:#e4ecff;--c-link:#f4cf6b;
 color-scheme:dark;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080d1c;--bg2:#1b2c5c;--bg3:#41190f;--panel:#101935;--cell:#070b18;--text:#eaf3ff;--dim:#8fa3c7}}
@@ -53,14 +53,11 @@ h1{margin:4px 0 6px;text-align:center;font-weight:700}
 .ttl::after{background:linear-gradient(90deg,#ff9d4d,transparent)}
 .sub{text-align:center;color:var(--dim);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;margin:10px 0 12px}
 
-/* jump links (single compact row) */
-.jump{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 16px;padding:2px}
-.jump::-webkit-scrollbar{display:none}
-.jump a{flex:none;font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:6px 12px;background:rgba(16,25,53,.75)}
-.jump a:first-child{margin-left:auto}
-.jump a:last-child{margin-right:auto}
+/* jump links: wrap onto multiple lines, no side scroll */
+.jump{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0 0 16px;padding:2px}
+.jump a{font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:6px 11px;background:rgba(16,25,53,.75)}
 .jump a:hover,.jump a:focus-visible{box-shadow:0 0 12px -2px var(--c);color:var(--text);outline:none}
-.jump .j-ms{--c:var(--c-ms)}.jump .j-rec{--c:var(--c-rec)}.jump .j-evt{--c:var(--c-evt)}.jump .j-dgn{--c:var(--c-dgn)}.jump .j-ssn{--c:var(--c-ssn)}.jump .j-lnk{--c:var(--c-link)}
+.jump .j-ms{--c:var(--c-ms)}.jump .j-rec{--c:var(--c-rec)}.jump .j-evt{--c:var(--c-evt)}.jump .j-dgn{--c:var(--c-dgn)}.jump .j-ssn{--c:var(--c-ssn)}.jump .j-gft{--c:var(--c-gift)}.jump .j-lnk{--c:var(--c-link)}
 
 .panel{border:2px solid transparent;background:linear-gradient(180deg,var(--panel),#0b1229) padding-box,linear-gradient(90deg,#bfe8ff,#ff9d4d) border-box;border-radius:14px;box-shadow:0 0 0 4px #000,0 0 0 6px #5b5470,-14px 0 34px rgba(111,214,245,.18),14px 0 34px rgba(255,140,60,.18);padding:22px 14px}
 .day{text-align:center;font-size:1.05rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase}
@@ -73,7 +70,7 @@ h1{margin:4px 0 6px;text-align:center;font-weight:700}
 .next div+div{margin-top:5px}
 
 .sec{margin-top:30px;scroll-margin-top:16px}
-.sec.mls{--c:var(--c-ms)}.sec.rec{--c:var(--c-rec)}.sec.evt{--c:var(--c-evt)}.sec.dgn{--c:var(--c-dgn)}.sec.ssn{--c:var(--c-ssn)}.sec.lnk{--c:var(--c-link)}
+.sec.mls{--c:var(--c-ms)}.sec.rec{--c:var(--c-rec)}.sec.evt{--c:var(--c-evt)}.sec.dgn{--c:var(--c-dgn)}.sec.ssn{--c:var(--c-ssn)}.sec.gft{--c:var(--c-gift)}.sec.lnk{--c:var(--c-link)}
 h2{font-family:'Cinzel Decorative','Cinzel',Georgia,serif;color:var(--c);text-align:center;margin:0 0 4px;font-size:1.3rem;letter-spacing:.1em;text-shadow:0 0 14px var(--c)}
 .hint{text-align:center;color:var(--dim);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
 .rule{height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);margin:0 auto 14px;max-width:320px}
@@ -114,9 +111,24 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
   .dg .st{justify-content:space-between}
   .dg .st span{min-width:0;text-align:left}
 }
-/* milestones timeline: evenly spaced, level on top, title below */
+/* gift codes */
+.gc{background:var(--panel);border:1px solid var(--c);border-left:5px solid var(--c);border-radius:8px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;box-shadow:0 0 12px -6px var(--c)}
+.gc .info{flex:1 1 0;min-width:0}
+.gc .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.05rem;letter-spacing:.08em;color:var(--c);word-break:break-all}
+.gc .rw{font-size:.75rem;font-weight:600;margin-top:2px}
+.gc .ex{font-size:.65rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+.gc button{flex:none;min-width:88px;font:inherit;font-size:.7rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#0b1229;background:var(--c);border:0;border-radius:6px;padding:10px 14px;cursor:pointer}
+.gc button:hover:not(:disabled){box-shadow:0 0 14px -2px var(--c)}
+.gc button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+.gc button.ok{background:var(--c-ssn)}
+.gc button:disabled{background:transparent;color:var(--dim);border:1px solid var(--dim);cursor:not-allowed}
+.gc.exp{opacity:.6}
+.gc.exp .code{text-decoration:line-through}
+/* milestones timeline: horizontal on wide screens, vertical on phones */
 .tl{overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
-.tl-track{display:flex}
+.tl-track{display:flex;min-width:calc(var(--n,5) * 96px)}
+.tl-hint{text-align:center;color:var(--dim);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
+.tl-hint[hidden]{display:none}
 .mn{flex:1 1 0;min-width:96px;padding:0 4px;text-align:center}
 .mn .lv{font-weight:800;font-size:1.2rem;color:var(--c);text-shadow:0 0 12px var(--c);line-height:1.2}
 .mn .lv small{font-size:.6rem;letter-spacing:.2em;color:var(--dim);text-shadow:none;margin-right:2px}
@@ -127,6 +139,17 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 .mn .dot{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--bg);border:2px solid var(--c)}
 .mn.reached .dot{background:var(--c);box-shadow:0 0 12px var(--c)}
 .mn .mt{font-size:.7rem;line-height:1.4;font-weight:600;letter-spacing:.04em}
+@media (max-width:560px){
+  .tl{overflow:visible}
+  .tl-track{flex-direction:column;min-width:0}
+  .mn{display:grid;grid-template-columns:5.4rem 22px 1fr;column-gap:10px;align-items:center;min-width:0;padding:7px 0;text-align:left}
+  .mn .lv{text-align:right;font-size:1.05rem}
+  .mn .rail{height:auto;align-self:stretch;margin:0}
+  .mn .rail::before{left:50%;right:auto;top:0;bottom:0;width:2px;height:auto;margin:0 0 0 -1px;background:linear-gradient(180deg,rgba(255,143,192,.35),rgba(255,143,192,.7),rgba(255,143,192,.35))}
+  .mn:first-child .rail::before{left:50%;top:50%}
+  .mn:last-child .rail::before{right:auto;bottom:50%}
+  .mn .mt{font-size:.78rem}
+}
 </style>
 </head>
 <body>
@@ -191,6 +214,7 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
     <a class="j-evt" href="#sec-events">Events</a>
     <a class="j-dgn" href="#sec-dungeons">Dungeons</a>
     <a class="j-ssn" href="#sec-seasonal">Seasonal</a>
+    <a class="j-gft" href="#sec-codes">Gift Codes</a>
     <a class="j-lnk" href="#sec-links">Links</a>
   </nav>
 
@@ -210,7 +234,8 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
 
   <div class="sec mls" id="sec-milestones">
     <h2>Milestones</h2><div class="hint">Level progression</div><div class="rule"></div>
-    <div class="tl"><div class="tl-track" id="milestones"></div></div>
+    <div class="tl" id="tl"><div class="tl-track" id="milestones"></div></div>
+    <div class="tl-hint" id="tlhint" hidden>Scroll sideways &rarr;</div>
   </div>
 
   <div class="sec rec" id="sec-recurring">
@@ -231,6 +256,11 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
   <div class="sec ssn" id="sec-seasonal">
     <h2>Seasonal Events</h2><div class="hint">Limited-time events</div><div class="rule"></div>
     <div id="seasonal"></div>
+  </div>
+
+  <div class="sec gft" id="sec-codes">
+    <h2>Gift Codes</h2><div class="hint">Tap to copy</div><div class="rule"></div>
+    <div id="codes"></div>
   </div>
 
   <div class="sec lnk" id="sec-links">
@@ -313,10 +343,21 @@ desc: "A massive warship shaped like a fortress. Once a legendary \"weapon\" in 
 info: [["Normal", "16.5M"], ["Hard", "20M"], ["Nightmare", "24.5M"], ["Purgatory", "40M"] ] }
 ];
 
-// ===== SEASONAL EVENTS (limited-time, with a start and an end) =====
-// day = when it starts | endDay = when it ends (optional for events with no end)
+// ===== SEASONAL EVENTS (limited-time) =====
+// day = season day it starts | end = calendar date it ends, as "YYYY-MM-DD"
+// (end is optional; the event ends at the daily reset on that date)
 const SEASONAL = [
-  { name: "Seasonal event name", day: 1, endDay: 30 }
+  { name: "Haunted Carnival", day: 1, end: "2026-11-15" }
+];
+
+// ===== GIFT CODES =====
+// code    = the code (this is what gets copied)
+// reward  = (optional) what it gives
+// expires = date it expires, as "YYYY-MM-DD" (expires at the daily reset on that date)
+// Expired codes show "Expired", have the copy button disabled, and sort to the bottom.
+const GIFT_CODES = [
+  { code: "EXAMPLECODE2026", reward: "Replace with a real code", expires: "2026-12-31" },
+  { code: "OLDEXAMPLE",      reward: "Example of an expired code", expires: "2026-10-01" }
 ];
 
 // ===== LINKS: name + url (+ optional note) =====
@@ -331,7 +372,7 @@ const LINKS = [
 // ======================================================
 
 const TZ = "America/New_York";   // Eastern time (EST/EDT as observed)
-const ROLLOVER_HOUR = 8;         // every season day (and every event) starts at 8:00 AM Eastern
+const ROLLOVER_HOUR = 8;         // every season day (and every event/expiry) happens at 8:00 AM Eastern
 
 function tzOffset(ms){
   const p = {};
@@ -350,6 +391,17 @@ function dayStart(n){
   return wallTime(SEASON_START.year, SEASON_START.month, SEASON_START.day + (n - 1), ROLLOVER_HOUR);
 }
 const SERVER_MS = wallTime(SERVER_START.year, SERVER_START.month, SERVER_START.day, ROLLOVER_HOUR);
+
+// "YYYY-MM-DD" -> UTC ms at the reset hour (NaN if invalid)
+function dateTime(str){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(str||""));
+  return m ? wallTime(+m[1], +m[2], +m[3], ROLLOVER_HOUR) : NaN;
+}
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmtDate(str){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(str||""));
+  return m ? MONTHS[+m[2]-1] + " " + (+m[3]) + ", " + m[1] : "";
+}
 
 function currentDay(now){
   let n = Math.floor((now - dayStart(1))/86400000) + 1;
@@ -426,14 +478,28 @@ function tick(){
   const ssn = [...SEASONAL].sort((a,b)=>a.day-b.day);
   el("seasonal").innerHTML = ssn.length ? ssn.map(s=>{
     const st = dayStart(s.day);
-    const hasEnd = s.endDay !== undefined && s.endDay !== null;
-    const en = hasEnd ? dayStart(s.endDay) : null;
-    const endTxt = hasEnd ? "Ends Day " + s.endDay : "";
+    const en = dateTime(s.end);
+    const hasEnd = !isNaN(en);
+    const endTxt = hasEnd ? "Ends " + fmtDate(s.end) : "";
     if (now < st) return card(s.name, "Starts Day "+s.day+(hasEnd ? " &middot; "+endTxt : ""), fmt(st-now), "");
     if (!hasEnd)  return card(s.name, "Started Day "+s.day, "Live", "live");
     if (now < en) return card(s.name, "Live &middot; "+endTxt, fmt(en-now), "live");
-    return card(s.name, "Ended Day "+s.endDay, "Ended", "done");
+    return card(s.name, "Ended " + fmtDate(s.end), "Ended", "done");
   }).join("") : '<div class="empty">No seasonal events.</div>';
+
+  // gift codes: update expiry text in place (so copy buttons aren't re-rendered)
+  document.querySelectorAll("#codes .gc").forEach(x=>{
+    const t = +x.dataset.exp, ex = x.querySelector(".ex"), b = x.querySelector("button");
+    if (!t){ ex.textContent = "No expiry listed"; return; }
+    const diff = t - now;
+    if (diff <= 0){
+      if (!x.classList.contains("exp")){ x.classList.add("exp"); b.disabled = true; b.textContent = "Expired"; }
+      ex.textContent = "Expired " + x.dataset.date;
+    } else {
+      const r = split(diff);
+      ex.textContent = "Expires " + x.dataset.date + " · " + (r.d > 0 ? r.d+"d "+pad(r.h)+"h" : pad(r.h)+"h "+pad(r.m)+"m") + " left";
+    }
+  });
 
   // dungeon countdowns (updated in place so expanded cards stay open)
   document.querySelectorAll("#dungeons [data-day]").forEach(s=>{
@@ -449,7 +515,15 @@ el("milestones").innerHTML = MILESTONES.map(m=>
   '<div class="rail"><i class="dot"></i></div>'+
   '<div class="mt">'+esc(m.title)+'</div></div>'
 ).join("") || '<div class="empty">No milestones yet.</div>';
-el("milestones").style.minWidth = (MILESTONES.length * 96) + "px";
+el("milestones").style.setProperty("--n", MILESTONES.length);
+
+// show a "scroll sideways" hint only if the (desktop) timeline overflows
+function checkTl(){
+  const t = el("tl");
+  el("tlhint").hidden = !(t.scrollWidth > t.clientWidth + 2);
+}
+window.addEventListener("resize", checkTl);
+checkTl();
 
 // dungeons render once so open/closed state isn't reset every second
 el("dungeons").innerHTML = DUNGEONS.map(d=>{
@@ -460,6 +534,44 @@ el("dungeons").innerHTML = DUNGEONS.map(d=>{
     '<div class="st">'+(hasDay?'<span data-day="'+esc(d.day)+'"></span>':'')+'</div></summary>'+
     '<div class="body">'+(d.desc?'<p>'+esc(d.desc)+'</p>':'')+(rows?'<dl>'+rows+'</dl>':'')+'</div></details>';
 }).join("") || '<div class="empty">No dungeons listed.</div>';
+
+// gift codes render once; active first (soonest expiry), expired last
+(function(){
+  const now0 = Date.now();
+  const list = GIFT_CODES.map(g=>({g, t:dateTime(g.expires)}));
+  const rank = x => (!isNaN(x.t) && x.t <= now0) ? 2 : (isNaN(x.t) ? 1 : 0);
+  list.sort((a,b)=> rank(a)-rank(b) || (isNaN(a.t)?0:a.t) - (isNaN(b.t)?0:b.t));
+  el("codes").innerHTML = list.length ? list.map(x=>
+    '<div class="gc" data-exp="'+(isNaN(x.t)?'':x.t)+'" data-date="'+esc(fmtDate(x.g.expires))+'">'+
+    '<div class="info"><div class="code">'+esc(x.g.code)+'</div>'+
+    (x.g.reward?'<div class="rw">'+esc(x.g.reward)+'</div>':'')+
+    '<div class="ex"></div></div>'+
+    '<button type="button" data-code="'+esc(x.g.code)+'">Copy</button></div>'
+  ).join("") : '<div class="empty">No active gift codes.</div>';
+})();
+
+async function copyCode(text){
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {
+    try { // fallback for browsers/frames that block the clipboard API
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly","");
+      ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand("copy");
+      ta.remove();
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+el("codes").addEventListener("click", async ev=>{
+  const b = ev.target.closest("button[data-code]");
+  if (!b || b.disabled) return;
+  const ok = await copyCode(b.dataset.code);
+  b.textContent = ok ? "Copied!" : "Copy failed";
+  b.classList.toggle("ok", ok);
+  setTimeout(()=>{ if (!b.disabled){ b.textContent = "Copy"; b.classList.remove("ok"); } }, 1600);
+});
 
 el("links").innerHTML = LINKS.filter(l=>/^https?:\/\//i.test(l.url)).map(l=>
   '<a class="card" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">&#10048; '+esc(l.name)+(l.note?'<small>'+esc(l.note)+'</small>':'')+'</a>'
