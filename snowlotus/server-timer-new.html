@@ -261,6 +261,8 @@ a.card small{display:block;color:var(--dim);font-weight:600;font-size:.7rem;lett
   <div class="sec gft" id="sec-codes">
     <h2>Gift Codes</h2><div class="hint">Tap to copy</div><div class="rule"></div>
     <div id="codes"></div>
+    <div id="codes"></div>
+    <p class="gc-note">Using an Apple Device? <a href="https://webcp01.boltray.com/zjcs/act/202607/exch/" target="_blank" rel="noopener noreferrer">Redeem here</a></p>
   </div>
 
   <div class="sec lnk" id="sec-links">
@@ -344,10 +346,11 @@ info: [["Normal", "16.5M"], ["Hard", "20M"], ["Nightmare", "24.5M"], ["Purgatory
 ];
 
 // ===== SEASONAL EVENTS (limited-time) =====
-// day = season day it starts | end = calendar date it ends, as "YYYY-MM-DD"
-// (end is optional; the event ends at the daily reset on that date)
+// start = calendar date it starts, as "YYYY-MM-DD"
+// end   = calendar date it ends, as "YYYY-MM-DD" (optional)
+// Both happen at the daily reset on that date.
 const SEASONAL = [
-  { name: "Haunted Carnival", day: 1, end: "2026-11-15" }
+  { name: "Haunted Carnival", start: "2026-10-25", end: "2026-11-15" }
 ];
 
 // ===== GIFT CODES =====
@@ -475,14 +478,13 @@ function tick(){
     return card(e.name, "Day "+e.day, diff<=0 ? "Underway!" : fmt(diff), diff<=0 ? "done" : "");
   }).join("") : '<div class="empty">No events scheduled.</div>';
 
-  const ssn = [...SEASONAL].sort((a,b)=>a.day-b.day);
+  const ssn = [...SEASONAL].sort((a,b)=>(dateTime(a.start)||0)-(dateTime(b.start)||0));
   el("seasonal").innerHTML = ssn.length ? ssn.map(s=>{
-    const st = dayStart(s.day);
-    const en = dateTime(s.end);
-    const hasEnd = !isNaN(en);
+    const st = dateTime(s.start), hasStart = !isNaN(st);
+    const en = dateTime(s.end),   hasEnd   = !isNaN(en);
     const endTxt = hasEnd ? "Ends " + fmtDate(s.end) : "";
-    if (now < st) return card(s.name, "Starts Day "+s.day+(hasEnd ? " &middot; "+endTxt : ""), fmt(st-now), "");
-    if (!hasEnd)  return card(s.name, "Started Day "+s.day, "Live", "live");
+    if (hasStart && now < st) return card(s.name, "Starts "+fmtDate(s.start)+(hasEnd ? " &middot; "+endTxt : ""), fmt(st-now), "");
+    if (!hasEnd)  return card(s.name, hasStart ? "Started "+fmtDate(s.start) : "Live now", "Live", "live");
     if (now < en) return card(s.name, "Live &middot; "+endTxt, fmt(en-now), "live");
     return card(s.name, "Ended " + fmtDate(s.end), "Ended", "done");
   }).join("") : '<div class="empty">No seasonal events.</div>';
