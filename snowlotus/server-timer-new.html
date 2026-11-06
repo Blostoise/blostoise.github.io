@@ -274,21 +274,21 @@ const MILESTONES = [
 //         hour (e.g. 2 = 2 AM) counts as the early morning at the END of that season day.
 // every = repeat interval in days
 const RECURRING = [
-  { name: "Server Tournament preparation begins", day: 5,  hour: 8, every: 7 },
-  { name: "Nexus Tournament preparation begins",  day: 6,  hour: 8, every: 14 },
-  { name: "Weekly Reset",                         day: 7,  hour: 8, every: 7 },
-  { name: "Grand Treasure Hunt resets",           day: 5,  hour: 8, every: 7 },
-  { name: "Pilgrimage Pass resets",               day: 11, hour: 8, every: 14 },
-  { name: "Void Rift event",                      day: 6,  hour: 8, every: 14 },
-  { name: "Chaos Invasion event",                 day: 20, hour: 8, every: 14 }
+  { name: "Server Tournament preparation begins", day: 4,  hour: 8, every: 7 },
+  { name: "Nexus Tournament preparation begins",  day: 5,  hour: 8, every: 14 },
+  { name: "Weekly Reset",                         day: 6,  hour: 8, every: 7 },
+  { name: "Grand Treasure Hunt resets",           day: 4,  hour: 8, every: 7 },
+  { name: "Pilgrimage Pass resets",               day: 10, hour: 8, every: 14 },
+  { name: "Void Rift event",                      day: 5,  hour: 8, every: 14 },
+  { name: "Chaos Invasion event",                 day: 19, hour: 8, every: 14 }
 ];
 
 // ===== SERVER EVENTS (one-time): name + day + hour (same rules as above) =====
 const EVENTS = [
-  { name: "Acme Nexus opens",              day: 16, hour: 8 },
-  { name: "Second Gacha releases",         day: 33, hour: 8 },
-  { name: "Pandarial releases",            day: 47, hour: 8 },
-  { name: "End of season 2 (approximate)", day: 68, hour: 8 }
+  { name: "Acme Nexus opens",              day: 15, hour: 8 },
+  { name: "Second Gacha releases",         day: 32, hour: 8 },
+  { name: "Pandarial releases",            day: 46, hour: 8 },
+  { name: "End of season 2 (approximate)", day: 67, hour: 8 }
 ];
 
 // ===== DUNGEONS (tap to expand) =====
@@ -297,19 +297,19 @@ const EVENTS = [
 // desc  = (optional) short description paragraph
 // info  = (optional) list of ["Label", "Value"] rows
 const DUNGEONS = [
-  { name: "Demonseal Gorge", day: 2,
+  { name: "Demonseal Gorge", day: 1,
 desc: "A gorge that once imprisoned legions of monsters. Its seal now falters.",
 info: [["Level Requirement", "100"],["Normal", "none"], ["Hard", "2.35M"]] },
-  { name: "Warlord's Rest", day: 15,
+  { name: "Warlord's Rest", day: 14,
 desc: "Famed generals rest in peace here. The place is now overrun by monsters.",
 info: [["Level Requirement", "130"],["Normal", "3.55M"], ["Hard", "5M"], ["Nightmare", "6M"]] },
-  { name: "Cloudcrest Temple", day: 28,
+  { name: "Cloudcrest Temple", day: 27,
 desc: "A temple embrace by lush greenery and drifting clouds. Now in ruins, it's former grandeur still lingers.",
 info: [["Normal", "6.2M"], ["Hard", "7.7M"], ["Nightmare", "9.8M"]] },
-  { name: "Bladeshire", day: 41,
+  { name: "Bladeshire", day: 40,
 desc: "The shire stands firm atop a spiritual leyline. A guardian of time, watching over the ancient kingdom.",
 info: [["Normal", "10M"], ["Hard", "12.5M"], ["Nightmare", "15.8M"]] },
-  { name: "Celestship", day: 54,
+  { name: "Celestship", day: 53,
 desc: "A massive warship shaped like a fortress. Once a legendary \"weapon\" in the Loong Haven's conquest.",
 info: [["Normal", "16.5M"], ["Hard", "20M"], ["Nightmare", "24.5M"], ["Purgatory", "40M"] ] }
 ];
