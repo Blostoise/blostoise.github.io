@@ -269,26 +269,23 @@ const MILESTONES = [
 
 // ===== RECURRING EVENTS =====
 // day   = first season day it happens (Day 1 = SEASON_START)
-// hour  = hour of the day in Eastern time, 0-23 (8 = 8 AM, 20 = 8 PM)
-//         omit it to use the daily reset time. An hour earlier than the reset
-//         hour (e.g. 2 = 2 AM) counts as the early morning at the END of that season day.
 // every = repeat interval in days
 const RECURRING = [
-  { name: "Server Tournament preparation begins", day: 4,  hour: 8, every: 7 },
-  { name: "Nexus Tournament preparation begins",  day: 5,  hour: 8, every: 14 },
-  { name: "Weekly Reset",                         day: 6,  hour: 8, every: 7 },
-  { name: "Grand Treasure Hunt resets",           day: 4,  hour: 8, every: 7 },
-  { name: "Pilgrimage Pass resets",               day: 10, hour: 8, every: 14 },
-  { name: "Void Rift event",                      day: 5,  hour: 8, every: 14 },
-  { name: "Chaos Invasion event",                 day: 19, hour: 8, every: 14 }
+  { name: "Server Tournament preparation begins", day: 4,  every: 7 },
+  { name: "Nexus Tournament preparation begins",  day: 5,  every: 14 },
+  { name: "Weekly Reset",                         day: 6,  every: 7 },
+  { name: "Grand Treasure Hunt resets",           day: 4,  every: 7 },
+  { name: "Pilgrimage Pass resets",               day: 10, every: 14 },
+  { name: "Void Rift event",                      day: 5,  every: 14 },
+  { name: "Chaos Invasion event",                 day: 19, every: 14 }
 ];
 
-// ===== SERVER EVENTS (one-time): name + day + hour (same rules as above) =====
+// ===== SERVER EVENTS (one-time): name + day =====
 const EVENTS = [
-  { name: "Acme Nexus opens",              day: 15, hour: 8 },
-  { name: "Second Gacha releases",         day: 32, hour: 8 },
-  { name: "Pandarial releases",            day: 46, hour: 8 },
-  { name: "End of season 2 (approximate)", day: 67, hour: 8 }
+  { name: "Acme Nexus opens",              day: 15 },
+  { name: "Second Gacha releases",         day: 32 },
+  { name: "Pandarial releases",            day: 46 },
+  { name: "End of season 2 (approximate)", day: 67 }
 ];
 
 // ===== DUNGEONS (tap to expand) =====
@@ -315,10 +312,9 @@ info: [["Normal", "16.5M"], ["Hard", "20M"], ["Nightmare", "24.5M"], ["Purgatory
 ];
 
 // ===== SEASONAL EVENTS (limited-time, with a start and an end) =====
-// day/hour       = when it starts   |   endDay/endHour = when it ends
-// (hour is optional, same rules as above; endDay is optional for events with no end)
+// day = when it starts | endDay = when it ends (optional for events with no end)
 const SEASONAL = [
-  { name: "Seasonal event name", day: 1, hour: 8, endDay: 30, endHour: 8 }
+  { name: "Seasonal event name", day: 1, endDay: 30 }
 ];
 
 // ===== LINKS: name + url (+ optional note) =====
@@ -333,7 +329,7 @@ const LINKS = [
 // ======================================================
 
 const TZ = "America/New_York";   // Eastern time (EST/EDT as observed)
-const ROLLOVER_HOUR = 8;         // each season day rolls over at 8:00 AM Eastern
+const ROLLOVER_HOUR = 8;         // every season day (and every event) starts at 8:00 AM Eastern
 
 function tzOffset(ms){
   const p = {};
@@ -347,14 +343,10 @@ function wallTime(y,mo,d,hour){ // UTC ms of hour:00 Eastern on the given calend
   t = guess - tzOffset(t);
   return t;
 }
-const hourOf = h => (h === undefined || h === null) ? ROLLOVER_HOUR : h;
-// when season day `day` happens at `hour` Eastern (Day 1 = SEASON_START)
-function eventTime(day, hour){
-  const h = hourOf(hour);
-  const extra = h < ROLLOVER_HOUR ? 1 : 0;   // early-morning hours belong to the end of that season day
-  return wallTime(SEASON_START.year, SEASON_START.month, SEASON_START.day + (day - 1) + extra, h);
+// start (UTC ms) of season day n (Day 1 = SEASON_START at the reset hour)
+function dayStart(n){
+  return wallTime(SEASON_START.year, SEASON_START.month, SEASON_START.day + (n - 1), ROLLOVER_HOUR);
 }
-function dayStart(n){ return eventTime(n, ROLLOVER_HOUR); }
 const SERVER_MS = wallTime(SERVER_START.year, SERVER_START.month, SERVER_START.day, ROLLOVER_HOUR);
 
 function currentDay(now){
@@ -372,8 +364,6 @@ function split(ms){
 }
 const esc = v => String(v).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt = ms => { const r = split(ms); return r.d+"d "+pad(r.h)+"h "+pad(r.m)+"m "+pad(r.s)+"s"; };
-const fmtHour = h => (h%12===0 ? 12 : h%12) + " " + (h<12 ? "AM" : "PM") + " ET";
-const when = (day, hour) => "Day " + day + " &middot; " + fmtHour(hourOf(hour));
 const card = (name, label, txt, cls) =>
   '<div class="card'+(cls?' '+cls:'')+'"><div><div class="n">'+esc(name)+'</div><div class="d">'+label+'</div></div><div class="t">'+txt+'</div></div>';
 
@@ -382,11 +372,11 @@ const TITLE = "Season " + SEASON_NUMBER + " Timer";
 el("ttl").textContent = TITLE;
 document.title = TITLE;
 
-// next time a recurring event happens (returns the season day number)
+// next season day a recurring event happens
 function nextOccurrence(e, cur, now){
-  let k = Math.max(0, Math.ceil((cur - e.day) / e.every));
+  const k = Math.max(0, Math.ceil((cur - e.day) / e.every));
   let n = e.day + k * e.every;
-  while (eventTime(n, e.hour) <= now) n += e.every;
+  while (dayStart(n) <= now) n += e.every;
   return n;
 }
 function tick(){
@@ -420,27 +410,27 @@ function tick(){
     x.classList.toggle("reached", n >= +x.dataset.day);
   });
 
-  const rec = RECURRING.map(e=>({e, d:nextOccurrence(e,n,now)})).sort((a,b)=>eventTime(a.d,a.e.hour)-eventTime(b.d,b.e.hour));
+  const rec = RECURRING.map(e=>({e, d:nextOccurrence(e,n,now)})).sort((a,b)=>dayStart(a.d)-dayStart(b.d));
   el("recurring").innerHTML = rec.length ? rec.map(x=>
-    card(x.e.name, "Next: "+when(x.d,x.e.hour)+" &middot; every "+x.e.every+" days", fmt(eventTime(x.d,x.e.hour)-now), "")).join("")
+    card(x.e.name, "Next: Day "+x.d+" &middot; every "+x.e.every+" days", fmt(dayStart(x.d)-now), "")).join("")
     : '<div class="empty">No recurring events.</div>';
 
-  const list = [...EVENTS].sort((a,b)=>eventTime(a.day,a.hour)-eventTime(b.day,b.hour));
+  const list = [...EVENTS].sort((a,b)=>a.day-b.day);
   el("events").innerHTML = list.length ? list.map(e=>{
-    const diff = eventTime(e.day,e.hour) - now;
-    return card(e.name, when(e.day,e.hour), diff<=0 ? "Underway!" : fmt(diff), diff<=0 ? "done" : "");
+    const diff = dayStart(e.day) - now;
+    return card(e.name, "Day "+e.day, diff<=0 ? "Underway!" : fmt(diff), diff<=0 ? "done" : "");
   }).join("") : '<div class="empty">No events scheduled.</div>';
 
-  const ssn = [...SEASONAL].sort((a,b)=>eventTime(a.day,a.hour)-eventTime(b.day,b.hour));
+  const ssn = [...SEASONAL].sort((a,b)=>a.day-b.day);
   el("seasonal").innerHTML = ssn.length ? ssn.map(s=>{
-    const st = eventTime(s.day, s.hour);
+    const st = dayStart(s.day);
     const hasEnd = s.endDay !== undefined && s.endDay !== null;
-    const en = hasEnd ? eventTime(s.endDay, s.endHour) : null;
-    const endTxt = hasEnd ? "Ends " + when(s.endDay, s.endHour) : "";
-    if (now < st) return card(s.name, "Starts "+when(s.day,s.hour)+(hasEnd ? " &middot; "+endTxt : ""), fmt(st-now), "");
-    if (!hasEnd)  return card(s.name, "Started "+when(s.day,s.hour), "Live", "live");
+    const en = hasEnd ? dayStart(s.endDay) : null;
+    const endTxt = hasEnd ? "Ends Day " + s.endDay : "";
+    if (now < st) return card(s.name, "Starts Day "+s.day+(hasEnd ? " &middot; "+endTxt : ""), fmt(st-now), "");
+    if (!hasEnd)  return card(s.name, "Started Day "+s.day, "Live", "live");
     if (now < en) return card(s.name, "Live &middot; "+endTxt, fmt(en-now), "live");
-    return card(s.name, "Ended "+when(s.endDay,s.endHour), "Ended", "done");
+    return card(s.name, "Ended Day "+s.endDay, "Ended", "done");
   }).join("") : '<div class="empty">No seasonal events.</div>';
 
   // dungeon countdowns (updated in place so expanded cards stay open)
